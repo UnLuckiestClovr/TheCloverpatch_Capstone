@@ -2,13 +2,13 @@ networks:
   cloverpatch-network:
 
 services:
-  eureka-registry:
+  eurekaregistry:
     restart: always
     networks:
       - cloverpatch-network
     ports:
-      - 10002:8761
-    container_name: ECommerceEureka
+      - 10000:8761
+    container_name: CloverpatchEureka
     image: steeltoeoss/eureka-server
 
   ocelot:
@@ -19,7 +19,34 @@ services:
       - cloverpatch-network
     ports:
       - 10001:5000
-    container_name: ECommerceOcelotGateway
+    container_name: CloverpatchOcelotGateway
     build: 
       context: ./apigateway-ocelot-dotnet8
       dockerfile: Dockerfile
+  
+  # Basket Service Setup
+  basketdatabase:
+    restart: always
+    networks:
+      - cloverpatch-network
+    ports:
+      - 11000:6379
+      - 11001:8001
+    container_name: CloverpatchBasketDatabase
+    image: redis/redis-stack:latest
+
+  basketservice:
+    depends_on:
+      - eurekaregistry
+      - ocelot
+      - basketdatabase
+    restart: always
+    networks:
+      - cloverpatch-network
+    ports:
+      - 12000:8000
+    build: 
+      context: ./Backend/BasketService
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_HOST=CloverpatchEureka
