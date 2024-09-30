@@ -1,0 +1,25 @@
+networks:
+  cloverpatch-network:
+
+services:
+  eureka-registry:
+    restart: always
+    networks:
+      - cloverpatch-network
+    ports:
+      - 10002:8761
+    container_name: ECommerceEureka
+    image: steeltoeoss/eureka-server
+
+  ocelot:
+    restart: always
+    depends_on:
+      - eureka-registry
+    networks:
+      - cloverpatch-network
+    ports:
+      - 10001:5000
+    container_name: ECommerceOcelotGateway
+    build: 
+      context: ./apigateway-ocelot-dotnet8
+      dockerfile: Dockerfile
