@@ -47,3 +47,33 @@ def addItemToBasket(BID: str, item: Item):
         }
 
 
+# Retrieves the List of Items from the Basket
+def getBasket(BID: str):
+    try:
+        rConn = redis.Redis(connection_pool=rConnPool)
+
+        # Get all elements from the list
+        json_strings = rConn.lrange(f'{BID}:Items', 0, rConn.llen(f'{BID}:Items'))
+
+        items = []
+        for json_str in json_strings:
+            item_dict = json.loads(json_str.decode('utf-8'))
+            item = Item(**item_dict)
+            items.append(item)
+        return {
+            "success": True,
+            "message": f'Successful Grab from Basket : {BID}',
+            "value": items
+        }
+    except redis.ConnectionError as e:
+        return {
+            "success": False,
+            "message": f"Error connecting to Redis: {e}"
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "message": f"An error occurred: {e}"
+        }
+
+
