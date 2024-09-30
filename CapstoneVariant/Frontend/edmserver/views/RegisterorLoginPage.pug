@@ -1,0 +1,77 @@
+extends layout.pug
+
+block mainContent
+    article(id="LoginView") 
+        h2 Login
+        p Username:
+        input(type="text", class="usernameInput", id="uLogin")
+        p Password:
+        input(type="password", class="pswrdInput", id="pLogin")
+        p
+        button(class="PrettyButton", id="loginBTN", type='submit') Login
+        p  
+        p(id="OutputBox") 
+        p      
+        article(class="ViewChangeButton")
+            h3(class="ViewSwitchLoginPage") Don't Have an Account? 
+            button(id="regViewSwitch", class="PrettyButton", type='submit') Click Here to Register
+
+    article(id="RegisterView") 
+        h2 Register
+        p Username [Needs 1 Capital Letter, 1 Lowercase Letter, and 1 Number]:
+        input(type="text", class="usernameInput", id="uReg")
+        p Password [Needs 1 Capital Letter, 1 Lowercase Letter, 1 Number, and 1 Special Character (!@#$%^&*()_-)]:
+        input(type="password", class="pswrdInput", id="pReg")
+        p Email:
+        input(type="text", class="emailInput", id="eReg")
+        p Full Name:
+        input(type="text", class="nameInput", id="nReg")
+        p Age: 
+        input(type="text", class="ageInput", id="aReg")
+        br
+        h2 Questionaire
+
+        table(class="ProductTables") 
+            tbody 
+                tr  
+                    td
+                        h3(class="QuestionHeader") Do you Prefer Coffee, Hot Cocoa, or Tea?
+                        div(class="QuestionAnswers")
+                            select(id="question1", class="QuestionaireSelection")
+                                option(value="") Select Answer:
+                                option(value="Coffee") Coffee 
+                                option(value="Tea") Tea 
+                                option(value="Hot Cocoa") Hot Cocoa
+                                option(value="None") None
+                tr 
+                    td 
+                        h3(class="QuestionHeader") What is your Favorite Flavour of Ice Cream?
+                        div(class="QuestionAnswers")
+                            select(id="question2", class="QuestionaireSelection")  
+                                option(value="") Select Answer: 
+                                option(value="Vanilla") Vanilla
+                                option(value="Chocolate") Chocolate
+                                option(value="Strawberry") Strawberry 
+                                option(value="Neopolitan") Neopolitan 
+                                option(value="Other") Other
+                tr 
+                    td 
+                        h3(class="QuestionHeader") What is your Favorite Color out of Those Listed?
+                        div(class="QuestionAnswers")
+                            select(id="question3", class="QuestionaireSelection") 
+                                option(value="") Select Answer: 
+                                option(value="Red") Red 
+                                option(value="Orange") Orange 
+                                option(value="Yellow") Yellow 
+                                option(value="Green") Green 
+                                option(value="Blue") Blue 
+                                option(value="Purple") Purple 
+                                option(value="Violet") Violet 
+        div(id="questionInvalidOutput")
+
+        br
+        button(class="PrettyButton", id='registerBTN', type='submit') Register
+        br
+        article(class="ViewChangeButton")
+            h3(class="ViewSwitchLoginPage") Already Have an Account? 
+            button(id="logViewSwitch", class="PrettyButton", type='submit') Click Here to Login

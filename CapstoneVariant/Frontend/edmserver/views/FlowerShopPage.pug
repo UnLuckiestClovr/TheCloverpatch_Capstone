@@ -1,0 +1,666 @@
+extends layout.pug
+
+block mainContent
+    article(id="orderOverlay")
+        article(id="orderDetails")
+            h2(class="OrderedFlowers") Order Details 
+
+            div 
+                p Full Name:
+                input(id="NameInput", type="text", value="")
+                p Shipping Address:
+                input(id="AddressInput", type="text", value="")
+                p Phone Number:
+                input(id="PhoneInput", type="text", value="")
+                p Email Address: 
+                input(id="EmailInput", type="text", value="")
+
+
+            p(id="orderProductNameDisplay") You Are Ordering: 
+
+            select(id="ProductOptions")
+                option(value=1.26) Single Flowers - $1.26
+                option(value=9.99) Bouquet - $9.99
+                option(value=14.89) Bouquet in Vase - $14.89
+                option(value=15.99) Fresh Flowers in Full Pot - $15.99
+
+            div
+                p Quantity:
+                input(id="ProductQuantity", type="text", value="1")
+                button(id="increaseQuantityButton") +
+                button(id="decreaseQuantityButton") -
+
+            p 
+            p(id="PriceOutput") Final Cost: $0.00
+            p 
+            button(id="ConfirmOrder") Confirm Order
+            p 
+            button(id="cancelOrder") Cancel Order
+
+        article(id="ItemOrdered")
+            h2 Your Item has Been Ordered and is Preparing to Ship to You!!!
+            button(id="ReturnBtn") Return to Product Page
+
+    article(id="Products_View")
+        h2 If You Want to Get a Gift for Your Loved Ones,
+            |  I Can Think of No Better Gifts than Our Lovely Seasonal Flowers! Catered to you Year-Round! 
+            |  Order Our Flowers online below! We Will Ship it Directly to your Front Door!
+
+        
+        article(id="FlowerShopInfo")
+            p ____________________________________________________
+            p(class="FlowerShopInfo").
+                For every Month, we have deals on our bouquettes and flower services, we change our flower rotation by month, so some flowers may be unavailable.
+                Please refer to the list below to see which flowers are available during which months. 
+                Prices are also included below, prices are prone to change depending on seasonal conditions and availability of listed flowers and inflation.
+            p ____________________________________________________
+            p(class="FlowerShopInfo") ~ Single Flower : $1.26 ~ Bouqhette : $9.99 ~
+            p(class="FlowerShopInfo") ~ Bouquet in Vase : $14.89 ~ Fresh Flowers in Full Pot : 15.99 ~
+
+            p ____________________________________________________
+            
+            p This Shop Page shows the Available Flowers during the current Month they are available for purchase. It will not show other flowers during subsequent months. 
+            p Further Details should be included at bottom of page (WIP).
+            if month == 1
+                p Current Month: January
+            if month == 2
+                p Current Month: February
+            if month == 3
+                p Current Month: March
+            if month == 4
+                p Current Month: April
+            if month == 5
+                p Current Month: May
+            if month == 6
+                p Current Month: June
+            if month == 7
+                p Current Month: July
+            if month == 8
+                p Current Month: August
+            if month == 9
+                p Current Month: September
+            if month == 10
+                p Current Month: October
+            if month == 11
+                p Current Month: November
+            if month == 12
+                p Current Month: December
+
+            
+            p ____________________________________________________
+        if month == 1
+            table(class="ProductTables")
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Winter Flowers : January
+                    tr 
+                        td 
+                            h3 Calendula
+                            img(src="/images/flowers/Calendula.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Calendula") Click Me to Order Your Own!
+                        td 
+                            h3 Hardenbergia 
+                            img(src="/images/flowers/Hardenbergia.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Hardenbergia") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Witch Hazel 
+                            img(src="/images/flowers/Witchhazels.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Witch Hazel") Click Me to Order Your Own!
+        if month == 2
+            table(class="ProductTables")
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Winter Flowers : February
+                    tr 
+                        td 
+                            h3 Yellow Jessamine
+                            img(src="/images/flowers/YellowJessamines.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Yellow Jessamine") Click Me to Order Your Own!
+                        td 
+                            h3 Gardenias
+                            img(src="/images/flowers/Gardenias.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Gerdenias") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Winter Jasmine 
+                            img(src="/images/flowers/WinterJasmine.png", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Winter Jasmine") Click Me to Order Your Own!
+                        td 
+                            h3 Witch Hazel
+                            img(src="/images/flowers/Witchhazels.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Witch Hazel") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Camellias
+                            img(src="/images/flowers/Camellias.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Camellias") Click Me to Order Your Own!
+        if month == 3
+            table(class="ProductTables")
+            
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Spring Flowers : March
+                    tr
+                        td 
+                            h3 Daffodils 
+                            img(src="/images/flowers/Daffodils.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Daffodils") Click Me to Order Your Own!
+                            
+                        td 
+                            h3 Star Magnolias 
+                            img(src="/images/flowers/StarMagnolia.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="StarMagnolias") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Windflowers 
+                            img(src="/images/flowers/Windflowers.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Windflowers") Click Me to Order Your Own!
+                        td 
+                            h3 Trout Lilies
+                            img(src="/images/flowers/TroutLilies.jpeg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Trout Lilies") Click Me to Order Your Own!
+                    tr
+                        td 
+                            h3 Tree Peonies
+                            img(src="/images/flowers/TreePeonies.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Tree Ponies") Click Me to Order Your Own!
+                        td 
+                            h3 Wild Ginger
+                            img(src="/images/flowers/WildGinger.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Wild Ginger") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Forsythias
+                            img(src="/images/flowers/Forsythias.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Forsythias") Click Me to Order Your Own!
+                        td 
+                            h3 Periwinkles
+                            img(src="/images/flowers/Periwinkles.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Periwinkles") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Violets 
+                            img(src="/images/flowers/Violets.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Violets") Click Me to Order Your Own!
+                        td 
+                            h3 Hyacinths
+                            img(src="/images/flowers/Hyacinths.png", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Hyacinths") Click Me to Order Your Own!
+        if month == 4
+            table(class="ProductTables")
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Spring Flowers : April
+                    tr
+                        td 
+                            h3 Daffodils 
+                            img(src="/images/flowers/Daffodils.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Daffodils") Click Me to Order Your Own!
+                        td 
+                            h3 Money Plants 
+                            img(src="/images/flowers/MoneyPlant.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Money Plants") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Bleeding Hearts 
+                            img(src="/images/flowers/BleedingHearts.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Bleeding Hearts") Click Me to Order Your Own!
+                        td 
+                            h3 Wild Geraniums
+                            img(src="/images/flowers/WildGeranium.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Wild Geraniums") Click Me to Order Your Own!
+                    tr
+                        td 
+                            h3 Azeleas
+                            img(src="/images/flowers/Azeleas.jpeg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Azeleas") Click Me to Order Your Own!
+                        td 
+                            h3 Dwarf Crested Irises
+                            img(src="/images/flowers/DwarfCrestedIrises.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Dwarf Crested Irises") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Grape Hyacinths
+                            img(src="/images/flowers/GrapeHyacinths.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Grape Hyacinths") Click Me to Order Your Own!
+        if month == 5
+            table(class="ProductTables")
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Spring Flowers : May
+                    tr
+                        td 
+                            h3 Trillium 
+                            img(src="/images/flowers/Trillium.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Trillium") Click Me to Order Your Own!
+                        td 
+                            h3 Rhododendrons
+                            img(src="/images/flowers/Rhododendrons.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Rhododendrons") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Lilies of the Valley 
+                            img(src="/images/flowers/LiliesOfTheValley.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Lilies of the Valley") Click Me to Order Your Own!
+                        td 
+                            h3 Bearded Irises
+                            img(src="/images/flowers/BeardedIrises.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Bearded Irises") Click Me to Order Your Own!
+                    tr
+                        td 
+                            h3 Peonies
+                            img(src="/images/flowers/Peonies.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Peonies") Click Me to Order Your Own!
+                        td 
+                            h3 Mountain Laurels
+                            img(src="/images/flowers/MountainLaurels.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Mountain Laurels") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Lamb’s Ear
+                            img(src="/images/flowers/LambsEar.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Lamb's Ear") Click Me to Order Your Own!
+                        td 
+                            h3 Forget-Me-Nots
+                            img(src="/images/flowers/ForgetMeNots.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Forget-Me-Nots") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Lilacs 
+                            img(src="/images/flowers/Lilacs.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Lilacs") Click Me to Order Your Own!
+        if month == 6
+            table(class="ProductTables")
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Summer Flowers : June
+                    tr
+                        td 
+                            h3 Foxtail Lilies
+                            img(src="/images/flowers/FoxtailLilies.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Foxtail Lilies") Click Me to Order Your Own!
+                        td 
+                            h3 Roses
+                            img(src="/images/flowers/Roses.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Roses") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Yarrow
+                            img(src="/images/flowers/Yarrow.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Yarrow") Click Me to Order Your Own!
+                        td 
+                            h3 Poppies
+                            img(src="/images/flowers/Poppies.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Poppies") Click Me to Order Your Own!
+                    tr
+                        td 
+                            h3 Hydrangeas
+                            img(src="/images/flowers/Hydrangeas.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Hydrangeas") Click Me to Order Your Own!
+                        td 
+                            h3 Bergamot 
+                            img(src="/images/flowers/Bergamot.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Bergamot") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Wild Blue Indigo
+                            img(src="/images/flowers/WildBlueIndigo.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Wild Blue Indigo") Click Me to Order Your Own!
+                        td 
+                            h3 Bellflowers
+                            img(src="/images/flowers/Bellflowers.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Bellflowers") Click Me to Order Your Own!
+        if month == 7
+            table(class="ProductTables")
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Summer Flowers : July
+                    tr
+                        td 
+                            h3 Daylilies
+                            img(src="/images/flowers/Daylily.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Daylilies") Click Me to Order Your Own!
+                        td 
+                            h3 Dahlias
+                            img(src="/images/flowers/Dahlias.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Dahlias") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Daisies
+                            img(src="/images/flowers/Daisies.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Daisies") Click Me to Order Your Own!
+                        td 
+                            h3 Queen Anne's Lace
+                            img(src="/images/flowers/QueenAnnesLace.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Queen Anne's Lace") Click Me to Order Your Own!
+        if month == 8
+            table(class="ProductTables")
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Summer Flowers : August
+                    tr
+                        td 
+                            h3 Blazing Stars
+                            img(src="/images/flowers/BlazingStars.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Blazing Stars") Click Me to Order Your Own!
+                        td 
+                            h3 Tube Clematis
+                            img(src="/images/flowers/TubeClematis.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Tube Clematis") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Daylilies
+                            img(src="/images/flowers/Daylily.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Daylilies") Click Me to Order Your Own!
+        if month == 9
+            table(class="ProductTables")
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Autumn Flowers : September
+                    tr
+                        td 
+                            h3 Chrysanthemums
+                            img(src="/images/flowers/Chrysanthemums.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Chrysanthemums") Click Me to Order Your Own!
+                        td 
+                            h3 Pansies
+                            img(src="/images/flowers/Pansies.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Pansies") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Violas
+                            img(src="/images/flowers/Violas.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Violas") Click Me to Order Your Own!
+                        td 
+                            h3 Asters
+                            img(src="/images/flowers/Asters.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Asters") Click Me to Order Your Own!
+                    tr
+                        td 
+                            h3 Petunias
+                            img(src="/images/flowers/Petunias.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Petunias") Click Me to Order Your Own!
+                        td 
+                            h3 Purple Coneflowers
+                            img(src="/images/flowers/PurpleConeflowers.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Purple Coneflowers") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Black-Eyed Susans
+                            img(src="/images/flowers/BlackEyedSusan.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Black-Eyed Susans") Click Me to Order Your Own!
+        if month == 10
+            table(class="ProductTables")
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Autumn Flowers : October
+                    tr
+                        td 
+                            h3 Roses
+                            img(src="/images/flowers/Roses.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Roses") Click Me to Order Your Own!
+                        td 
+                            h3 Sunflowers
+                            img(src="/images/flowers/Sunflowers.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Sunflowers") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Asters
+                            img(src="/images/flowers/Asters.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Asters") Click Me to Order Your Own!
+                        td 
+                            h3 Autumn Crocus
+                            img(src="/images/flowers/AutumnCrocus.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Autumn Crocus") Click Me to Order Your Own!
+                    tr
+                        td 
+                            h3 Coneflowers
+                            img(src="/images/flowers/Coneflowers.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Coneflowers") Click Me to Order Your Own!
+                        td 
+                            h3 Willow-Leaved Sunflowers
+                            img(src="/images/flowers/WillowLeafedSunflowers.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Willow-Leaved Sunflowers") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Hibiscus
+                            img(src="/images/flowers/Hibiscus.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Hibiscus") Click Me to Order Your Own!
+                        td 
+                            h3 English Lavender
+                            img(src="/images/flowers/EnglishLavender.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="English Lavender") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Japanese Honeysuckle
+                            img(src="/images/flowers/JapaneseHoneysuckle.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Japanese Honeysuckle") Click Me to Order Your Own!
+        if month == 11
+            table(class="ProductTables")
+                tbody 
+                    h3(class="FlowerSeasonHeaders") Autumn Flowers : November
+                    tr
+                        td 
+                            h3 Pansies
+                            img(src="/images/flowers/Pansies.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Pansies") Click Me to Order Your Own!
+                        td 
+                            h3 Geraniums
+                            img(src="/images/flowers/Geraniums.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Geraniums") Click Me to Order Your Own!
+                    tr 
+                        td 
+                            h3 Coronillas
+                            img(src="/images/flowers/Coronillas.jpg", alt="")
+                            p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                            button(class="orderButton", data-flower="Coronillas") Click Me to Order Your Own!
+        if month == 12
+            table(class="ProductTables")
+                tbody 
+                h3(class="FlowerSeasonHeaders") Winter Flowers : December
+                tr 
+                    td 
+                        h3 Lenten Roses
+                        img(src="/images/flowers/LentenRoses.jpg", alt="")
+                        p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                        button(class="orderButton", data-flower="Lenten Roses") Click Me to Order Your Own!
+                    td 
+                        h3 Winter's Rose Camellia 
+                        img(src="/images/flowers/WintersRoseCamellia.jpg", alt="")
+                        p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                        button(class="orderButton", data-flower="Winter's Rose Camellia") Click Me to Order Your Own!
+                tr 
+                    td 
+                        h3 Christmas Rose 
+                        img(src="/images/flowers/ChristmasRoses.jpg", alt="")
+                        p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                        button(class="orderButton", data-flower="Christmas Rose") Click Me to Order Your Own!
+
+    
+    script.
+        const buttons = document.querySelectorAll('.orderButton');
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function () {
+                const flowerSpecies = button.getAttribute('data-flower');
+                OrderFlowers(flowerSpecies);
+            });
+        });
+        
+        const orderBtn = document.getElementById('ConfirmOrder')
+        const cancelButton = document.getElementById('cancelOrder')
+        const productSelector = document.getElementById('ProductOptions')
+        const quantInput = document.getElementById('ProductQuantity')
+        const incBtn = document.getElementById('increaseQuantityButton')
+        const decBtn = document.getElementById('decreaseQuantityButton')
+        const outputBox = document.getElementById('PriceOutput')
+        const NameInput = document.getElementById('NameInput')
+        const AddressInput = document.getElementById('AddressInput')
+        const PhoneInput = document.getElementById('PhoneInput')
+        const EmailInput = document.getElementById('EmailInput')
+
+        const orderPageView = document.getElementById('orderDetails')
+        const orderedView = document.getElementById('ItemOrdered')
+        const returnBtn = document.getElementById('ReturnBtn')
+
+        orderPageView.style.display = 'block'
+        orderedView.style.display = 'none'
+
+        NameInput.value = ""
+        AddressInput.value = ""
+        PhoneInput.value = ""
+        EmailInput.value = ""
+
+        quantInput.value = "1"
+        const quantity = parseInt(quantInput.value)
+            const pricePer = parseFloat(productSelector.value)
+            if(!isNaN(quantity)) {
+                const total = (pricePer * quantity)
+                const roundedTotal = (total.toFixed(2))
+                console.log("Current Price: $", roundedTotal)
+                outputBox.innerHTML = ("Final Cost: $" + roundedTotal)
+            }
+
+        function updateFinalPrice() {
+            const quantity = parseInt(quantInput.value)
+            const pricePer = parseFloat(productSelector.value)
+            if(!isNaN(quantity)) {
+                const total = (pricePer * quantity)
+                const roundedTotal = (total.toFixed(2))
+                console.log("Current Price: $", roundedTotal)
+                outputBox.innerHTML = ("Final Cost: $" + roundedTotal)
+            }
+        }
+
+        orderBtn.addEventListener('click', function() {
+            const NameInput = document.getElementById('NameInput').value;
+            const AddressInput = document.getElementById('AddressInput').value;
+            const PhoneInput = document.getElementById('PhoneInput').value;
+            const EmailInput = document.getElementById('EmailInput').value;
+            
+            if (NameInput !== "" && AddressInput !== "" && PhoneInput !== "" && EmailInput !== "") {
+                switchView_OrderedPage();
+            }
+            else{console.log("Fields Required")}
+        })
+        
+        cancelButton.addEventListener('click', function() {
+            orderOverlayOff()
+        })
+
+        returnBtn.addEventListener('click', function() {
+            orderOverlayOff()
+        })
+
+        productSelector.addEventListener('change', function () {
+            const selectedV = productSelector.value;
+            console.log('Selected Product Value: ', selectedV)
+            updateFinalPrice()
+        })
+
+        incBtn.addEventListener('click', function () {
+            console.log("Increasing Quantity")
+            const currentV = parseInt(quantInput.value)
+            quantInput.value = (currentV + 1)
+            updateFinalPrice()
+        })
+
+        decBtn.addEventListener('click', function () {
+            console.log("Decreasing Quantity")
+            const currentV = parseInt(quantInput.value)
+            if (currentV > 1) {
+                quantInput.value = (currentV - 1)
+            }
+            updateFinalPrice()
+        })
+
+        quantInput.addEventListener('input', function() {
+            updateFinalPrice()
+        })
+
+        function switchView_OrderPage() {
+            orderPageView.style.display = 'block'
+            orderedView.style.display = 'none'
+        }
+
+        function switchView_OrderedPage() {
+            orderPageView.style.display = 'none'
+            orderedView.style.display = 'block'
+        }
+
+        async function OrderFlowers(FlowerSpecies) {
+            console.log("Clicked Order on: ", FlowerSpecies);
+            let displayName = document.getElementById('orderProductNameDisplay')
+            displayName.innerHTML = ("You Are Ordering: " + FlowerSpecies)
+            orderOverlayOn();
+        }
+
+        function orderOverlayOn() {
+            const overlayElement = document.getElementById('orderOverlay');
+            overlayElement.style.display = 'block';
+        }
+
+        function orderOverlayOff() {
+            const overlayElement = document.getElementById('orderOverlay');
+            overlayElement.style.display = 'none';
+            let displayName = document.getElementById('orderProductNameDisplay')
+            displayName.innerHTML = ("You Are Ordering: ")
+        }   
+

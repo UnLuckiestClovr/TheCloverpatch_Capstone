@@ -1,0 +1,46 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css', defer)
+    script(src="/javascripts/edm.js", defer)
+    script(src="/javascripts/LoginRegisterScripts.js", defer)
+  body
+    h1(id="outerHeader")
+      img(
+        id="CoffeeLogo"
+        src="/images/FlowersandCoffeeShop.png"
+      )
+    table(class="NavTable")
+      tbody 
+        tr 
+          td
+            a(href="/") Home
+          td
+            a(href="/CoffeeShop") Coffee Shop and Cafe
+          td
+            a(href="/FlowerShop") Flower Parlor and Herbal Shop
+          td
+            if loggedInBool == false
+              a(id="userLoginOrReg", href="/LoginorRegister") Login / Register
+            else 
+              a(id="userProfile", href="/Profile") Profile
+    p
+    block mainContent
+  footer
+    table(class="NavTable")
+      tbody 
+        tr 
+          td
+            a(href="/") Home
+          td
+            a(href="/CoffeeShop") Coffee Shop and Cafe
+          td
+            a(href="/FlowerShop") Flower Parlor and Herbal Shop
+          td
+            //- a(id="userLoginOrReg", href="/LoginorRegister") Login / Register
+            //- a(id="userProfile", href="/Profile") Profile
+            if loggedInBool == false
+              a(id="userLoginOrReg", href="/LoginorRegister") Login / Register
+            else 
+              a(id="userProfile", href="/Profile") Profile 

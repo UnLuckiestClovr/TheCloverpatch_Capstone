@@ -1,0 +1,33 @@
+extends layout.pug
+
+block mainContent
+  h2(id="WelcomeMessage") Welcome to #{title}!
+  h3(id="BusinessIntro").
+    Our small business is here to give you the love you need so you can give it to others!
+    Whether it be a relaxing time with our home-grown coffee, or the flowers you could give to your loved ones.
+    We have everything you need, catering to seasons and climates alike, making sure to give you satisfaction year-round.
+    Our doors and hearts are open to have you visit, so come say hello!
+  
+  table(class="ProductTables")
+    thead 
+      tr(class="headerrow") 
+        th Check Out Our Cafe and Coffeeshop!
+        th Check Out our Flowers and Plants Alike!
+    tbody 
+      tr 
+        td 
+          p 
+            a(href='/CoffeeShop') Coffee Shop and Cafe
+          img(
+            id="CoffeeShopImage"
+            src="/images/CoffeeShopImage.jpg"
+          )
+        td 
+          p 
+            a(href='/FlowerShop') Flower Boutique and Lounge 
+          img(
+            id="FlowerShopImage"
+            src="/images/PlantShopImage.jpg"
+          )
+
+  br

@@ -1,0 +1,23 @@
+extends layout 
+
+block mainContent
+    h2 Profile
+    article(class="profileStats")
+        h3(class="profileHeader") Profile Info:
+        h3(class="profileStatsText") Username: #{pageData.username}
+        h3(class="profileStatsText") Email: #{pageData.email}
+        h3(class="profileStatsText") Full Name: #{pageData.fullname}
+        h3(class="profileStatsText") Age: #{pageData.age}
+        br
+    br
+    article(class="profileStats")
+        h3(class="profileHeader") Questionaire Answers: 
+        h3 Coffee, Hot Cocoa, or Tea : #{pageData.q1Ans}
+        h3 Favorite Ice Cream Flavour : #{pageData.q2Ans}
+        h3 Favorite Color : #{pageData.q3Ans}
+        br
+    br
+    a(class="PrettyButton", href="/Questionaire") Edit Questionaire Answers 
+    br
+    br
+    button(id="LogoutBTN", class="PrettyButton") Log Out
