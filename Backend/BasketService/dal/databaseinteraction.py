@@ -23,7 +23,7 @@ def check_BasketExists(BID: str):
         }
 
 
-def addItemToBasket(BID: str, item: Item):
+def addItemToBasket(BID: str, item: Item):  # BID is Basket ID, this will be the User's ID as it reduces need for extra data storage and saves load time.
     try:
         rConn = redis.Redis(connection_pool=rConnPool) # Connect to Redis Database
         

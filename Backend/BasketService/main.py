@@ -1,10 +1,8 @@
-import time
-
 from fastapi import FastAPI, Path, Depends
 from starlette.responses import Response
 from py_eureka_client import eureka_client
 
-from MiscScripts import EurekaConnection
+from miscscripts import EurekaConnection
 
 app = FastAPI(
     title='CloverpatchBasketService',
@@ -23,3 +21,7 @@ EurekaPort = 10000
 
 EurekaConnection.Eureka_Register(EurekaHost, EurekaPort)
 
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app=app, host="0.0.0.0", port=12000)

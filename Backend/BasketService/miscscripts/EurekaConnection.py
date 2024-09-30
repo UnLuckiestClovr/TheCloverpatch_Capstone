@@ -15,7 +15,7 @@ def Eureka_Register(host, port):
                 eureka_server=f"http://{host}:{port}/eureka/",
                 app_name="BasketAPI",
                 instance_host="localhost", 
-                instance_port=10002,
+                instance_port=12000,
             )
             print("Eureka client initialized successfully.")
             break
