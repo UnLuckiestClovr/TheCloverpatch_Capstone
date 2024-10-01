@@ -14,7 +14,7 @@ app.include_router(apiendpoints.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Basket Root Called"}
+    return {"message" : "Basket Root Called"}
 
 #Eureka Service Config
 EurekaHost = "localhost"
