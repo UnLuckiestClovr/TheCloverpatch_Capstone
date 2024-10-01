@@ -3,13 +3,14 @@ from starlette.responses import Response
 from py_eureka_client import eureka_client
 
 from miscscripts import EurekaConnection
+from routes import apiendpoints
 
 app = FastAPI(
     title='CloverpatchBasketService',
     version='0.1'
 )
 
-app.include_router()
+app.include_router(apiendpoints.router)
 
 @app.get("/")
 async def root():
