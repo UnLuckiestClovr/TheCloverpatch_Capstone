@@ -50,3 +50,18 @@ services:
       dockerfile: Dockerfile
     environment:
       - EUREKA_HOST=CloverpatchEureka
+  
+  # Order Service Setup
+
+  # User Service Setup
+  userdatabase:
+    restart: always
+    container_name: CloverpatchUserDatabase
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Nc220370979"
+    ports:
+      - "10004:1433"
+    networks:
+      - ecommerce_webwork

@@ -11,4 +11,4 @@ EXPOSE 8000
 ENV NAME CloverpatchBasketAPI
 ENV EUREKA_HOST CloverpatchEureka
 
-CMD ["python", "app.py"]
+CMD ["python", "main.py"]
