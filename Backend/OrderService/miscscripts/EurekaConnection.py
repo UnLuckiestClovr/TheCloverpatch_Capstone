@@ -13,7 +13,7 @@ def Eureka_Register(host, port):
         try:
             eureka_client.init(
                 eureka_server=f"http://{host}:{port}/eureka/",
-                app_name="BasketAPI",
+                app_name="OrderAPI",
                 instance_host="localhost", 
                 instance_port=12000,
             )

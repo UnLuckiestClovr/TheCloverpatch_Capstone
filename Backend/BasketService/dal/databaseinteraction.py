@@ -25,15 +25,17 @@ def check_BasketExists(BID: str):
 
 def addItemToBasket(BID: str, item: Item):  # BID is Basket ID, this will be the User's ID as it reduces need for extra data storage and saves load time.
     try:
+        BID = BID.__str__().replace('-', '_')
+        redisBID = f"Basket_{BID}"
+
         rConn = redis.Redis(connection_pool=rConnPool) # Connect to Redis Database
         
         # Replace '-' with '_' in the BID; Redis doesn't like the '-' character
-        BID = BID.__str__().replace('-', '_')
-        rConn.rpush(f'{BID}:Items', item.json())
+        rConn.rpush(f'{redisBID}:Items', item.model_dump_json())
         return {
             'success' : True,
-            'message' : f'Item added to Basket {BID} Successfully',
-            'basketId': BID
+            'message' : f'Item added to {redisBID} Successfully',
+            'basketId': redisBID
         }
     except redis.ConnectionError as e:
         return {
@@ -50,10 +52,13 @@ def addItemToBasket(BID: str, item: Item):  # BID is Basket ID, this will be the
 # Retrieves the List of Items from the Basket
 def getBasket(BID: str):
     try:
+        BID = BID.__str__().replace('-', '_')
+        redisBID = f"Basket_{BID}"
+
         rConn = redis.Redis(connection_pool=rConnPool)
 
         # Get all elements from the list
-        json_strings = rConn.lrange(f'{BID}:Items', 0, rConn.llen(f'{BID}:Items'))
+        json_strings = rConn.lrange(f'{BID}:Items', 0, rConn.llen(f'{redisBID}:Items'))
 
         items = []
         for json_str in json_strings:
@@ -62,7 +67,7 @@ def getBasket(BID: str):
             items.append(item)
         return {
             "success": True,
-            "message": f'Successful Grab from Basket : {BID}',
+            "message": f'Successful Grab from {redisBID}',
             "value": items
         }
     except redis.ConnectionError as e:
@@ -79,10 +84,13 @@ def getBasket(BID: str):
 
 def deleteItemFromBasket(BID: str, IID: str):
     try:
+        BID = BID.__str__().replace('-', '_')
+        redisBID = f"Basket_{BID}"
+
         rConn = redis.Redis(connection_pool=rConnPool)
 
         # Get all elements from the list
-        items = rConn.lrange(f'{BID}:Items', 0, rConn.llen(f'{BID}:Items'))
+        items = rConn.lrange(f'{BID}:Items', 0, rConn.llen(f'{redisBID}:Items'))
 
         if items:
             # Decode to Python Dicts
@@ -100,13 +108,13 @@ def deleteItemFromBasket(BID: str, IID: str):
                 updatedItems = [json.dumps(item) for item in updatedItemObjects]
 
                 #update redis data
-                rConn.delete(f'{BID}:Items')
+                rConn.delete(f'{redisBID}:Items')
                 if updatedItems:
-                    rConn.rpush(f'{BID}:Items', *updatedItems)
+                    rConn.rpush(f'{redisBID}:Items', *updatedItems)
 
                     return {
                         "success": True,
-                        "message": f"Basket \'{BID}\' updated successfully"
+                        "message": f"\'{redisBID}\' updated successfully"
                     }
             return {
                 "success": False,
@@ -131,11 +139,14 @@ def deleteItemFromBasket(BID: str, IID: str):
 
 def ClearBasket(BID: str):
     try:
+        BID = BID.__str__().replace('-', '_')
+        redisBID = f"Basket_{BID}"
+
         rConn = redis.Redis(connection_pool=rConnPool)
-        rConn.delete(f'{BID}:Items')
+        rConn.delete(f'{redisBID}:Items')
         return {
             "success" : True,
-            "message" : f"Successful Deletion of Basket : {BID}"
+            "message" : f"Successful Deletion of {redisBID}"
         }
     except redis.ConnectionError as e:
         return {

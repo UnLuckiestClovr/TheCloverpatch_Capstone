@@ -24,34 +24,43 @@ services:
       context: ./apigateway-ocelot-dotnet8
       dockerfile: Dockerfile
   
-  # Basket Service Setup
-  basketdatabase:
+  # Basket and Order Service Setup
+  basketandorderdatabase:
     restart: always
     networks:
       - cloverpatch-network
     ports:
       - 11000:6379
       - 11001:8001
-    container_name: CloverpatchBasketDatabase
+    container_name: CloverpatchBasketAndOrderDatabase
     image: redis/redis-stack:latest
 
   basketservice:
     depends_on:
       - eurekaregistry
       - ocelot
-      - basketdatabase
+      - basketandorderdatabase
     restart: always
     networks:
       - cloverpatch-network
     ports:
-      - 12000:8000
+      - 12000:8080
     build: 
       context: ./Backend/BasketService
       dockerfile: Dockerfile
     environment:
       - EUREKA_HOST=CloverpatchEureka
   
-  # Order Service Setup
+  orderservice:
+    depends_on:
+      - eurekaregistry
+      - ocelot
+      - basketandorderdatabase
+    restart: always
+    networks:
+      - cloverpatch-network
+    ports:
+      - 12001:8080
 
   # User Service Setup
   userdatabase:
