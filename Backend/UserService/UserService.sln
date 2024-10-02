@@ -5,6 +5,24 @@ VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService", "UserService.csproj", "{80BED17D-0D33-4984-A667-F73482DF8964}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{DB70CA03-9F9E-437E-A5E5-0784CC69D365}"
+	ProjectSection(SolutionItems) = preProject
+		NewUser.cs = NewUser.cs
+		User.cs = User.cs
+		UserPassword.cs = UserPassword.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccessLayer", "DataAccessLayer", "{95A6579B-557F-4D89-B0B4-F9E276ACBB04}"
+	ProjectSection(SolutionItems) = preProject
+		DatabaseFunctions.cs = DatabaseFunctions.cs
+		DBContext.cs = DBContext.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controllers", "Controllers", "{D63EC7E8-83B3-4493-A576-712C77C8369C}"
+	ProjectSection(SolutionItems) = preProject
+		UserController.cs = UserController.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

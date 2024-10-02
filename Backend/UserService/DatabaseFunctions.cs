@@ -15,12 +15,12 @@ public class DatabaseFunctions
 
 	public class ResponseObject
 	{
-		public int Code;
+		public int code;
 		public string message;
 
 		public ResponseObject(int code, string message)
 		{
-			this.Code = code;
+			this.code = code;
 			this.message = message;
 		}
 	}

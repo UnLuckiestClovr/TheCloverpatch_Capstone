@@ -65,3 +65,19 @@ services:
       - "10004:1433"
     networks:
       - ecommerce_webwork
+  
+  userservice:
+    depends_on:
+      - eurekaregistry
+      - ocelot
+      - basketdatabase
+    restart: always
+    networks:
+      - cloverpatch-network
+    ports:
+      - 12003:8080
+    build: 
+      context: ./Backend/UserService
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_HOST=CloverpatchEureka
