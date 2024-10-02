@@ -35,7 +35,7 @@ def addItemToBasket(BID: str, item: Item):  # BID is Basket ID, this will be the
         return {
             'success' : True,
             'message' : f'Item added to {redisBID} Successfully',
-            'basketId': redisBID
+            'basketId': f'{redisBID}'
         }
     except redis.ConnectionError as e:
         return {

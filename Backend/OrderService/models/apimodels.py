@@ -14,7 +14,6 @@ class OrderItem(BaseModel):
     Price: float = Field()
 
 class Order(BaseModel):
-    OID: str = Field()
     UID: str = Field()
     Items: List[OrderItem] = Field()
     FinalPrice: float = Field()
