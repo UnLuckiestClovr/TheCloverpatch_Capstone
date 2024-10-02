@@ -121,7 +121,7 @@ def FetchOrdersOfUser(UID: str):
             'orders': orders
         }
     except redis.ConnectionError as e:
-        return {
+        return {    
             "success": False,
             "message": f"Error connecting to Redis: {e}"
         }
@@ -131,3 +131,29 @@ def FetchOrdersOfUser(UID: str):
             "message": f"An error occurred: {e}"
         }
 
+
+def CancelOrder(OID: str, UID: str):
+    try:
+        OID = OID.__str__().replace('-', '_')
+        redisOID = f"Order_{OID}"
+
+        rConn = redis.Redis(connection_pool=rConnPool)  # Connect to Redis Database
+
+        # Delete Order object from both the Order Items and the List of User's Orders
+        rConn.delete(f'{redisOID}:Items')
+        rConn.srem(f'UID:{UID}:orders', redisOID)
+
+        return {
+            "success" : True,
+            "message" : f"Successful Deletion of {redisOID}"
+        }
+    except redis.ConnectionError as e:
+        return {
+            "success": False,
+            "message": f"Error connecting to Redis: {e}"
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "message": f"An error occurred: {e}"
+        }

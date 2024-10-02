@@ -24,6 +24,6 @@ async def FetchOrder(OID: str = Path(alias='OID')):
 async def FetchUserOrders(UID: str = Path(alias='UID')):
     return databaseinteraction.FetchOrdersOfUser(UID)
 
-@router.delete("/cancel/{OID}")
-async def CancelOrder(OID: str = Path(alias='OID')):
-    pass
+@router.delete("/cancel/{UID}/{OID}")
+async def CancelOrder(UID: str = Path(alias='UID'), OID: str = Path(alias='OID')):
+    return databaseinteraction.CancelOrder(OID, UID)
