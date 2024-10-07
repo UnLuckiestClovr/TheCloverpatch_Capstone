@@ -27,7 +27,7 @@ possible data leakages causing massive issues. As to how this will be stored it 
 User: {
     ID: str,
     Username: str,
-    Email: str
+    Email: str  
 }
 
 UserPass: {

@@ -2,7 +2,7 @@ import redis, json, uuid
 
 from models.apimodels import Basket, Item
 
-rConnPool = redis.ConnectionPool(host='CloverpatchBasketDatabase', port=10002)
+rConnPool = redis.ConnectionPool(host='CloverpatchBasketDatabase', port=6379)
 
 
 def check_BasketExists(BID: str):

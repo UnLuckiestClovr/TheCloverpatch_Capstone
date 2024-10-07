@@ -2,7 +2,7 @@ import redis, json, uuid, re
 
 from models.apimodels import Order, AddressInfo, FlowerOrder
 
-rConnPool = redis.ConnectionPool(host='CloverpatchBasketAndOrderDatabase', port=10002)
+rConnPool = redis.ConnectionPool(host='CloverpatchBasketAndOrderDatabase', port=6379)
 
 def check_OrderExists(OID: str):
     try:
