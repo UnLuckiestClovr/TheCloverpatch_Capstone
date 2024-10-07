@@ -11,3 +11,4 @@ def FlowerProduct(BaseModel):
     PName: str = Field()
     PMonth: int = Field()
     PCostPerFlower: float = Field()
+    PImageURL: str = Field()
