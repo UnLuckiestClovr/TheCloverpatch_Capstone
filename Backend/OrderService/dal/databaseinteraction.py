@@ -1,6 +1,6 @@
 import redis, json, uuid, re
 
-from models.apimodels import Order, OrderItem
+from models.apimodels import Order, AddressInfo, FlowerOrder
 
 rConnPool = redis.ConnectionPool(host='CloverpatchBasketAndOrderDatabase', port=10002)
 
@@ -23,7 +23,51 @@ def check_OrderExists(OID: str):
             "message": f"An error occurred: {e}"
         }
 
-def CreateOrder(rConn: redis.Redis, orderObject: Order, OID: str):
+
+def CreateFlowerOrder(BID: str, addressInfo: AddressInfo):
+    try:
+        redisOID = f"Order_{(uuid.uuid4()).__str__().replace('-', '_')}"
+        redisBID = f"Basket_{BID.__str__().replace('-', '_')}"  # Concatenate for Redis
+
+        rConn = redis.Redis(connection_pool=rConnPool, decode_responses=True) # Connect to Redis Database
+
+        retrieved_data = json.loads(rConn.get(redisBID))
+
+        userID = retrieved_data["BID"]
+        items = retrieved_data["Items"]
+        total_price = retrieved_data["TotalPrice"]
+
+        regexPatternBID = r'^(Order_|Basket_)(\w+)$'
+        userid = re.sub(regexPatternBID, r'\2', userID)
+
+        orderObject = FlowerOrder(
+            userID=userid,
+            Items=items,
+            FinalPrice=total_price,
+            AddressInfo=addressInfo
+        )
+
+        rConn.hmset(redisOID, orderObject.model_dump_json())
+        rConn.rpush(f"UID:{orderObject.UID}:orders", redisOID)
+
+        return {
+            'success': True,
+            'message': f'{redisOID} created Successfully',
+            'orderID': f'{redisOID}'
+        }
+    except redis.ConnectionError as e:
+        return {
+            "success": False,
+            "message": f"Error connecting to Redis: {e}"
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "message": f"An error occurred: {e}"
+        }
+
+
+def CreateCafeOrder(rConn: redis.Redis, orderObject: Order, OID: str):
     try:
         rConn.hmset(OID, orderObject.model_dump_json())
         rConn.rpush(f"UID:{orderObject.UID}:orders", OID)
@@ -43,6 +87,7 @@ def CreateOrder(rConn: redis.Redis, orderObject: Order, OID: str):
             "success": False,
             "message": f"An error occurred: {e}"
         }
+
 
 def ProcessBasketToOrder(BID: str):
     try:
@@ -66,7 +111,7 @@ def ProcessBasketToOrder(BID: str):
             FinalPrice=total_price
         )
 
-        return CreateOrder(rConn, order, redisOID)  # Calls to the Creation Script
+        return CreateCafeOrder(rConn, order, redisOID)  # Calls to the Creation Script
             
     except redis.ConnectionError as e:
         return {
@@ -78,6 +123,7 @@ def ProcessBasketToOrder(BID: str):
             "success": False,
             "message": f"An error occurred: {e}"
         }
+
 
 def FetchOrderbyID(OID: str):
     try:
