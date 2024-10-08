@@ -61,6 +61,38 @@ services:
       - cloverpatch-network
     ports:
       - 12001:8080
+    build: 
+      context: ./Backend/OrderService
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_HOST=CloverpatchEureka
+
+  # Flower and Cafe Product Service
+  productdatabase:
+    restart: always
+    container_name: CloverpatchProductDatabase
+    image: mongo
+    networks:
+      - cloverpatch-network
+    ports:
+      - 11002:27017
+  
+  flowerservice:
+    depends_on:
+      - eurekaregistry
+      - ocelot
+      - productdatabase
+    restart: always
+    container_name: CloverpatchFlowerService
+    networks:
+      - cloverpatch-network
+    ports:
+      - 12002:8080
+    build: 
+      context: ./Backend/FlowerService
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_HOST=CloverpatchEureka
 
   # User Service Setup
   userdatabase:
@@ -71,7 +103,7 @@ services:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "Nc220370979"
     ports:
-      - "10004:1433"
+      - "11003:1433"
     networks:
       - ecommerce_webwork
   
@@ -81,10 +113,11 @@ services:
       - ocelot
       - basketdatabase
     restart: always
+    container_name: CloverpatchUserService
     networks:
       - cloverpatch-network
     ports:
-      - 12003:8080
+      - 12004:8080
     build: 
       context: ./Backend/UserService
       dockerfile: Dockerfile
