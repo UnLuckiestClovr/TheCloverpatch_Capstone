@@ -4,6 +4,8 @@ from py_eureka_client import eureka_client
 
 from miscscripts import EurekaConnection
 
+from routes import apiendpoints
+
 app = FastAPI(
     title="CloverpatchOrderService",
     version="0.1"
@@ -28,7 +30,7 @@ app.add_middleware(
 
 # ---------------------------------------------
 
-app.include_router()
+app.include_router(apiendpoints.router)
 
 app.get("/")
 async def root():

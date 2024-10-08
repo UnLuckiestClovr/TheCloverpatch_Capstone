@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Path, Depends
 from starlette.responses import Response
 
+from routes import apiendpoints
+
 app = FastAPI(
     title="CloverpatchOrderService",
     version="0.1"
@@ -25,7 +27,7 @@ app.add_middleware(
 
 # ---------------------------------------------
 
-app.include_router()
+app.include_router(apiendpoints.router)
 
 app.get("/")
 async def root():
