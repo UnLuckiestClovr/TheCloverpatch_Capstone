@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Path, Depends
 from starlette.responses import Response
 
-from routes import apiendpoints
+from security.dependencies import get_query_token, get_token_header
+from routes import apiendpoints, protected
 
 app = FastAPI(
     title="CloverpatchOrderService",
@@ -28,6 +29,13 @@ app.add_middleware(
 # ---------------------------------------------
 
 app.include_router(apiendpoints.router)
+app.include_router(
+    protected.router,
+    prefix='/protected-flowers',
+    tags=['flowers'],
+    dependencies=[Depends(get_token_header)],
+    responses={404 : {"description": "Not Found"}}
+)
 
 app.get("/")
 async def root():
