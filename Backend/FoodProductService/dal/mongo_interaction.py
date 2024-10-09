@@ -10,6 +10,7 @@ MongoClient = pymongo.MongoClient("mongodb://localhost:11002/") # Test Connectio
 objDatabase = MongoClient["CloverpatchProducts"]
 foodColl = objDatabase["Food"]
 drinkColl = objDatabase["Drink"]
+dessertColl = objDatabase["Dessert"]
 
 def FetchAll_Food_NonAdult():
     try:
