@@ -5,7 +5,7 @@ from security.dependencies import get_query_token, get_token_header
 from routes import apiendpoints, protected
 
 app = FastAPI(
-    title="CloverpatchFlowerService",
+    title="CloverpatchFoodProductService",
     version="0.1"
 )
 
@@ -39,7 +39,7 @@ app.include_router(
 
 app.get("/")
 async def root():
-    return { "message" : "Order Root Called"}
+    return { "message" : "Cafe Root Called"}
 
 if __name__ == "__main__":
     import uvicorn
