@@ -3,7 +3,11 @@ from fastapi import APIRouter, Depends, HTTPException, Path
 from models.apimodels import *
 from dal import mongo_interaction
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/flowers',
+    tags=['flowers'],
+    responses={404 : {"description": "Not Found"}}
+)
 
 
 @router.get("/get-all")

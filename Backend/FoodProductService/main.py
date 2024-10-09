@@ -31,7 +31,7 @@ app.add_middleware(
 app.include_router(apiendpoints.router)
 app.include_router(
     protected.router,
-    prefix='/protected-flowers',
+    prefix='/protected-products',
     tags=['flowers'],
     dependencies=[Depends(get_token_header)],
     responses={404 : {"description": "Not Found"}}

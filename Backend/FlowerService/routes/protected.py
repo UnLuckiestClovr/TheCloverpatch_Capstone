@@ -4,9 +4,6 @@ from models.apimodels import *
 from dal import mongo_interaction
 
 router = APIRouter(
-    prefix='/flowers',
-    tags=['protected','flowers'],
-    responses={404 : {"description": "Not Found"}}
 )
 
 @router.post("/create-flower")
