@@ -192,3 +192,28 @@ def EnactProductUpdate(updatedProduct: EdibleItem, PType: int):
                 return UpdateProduct(drinkColl, updatedProduct)
             case 3:  # DESSERT
                 return UpdateProduct(dessertColl, updatedProduct)
+
+
+def DeleteProduct(collection: Collection, id: str):
+    try:
+        collection.delete_one({'_id': id})
+
+        return {
+            'success': True,
+            'message': f'Product Deletion of Product {id} Successful!'
+        }
+    except Exception as e:
+        return {
+            'success': False,
+            'message': f'Deletion of Edible Product "{id}" Failed : {e}'
+        }
+
+
+def EnactProductDeletion(id: str, PType: int):
+    match PType:
+            case 1:  # FOOD
+                return DeleteProduct(foodColl, id)
+            case 2:  # DRINK
+                return DeleteProduct(drinkColl, id)
+            case 3:  # DESSERT
+                return DeleteProduct(dessertColl, id)
