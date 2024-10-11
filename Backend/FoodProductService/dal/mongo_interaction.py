@@ -2,6 +2,7 @@ import pymongo, json, uuid
 
 from datetime import datetime
 from pymongo import ReturnDocument
+from pymongo.collection import Collection
 from models.apimodels import *
 
 
@@ -126,3 +127,68 @@ def Fetch_Drink_ByID(id: str):
             'success': False,
             'message': f'We Ran Into an Issue while grabbing a Drink Item : {e}'
         }
+
+
+# PROTECTED ---------------------------------------------------
+
+
+def CreateProduct(collection: Collection, edibleProduct: EdibleItem):
+    try:
+        newID = uuid.uuid4()
+
+        newProduct = EdibleItem(
+            _id=newID,
+            PName=edibleProduct.PName,
+            IDRequired=edibleProduct.IDRequired,
+            PCost=edibleProduct.PCost,
+            PImageURL=edibleProduct.PImageURL
+        )
+
+        collection.insert_one(json.loads(newProduct.model_dump_json()))
+
+        return {
+            'success': True,
+            'message': f'Product {newID} Created Successfully!'
+        }
+
+    except Exception as e:
+        return {
+            'success': False,
+            'message': f'Creation of Edible Product Failed : {e}'
+        }
+
+
+def ProductCreationEnact(edibleProduct: EdibleItem, PType: int):
+    match PType:
+            case 1:  # FOOD
+                return CreateProduct(foodColl, edibleProduct)
+            case 2:  # DRINK
+                return CreateProduct(drinkColl, edibleProduct)
+            case 3:  # DESSERT
+                return CreateProduct(dessertColl, edibleProduct)
+
+
+def UpdateProduct(collection: Collection, updatedProduct: EdibleItem):
+    try:
+        result = collection.find_one_and_replace({"_id": updatedProduct._id})
+
+        return {
+            'success': True,
+            'message': f'Updated Product {updatedProduct._id} Successfully',
+            'updatedProduct': json.dumps(result)
+        }
+    except Exception as e:
+        return {
+            'success': False,
+            'message': f'Updating of Edible Product Failed : {e}'
+        }
+
+
+def EnactProductUpdate(updatedProduct: EdibleItem, PType: int):
+    match PType:
+            case 1:  # FOOD
+                return UpdateProduct(foodColl, updatedProduct)
+            case 2:  # DRINK
+                return UpdateProduct(drinkColl, updatedProduct)
+            case 3:  # DESSERT
+                return UpdateProduct(dessertColl, updatedProduct)
