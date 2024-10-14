@@ -13,6 +13,23 @@ foodColl = objDatabase["Food"]
 drinkColl = objDatabase["Drink"]
 dessertColl = objDatabase["Dessert"]
 
+def FetchAll_Dessert():
+    try:
+        documents = dessertColl.find()
+
+        desserts = [{key: value for key, value in document.items()} for document in documents]
+
+        return {
+            'success': True,
+            'message': 'List of Desserts Fetched Successfully!',
+            'desserts': json.dumps(desserts, default=str)
+        }
+    except Exception as e:
+        return {
+            'success': False,
+            'message': f'We Ran Into an Issue while grabbing a list of Desserts : {e}'
+        }
+
 def FetchAll_Food_NonAdult():
     try:
         documents = foodColl.find({'IDRequired': False})

@@ -9,6 +9,10 @@ router = APIRouter(
     responses={404 : {"description": "Not Found"}}
 )
 
+@router.get("/fetch/dessert")
+def getDessert():
+    return mongo_interaction.FetchAll_Dessert()
+
 @router.get("/fetch/food")
 def getFood():
     return mongo_interaction.FetchAll_Food_NonAdult()
