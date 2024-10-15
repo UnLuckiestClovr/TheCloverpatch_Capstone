@@ -27,50 +27,6 @@ public class DatabaseFunctions
 	}
 
 
-	public static void InduceDatabaseChecks() {
-		try {
-			string connString = "Server=localhost;Database=master; User Id=sa;Password=Nc220370979;";
-
-			using (SqlConnection connection = new SqlConnection(connString)) 
-			{
-				connection.Open();
-
-				List<string> dbNames = ["UserDB", "UserPassDB"];
-
-				for (int index = 0; index < dbNames.Count; index++)
-				{
-					DatabaseCheck(connection, dbNames[index]);
-				}
-			}
-		} catch (Exception e) {
-			Console.WriteLine(e.Message);
-		}
-    }
-
-
-	public static void DatabaseCheck(SqlConnection connection, string dbName)
-	{
-		//Check if Database Exists
-		string checkQuery = $"SELECT database_id FROM sys.databases WHERE name = '{dbName}'";
-
-		using (SqlCommand command = new SqlCommand(checkQuery, connection))
-		{
-			var result = command.ExecuteScalar();
-
-			if (result == null) 
-			{
-				// Database does not exist, Create It
-				string createDBQuery = $"CREATE DATABASE '{dbName}'";
-				using (SqlCommand createCommand = new SqlCommand(createDBQuery, connection))
-				{
-					createCommand.ExecuteNonQuery();
-					Console.WriteLine($"Created Database {dbName} Successfully!");
-				}
-			}
-		}
-	}
-
-
 	public async Task<ResponseObject> RegisterUser(NewUser newuser)
 	{
 		if (newuser == null) { return new ResponseObject(500, "Invalid User Object: Found to be Null"); }
