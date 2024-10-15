@@ -5,16 +5,18 @@ namespace UserService
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddControllers();
+            builder.Services.AddDbContext<UserDBContext>();
+            builder.Services.AddDbContext<PasswordDBContext>();
+
             var app = builder.Build();
 
-            app.MapGet("/", () => "Hello World!");
+            // Configure the HTTP request pipeline.
+            app.UseAuthorization();
+            app.MapControllers();
 
-            app.MapPost("/user/register", async (NewUser newuser) =>
-            {
-                return DatabaseFunctions.RegisterUser(newuser);
-            });
-
-            
+            app.MapGet("/", () => "Hello World!");            
 
             app.Run();
         }

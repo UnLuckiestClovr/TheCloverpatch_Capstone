@@ -2,11 +2,11 @@
 
 public class UserPassword
 {
-    public string Username { get; set; }
+    public string ID { get; set; }
     public string Password { get; set; }
 
-    public UserPassword(string username, string password) { 
-        this.Username = username;
+    public UserPassword(string id, string password) { 
+        this.ID = id;
         this.Password = password;
     }
 

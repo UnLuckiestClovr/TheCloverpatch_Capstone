@@ -1,13 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 
+[ApiController]
+[Route("[controller]")]
 public class UserController : ControllerBase
 {
 	private readonly DatabaseFunctions _databaseFunctions;
 
-	public UserController(DatabaseFunctions databaseFunctions)
+	public UserController()
     {
-        _databaseFunctions = databaseFunctions;
+        _databaseFunctions = new DatabaseFunctions(new UserDBContext(), new PasswordDBContext());
+    }
+
+    [HttpGet("")]
+    public async Task<IActionResult> TestEndpoint()
+    {
+        return Ok("Hello User!");
     }
 
     [HttpPost("register")]
