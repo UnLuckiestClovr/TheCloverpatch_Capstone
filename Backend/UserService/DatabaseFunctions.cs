@@ -77,7 +77,7 @@ public class DatabaseFunctions
 
 		try
 		{
-		string newID = Guid.NewGuid().ToString();
+			string newID = Guid.NewGuid().ToString();
 
             User userobject = new User(newID, newuser.Username, newuser.Email);
             UserPassword passwordObject = new UserPassword(newID, newuser.Password);
@@ -92,10 +92,13 @@ public class DatabaseFunctions
         } 
 		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
 		{
-            return new ResponseObject(500, $"Database error occurred: {ex.Message}");
+			var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "No inner exception.";
+			Console.WriteLine($"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+            return new ResponseObject(500, $"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
         }
 		catch (Exception ex)  // Handle General Exception
 		{
+			Console.WriteLine(ex.Message);
             return new ResponseObject(500, $"An error occurred: {ex.Message}");
         }
 	}
