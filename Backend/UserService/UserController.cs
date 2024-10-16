@@ -25,4 +25,11 @@ public class UserController : ControllerBase
 
         return StatusCode(response.code, response.message);
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginAttempt(LoginAttempt loginAttempt)
+    {
+        var response = await _databaseFunctions.Login(loginAttempt);
+        return StatusCode(response.code, response.message);
+    }
 }
