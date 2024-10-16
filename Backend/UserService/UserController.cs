@@ -21,7 +21,7 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(NewUser newUser)
     {
-        var response = await _databaseFunctions.RegisterUser(newUser);
+        var response = await _databaseFunctions.RegisterUser<string>(newUser);
 
         return StatusCode(response.code, response.message);
     }
@@ -29,7 +29,7 @@ public class UserController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> LoginAttempt(LoginAttempt loginAttempt)
     {
-        var response = await _databaseFunctions.Login(loginAttempt);
+        var response = await _databaseFunctions.Login<User>(loginAttempt);
         return StatusCode(response.code, response.message);
     }
 }
