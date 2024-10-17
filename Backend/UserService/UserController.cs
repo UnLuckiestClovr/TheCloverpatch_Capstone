@@ -12,12 +12,7 @@ public class UserController : ControllerBase
         _databaseFunctions = new DatabaseFunctions(new UserDBContext(), new PasswordDBContext());
     }
 
-    [HttpGet("")]
-    public async Task<IActionResult> TestEndpoint()
-    {
-        return Ok("Hello User!");
-    }
-
+    // Unprotected Endpoints
     [HttpPost("register")]
     public async Task<IActionResult> Register(NewUser newUser)
     {
