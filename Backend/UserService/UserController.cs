@@ -30,6 +30,14 @@ public class UserController : ControllerBase
     public async Task<IActionResult> LoginAttempt(LoginAttempt loginAttempt)
     {
         var response = await _databaseFunctions.Login<User>(loginAttempt);
-        return StatusCode(response.code, response.message);
+
+        if (response.code == 200)
+        {
+            return Ok(response);
+        }
+        else 
+        {
+            return StatusCode(response.code, response);
+        }
     }
 }

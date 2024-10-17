@@ -36,7 +36,7 @@ public class DatabaseFunctions
 	}
 
 
-	public async Task<ResponseObject<string>> RegisterUser<T>(NewUser newuser)
+	public async Task<ResponseObject<string>> RegisterUser<T>(NewUser newuser) // Create User
 	{
 		if (newuser == null) { return new ResponseObject<string>(500, "Invalid User Object: Found to be Null"); }
 
@@ -69,7 +69,7 @@ public class DatabaseFunctions
 	}
 
 
-	public async Task<User> FindUser(string usernameOrEmail)
+	public async Task<User> FindUser(string usernameOrEmail) // Read User by Username or Email [ Same Value counts for Both ]
 	{
 		using (_usercontext)
 		{
@@ -78,7 +78,7 @@ public class DatabaseFunctions
 	}
 
 
-	public async Task<UserPassword> FindPass(string id)
+	public async Task<UserPassword> FindPass(string id) // Find Password entry by the user's ID, seperates the databases for ease of useability.
 	{
 		using (_passwordcontext)
 		{
@@ -87,20 +87,20 @@ public class DatabaseFunctions
 	}
 
 
-	public async Task<ResponseObject<User>> Login<T>(LoginAttempt loginAttempt)
+	public async Task<ResponseObject<User>> Login<T>(LoginAttempt loginAttempt) // Attempt to Login
 	{
 		try {
 			User foundUser = await FindUser(loginAttempt.UsernameOrEmail);
 
 			if (foundUser == null) { return new ResponseObject<User>(500, "Username/Email or Password is Incorrect"); }  // If no user found with matching Username or Password, return a Generic LoginFailed Message. 
 
-			UserPassword foundPasswordEntry = await FindPass(loginAttempt.Password);
+			UserPassword foundPasswordEntry = await FindPass(foundUser.ID);
 
 			if (foundPasswordEntry.VerifyPassword(loginAttempt.Password))  // If Password matches the database-stored UserPassword then login can move forward.
 			{
 				return new ResponseObject<User>(200, "User Login Successful!", foundUser);
 			}
-			else  // Return Generic Login Failed Message if inserted Password does not match.
+			else  // Return Generic Login Failed Message if password doesn't match.
 			{
 				return new ResponseObject<User>(500, "Username/Email or Password is Incorrect");
 			}
@@ -113,7 +113,72 @@ public class DatabaseFunctions
         }
 		catch (Exception ex)  // Handle General Exception
 		{
-			Console.WriteLine(ex.Message);
+			Console.WriteLine(ex);
+            return new ResponseObject<User>(500, $"An error occurred: {ex.Message}");
+        }
+	}
+
+
+	public async Task<ResponseObject<User>> Update_UserInfo(User updatedUser) // Updates the user's main information, excludes the Password Updating as that is a seperate call.
+	{
+		try
+		{
+			var existingUser = await _usercontext.Users.FindAsync(updatedUser.ID);
+
+			if (existingUser == null)
+			{
+				return new ResponseObject<User>(500, "Error updating user, user does not exist.");
+			}
+
+			// Update Properties
+			existingUser.Username = updatedUser.Username;
+			existingUser.Email = updatedUser.Email;
+
+			// Save Changes to Database
+			await _usercontext.SaveChangesAsync();
+
+			return new ResponseObject<User>(200, "User Updated Successfully", updatedUser);
+		}
+		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
+		{
+			var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "No inner exception.";
+			Console.WriteLine($"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+            return new ResponseObject<User>(500, $"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+        }
+		catch (Exception ex)  // Handle General Exception
+		{
+			Console.WriteLine(ex);
+            return new ResponseObject<User>(500, $"An error occurred: {ex.Message}");
+        }
+	}
+
+
+	public async Task<ResponseObject<User>> Update_UserPassword(UserPasswordChangeInfo changeInfo)
+	{
+		try
+		{
+			var existingPassword = await _passwordcontext.Passwords.FindAsync(changeInfo.UserID);
+
+			if (existingPassword != null && existingPassword.VerifyPassword(changeInfo.OldPassword))
+			{
+				existingPassword.Password = changeInfo.NewPassword;
+
+				await _passwordcontext.SaveChangesAsync();
+
+				return new ResponseObject<User>(200, "Password Updated Successfully!");
+			}
+
+			return new ResponseObject<User>(500, $"Error: Password Update Failed for Unknown Reasons; Ensure that User [{changeInfo.UserID}] is a Valid User.");
+		}
+		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
+		{
+			var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "No inner exception.";
+			Console.WriteLine($"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+            return new ResponseObject<User>(500, $"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+        }
+		catch (Exception ex)  // Handle General Exception
+		{
+			Console.WriteLine(ex);
             return new ResponseObject<User>(500, $"An error occurred: {ex.Message}");
         }
 	}
