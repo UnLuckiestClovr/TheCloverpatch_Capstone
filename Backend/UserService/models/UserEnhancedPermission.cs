@@ -1,17 +1,19 @@
 public class UserEnhancedPermissions
 {
-    private string _UID { get; set; }
+    public string ID { get; set; } // Primary Key
 
-    private string _PermissionToken { get; set; } // EMP or ADM
+    public string PermissionToken { get; set; } // EMP or ADM
 
-    public UserEnhancedPermissions(string uid, string permToken)
+    public UserEnhancedPermissions() {}
+
+    public UserEnhancedPermissions(string id, string permToken)
     {
-        this._UID = uid;
-        this._PermissionToken = permToken;
+        this.ID = id;
+        this.PermissionToken = permToken;
     }
 
 
-    public string getUID() { return _UID; }
+    public string getID() { return ID; }
 
-    public string getPermToken() { return _PermissionToken;}
+    public string getPermToken() { return PermissionToken;}
 }

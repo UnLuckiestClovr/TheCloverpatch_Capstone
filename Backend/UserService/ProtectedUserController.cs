@@ -9,7 +9,7 @@ public class ProtectedUserController : ControllerBase
 
 	public ProtectedUserController()
     {
-        _databaseFunctions = new DatabaseFunctions(new UserDBContext(), new PasswordDBContext());
+        _databaseFunctions = new DatabaseFunctions(new UserDBContext(), new PasswordDBContext(), new HigherPermUserContent());
     }
 
     // Protected Endpoints
@@ -20,5 +20,5 @@ public class ProtectedUserController : ControllerBase
     }
 
     
-    
+
 }

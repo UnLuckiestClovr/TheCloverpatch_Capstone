@@ -219,4 +219,28 @@ public class DatabaseFunctions
             return new ResponseObject<string>(500, $"An error occurred: {ex.Message}");
         }
 	}
+
+
+	public async Task<ResponseObject<string>> TurnUserIntoEmployee(string id)
+	{
+		try
+		{
+			UserEnhancedPermissions empObject = new UserEnhancedPermissions(id, "EMP");
+			await _enhancedUserContext.EnhancedUsers.AddAsync(empObject); 
+			await _enhancedUserContext.SaveChangesAsync();
+
+            return new ResponseObject<string>(200, "User Transferred to Employee Status Successfully", $"New Employee: {id}");
+		}
+		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
+		{
+			var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "No inner exception.";
+			Console.WriteLine($"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+            return new ResponseObject<string>(500, $"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+        }
+		catch (Exception ex)  // Handle General Exception
+		{
+			Console.WriteLine(ex);
+            return new ResponseObject<string>(500, $"An error occurred: {ex.Message}");
+        }
+	}
 }
