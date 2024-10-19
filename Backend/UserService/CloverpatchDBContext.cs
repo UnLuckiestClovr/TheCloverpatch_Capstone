@@ -39,3 +39,22 @@ public class PasswordDBContext : DbContext
 
   public DbSet<UserPassword> Passwords { get; set; }
 }
+
+public class HigherPermUserContent : DbContext
+{
+  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+  {
+	optionsBuilder.UseSqlServer("Server=localhost,10004;database=EnhancedUsersDB;User Id=sa;password=Nc220370979;TrustServerCertificate=True;");
+  }
+
+  public HigherPermUserContent() {
+    Database.EnsureCreated();
+  }
+
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<UserEnhancedPermissions>().ToTable("EnhancedUsers");
+  }
+
+  public DbSet<UserEnhancedPermissions> EnhancedUsers { get; set; }
+}

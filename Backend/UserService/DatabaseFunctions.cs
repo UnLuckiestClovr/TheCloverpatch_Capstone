@@ -7,11 +7,13 @@ public class DatabaseFunctions
 {
 	private readonly UserDBContext _usercontext;
 	private readonly PasswordDBContext _passwordcontext;
+	private readonly HigherPermUserContent _enhancedUserContext;
 
-	public DatabaseFunctions(UserDBContext usercontext, PasswordDBContext passwordcontext)
+	public DatabaseFunctions(UserDBContext usercontext, PasswordDBContext passwordcontext, HigherPermUserContent enhancedUserContext)
 	{
 		_usercontext = usercontext;
 		_passwordcontext = passwordcontext;
+		_enhancedUserContext = enhancedUserContext;
 	}
 
 	public class ResponseObject<T>
@@ -180,6 +182,41 @@ public class DatabaseFunctions
 		{
 			Console.WriteLine(ex);
             return new ResponseObject<User>(500, $"An error occurred: {ex.Message}");
+        }
+	}
+
+
+	public async Task<ResponseObject<string>> MakeEmployeeUser(NewUser newUser)
+	{
+		try
+		{
+			string newID = Guid.NewGuid().ToString();
+
+            User userobject = new User(newID, newUser.Username, newUser.Email);
+            UserPassword passwordObject = new UserPassword(newID, newUser.Password);
+			UserEnhancedPermissions empObject = new UserEnhancedPermissions(newID, "EMP");
+
+			// Create new User in Context
+			await _usercontext.Users.AddAsync(userobject);
+			await _passwordcontext.Passwords.AddAsync(passwordObject);
+			await _enhancedUserContext.EnhancedUsers.AddAsync(empObject);
+
+			await _usercontext.SaveChangesAsync();
+			await _passwordcontext.SaveChangesAsync();
+			await _enhancedUserContext.SaveChangesAsync();
+
+            return new ResponseObject<string>(200, "User Registered Successfully", $"New User: {newID}");
+		}
+		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
+		{
+			var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "No inner exception.";
+			Console.WriteLine($"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+            return new ResponseObject<string>(500, $"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+        }
+		catch (Exception ex)  // Handle General Exception
+		{
+			Console.WriteLine(ex);
+            return new ResponseObject<string>(500, $"An error occurred: {ex.Message}");
         }
 	}
 }

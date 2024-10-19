@@ -2,7 +2,7 @@ public class UserEnhancedPermissions
 {
     private string _UID { get; set; }
 
-    private string _PermissionToken { get; set; }
+    private string _PermissionToken { get; set; } // EMP or ADM
 
     public UserEnhancedPermissions(string uid, string permToken)
     {
