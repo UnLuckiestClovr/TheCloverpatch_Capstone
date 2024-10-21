@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 public class UserRoleHandler_Employee : AuthorizationHandler<UserIDRequirement>
 {
     private readonly HigherPermUserContext _dbContext;
+    private readonly IHttpContextAccessor _contextAccessor;
 
-    public UserRoleHandler_Employee(HigherPermUserContext dbContext) { this._dbContext = dbContext; }
+
+    public UserRoleHandler_Employee(HigherPermUserContext dbContext, IHttpContextAccessor contextAccessor) 
+    { 
+        this._dbContext = dbContext; 
+        this._contextAccessor = contextAccessor;
+    }
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, UserIDRequirement requirement)
     {
-        var userIDClaim = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var httpContext = _contextAccessor.HttpContext;
+        var userIDClaim = httpContext?.Request.Headers["AuthenticationToken"].FirstOrDefault();
 
         if (userIDClaim != null)
         {
@@ -28,12 +35,18 @@ public class UserRoleHandler_Employee : AuthorizationHandler<UserIDRequirement>
 public class UserRoleHandler_Admin : AuthorizationHandler<UserIDRequirement>
 {
     private readonly HigherPermUserContext _dbContext;
+    private readonly IHttpContextAccessor _contextAccessor;
 
-    public UserRoleHandler_Admin(HigherPermUserContext dbContext) { this._dbContext = dbContext; }
+    public UserRoleHandler_Admin(HigherPermUserContext dbContext, IHttpContextAccessor contextAccessor) 
+    { 
+        this._dbContext = dbContext; 
+        this._contextAccessor = contextAccessor;
+    }
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, UserIDRequirement requirement)
     {
-        var userIDClaim = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var httpContext = _contextAccessor.HttpContext;
+        var userIDClaim = httpContext?.Request.Headers["AuthenticationToken"].FirstOrDefault();
 
         if (userIDClaim != null)
         {

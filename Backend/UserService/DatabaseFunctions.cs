@@ -243,19 +243,4 @@ public class DatabaseFunctions
             return new ResponseObject<string>(500, $"An error occurred: {ex.Message}");
         }
 	}
-
-
-	// Authorization Endpoints to grab Lists
-	public async Task<List<string>> GetEmps()
-	{
-		try
-		{			
-			return await _enhancedUserContext.GetEmployeeIDs_Async();
-		}
-		catch (Exception ex)  // Handle General Exception
-		{
-			Console.WriteLine(ex);
-            return [];
-        }
-	}
 }

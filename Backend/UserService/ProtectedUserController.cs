@@ -14,12 +14,6 @@ public class ProtectedUserController : ControllerBase
     }
 
     // Protected Endpoints
-    [HttpGet("")]
-    public async Task<IActionResult> TestEndpoint()
-    {
-        return Ok("Hello, Admin!");
-    }
-
     [Authorize(Policy= "AdminPolicy")]
     [HttpPost("/make-employee")]
     public async Task<IActionResult> MakeEmployee(NewUser newUser)
@@ -29,6 +23,12 @@ public class ProtectedUserController : ControllerBase
         return StatusCode(result.code, result);
     }
 
+    [Authorize(Policy = "AdminPolicy")]
+    [HttpPut("/update-to-employee/{id}")]
+    public async Task<IActionResult> UpdateUserPerms_ToEmployee(string id)
+    {
+        var result = await _databaseFunctions.TurnUserIntoEmployee(id);
 
-
+        return StatusCode(result.code, result);
+    }
 }
