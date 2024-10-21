@@ -7,9 +7,9 @@ public class DatabaseFunctions
 {
 	private readonly UserDBContext _usercontext;
 	private readonly PasswordDBContext _passwordcontext;
-	private readonly HigherPermUserContent _enhancedUserContext;
+	private readonly HigherPermUserContext _enhancedUserContext;
 
-	public DatabaseFunctions(UserDBContext usercontext, PasswordDBContext passwordcontext, HigherPermUserContent enhancedUserContext)
+	public DatabaseFunctions(UserDBContext usercontext, PasswordDBContext passwordcontext, HigherPermUserContext enhancedUserContext)
 	{
 		_usercontext = usercontext;
 		_passwordcontext = passwordcontext;
@@ -18,9 +18,9 @@ public class DatabaseFunctions
 
 	public class ResponseObject<T>
 	{
-		public int code;
-		public string message;
-		public T data;
+		public int code { get; set; }
+		public string message { get; set; }
+		public T data { get; set; }
 
 
 		public ResponseObject(int code, string message)
@@ -241,6 +241,21 @@ public class DatabaseFunctions
 		{
 			Console.WriteLine(ex);
             return new ResponseObject<string>(500, $"An error occurred: {ex.Message}");
+        }
+	}
+
+
+	// Authorization Endpoints to grab Lists
+	public async Task<List<string>> GetEmps()
+	{
+		try
+		{			
+			return await _enhancedUserContext.GetEmployeeIDs_Async();
+		}
+		catch (Exception ex)  // Handle General Exception
+		{
+			Console.WriteLine(ex);
+            return [];
         }
 	}
 }

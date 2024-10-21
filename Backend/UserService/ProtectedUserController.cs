@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -9,7 +10,7 @@ public class ProtectedUserController : ControllerBase
 
 	public ProtectedUserController()
     {
-        _databaseFunctions = new DatabaseFunctions(new UserDBContext(), new PasswordDBContext(), new HigherPermUserContent());
+        _databaseFunctions = new DatabaseFunctions(new UserDBContext(), new PasswordDBContext(), new HigherPermUserContext());
     }
 
     // Protected Endpoints
@@ -19,6 +20,15 @@ public class ProtectedUserController : ControllerBase
         return Ok("Hello, Admin!");
     }
 
-    
+    [Authorize(Policy= "AdminPolicy")]
+    [HttpPost("/make-employee")]
+    public async Task<IActionResult> MakeEmployee(NewUser newUser)
+    {
+        var result = await _databaseFunctions.MakeEmployeeUser(newUser);
+
+        return StatusCode(result.code, result);
+    }
+
+
 
 }

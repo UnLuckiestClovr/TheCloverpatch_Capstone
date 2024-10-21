@@ -9,7 +9,7 @@ public class UserController : ControllerBase
 
 	public UserController()
     {
-        _databaseFunctions = new DatabaseFunctions(new UserDBContext(), new PasswordDBContext(), new HigherPermUserContent());
+        _databaseFunctions = new DatabaseFunctions(new UserDBContext(), new PasswordDBContext(), new HigherPermUserContext());
     }
 
     // Unprotected Endpoints
