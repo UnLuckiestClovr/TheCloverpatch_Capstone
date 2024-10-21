@@ -15,6 +15,7 @@ namespace UserService
             builder.Services.AddControllers();
             builder.Services.AddDbContext<UserDBContext>();
             builder.Services.AddDbContext<PasswordDBContext>();
+            builder.Services.AddDbContext<HigherPermUserContext>();
 
             // Configure Authorization Policies
             builder.Services.AddAuthorization(options =>

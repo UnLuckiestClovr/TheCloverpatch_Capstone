@@ -1,8 +1,8 @@
 public class UserPasswordChangeInfo
 {
-    public string UserID;
-    public string OldPassword;
-    public string NewPassword;
+    public string UserID { get; set; }
+    public string OldPassword { get; set; }
+    public string NewPassword { get; set; }
 
     public UserPasswordChangeInfo() {}
 
@@ -10,6 +10,12 @@ public class UserPasswordChangeInfo
     {
         UserID = uid;
         OldPassword = oldpass;
-        NewPassword = newpass;
+        NewPassword = HashPassword(newpass);
+    }
+
+    // Hashes Password for more secure Storage and Usage
+    public string HashPassword(string password) 
+    {
+        return BCrypt.Net.BCrypt.HashPassword(password);
     }
 }

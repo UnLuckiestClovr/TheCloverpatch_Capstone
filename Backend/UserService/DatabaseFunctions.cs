@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 public class DatabaseFunctions
 {
@@ -163,13 +164,14 @@ public class DatabaseFunctions
 
 			if (existingPassword != null && existingPassword.VerifyPassword(changeInfo.OldPassword))
 			{
-				existingPassword.Password = changeInfo.NewPassword;
+				existingPassword.Password = changeInfo.HashPassword(changeInfo.NewPassword);
 
 				await _passwordcontext.SaveChangesAsync();
 
 				return new ResponseObject<User>(200, "Password Updated Successfully!");
 			}
 
+			Console.WriteLine(JsonSerializer.Serialize(changeInfo));
 			return new ResponseObject<User>(500, $"Error: Password Update Failed for Unknown Reasons; Ensure that User [{changeInfo.UserID}] is a Valid User.");
 		}
 		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates

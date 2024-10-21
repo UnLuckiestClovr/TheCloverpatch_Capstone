@@ -8,7 +8,6 @@ public class UserRoleHandler_Employee : AuthorizationHandler<UserIDRequirement>
     private readonly HigherPermUserContext _dbContext;
     private readonly IHttpContextAccessor _contextAccessor;
 
-
     public UserRoleHandler_Employee(HigherPermUserContext dbContext, IHttpContextAccessor contextAccessor) 
     { 
         this._dbContext = dbContext; 
@@ -20,7 +19,7 @@ public class UserRoleHandler_Employee : AuthorizationHandler<UserIDRequirement>
         var httpContext = _contextAccessor.HttpContext;
         var userIDClaim = httpContext?.Request.Headers["AuthenticationToken"].FirstOrDefault();
 
-        if (userIDClaim != null)
+        if (!string.IsNullOrEmpty(userIDClaim))
         {
             if (await _dbContext.CheckAuthorizedIDs_Async(userIDClaim))
             {
@@ -48,7 +47,8 @@ public class UserRoleHandler_Admin : AuthorizationHandler<UserIDRequirement>
         var httpContext = _contextAccessor.HttpContext;
         var userIDClaim = httpContext?.Request.Headers["AuthenticationToken"].FirstOrDefault();
 
-        if (userIDClaim != null)
+        // Use Token ; Check for Null or Absent Token
+        if (!string.IsNullOrEmpty(userIDClaim))
         {
             if (await _dbContext.CheckAdminIDs_Async(userIDClaim))
             {
