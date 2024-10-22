@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 public class DatabaseFunctions
 {
@@ -39,6 +40,14 @@ public class DatabaseFunctions
 	}
 
 
+	static bool IsValidEmail(string email)
+    {
+        // Regular expression for validating an email address
+        string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        return Regex.IsMatch(email, pattern);
+    }
+
+
 	public async Task<ResponseObject<string>> RegisterUser<T>(NewUser newuser) // Create User
 	{
 		if (newuser == null) { return new ResponseObject<string>(500, "Invalid User Object: Found to be Null"); }
@@ -47,16 +56,21 @@ public class DatabaseFunctions
 		{
 			string newID = Guid.NewGuid().ToString();
 
-            User userobject = new User(newID, newuser.Username, newuser.Email);
-            UserPassword passwordObject = new UserPassword(newID, newuser.Password);
+			if (IsValidEmail(newuser.Email)) // If Email is Valid, go through with registering the USER.
+			{
+				User userobject = new User(newID, newuser.Username, newuser.Email);
+				UserPassword passwordObject = new UserPassword(newID, newuser.Password);
 
-			// Create new User in Context
-			await _usercontext.Users.AddAsync(userobject);
-			await _passwordcontext.Passwords.AddAsync(passwordObject);
-			await _usercontext.SaveChangesAsync();
-			await _passwordcontext.SaveChangesAsync();
+				// Create new User in Context
+				await _usercontext.Users.AddAsync(userobject);
+				await _passwordcontext.Passwords.AddAsync(passwordObject);
+				await _usercontext.SaveChangesAsync();
+				await _passwordcontext.SaveChangesAsync();
 
-            return new ResponseObject<string>(200, "User Registered Successfully");
+				return new ResponseObject<string>(200, "User Registered Successfully");
+			}
+            
+			return new ResponseObject<string>(500, "Email is Invalid");  // Return 500 Status and "Invalid Email" output message.
         } 
 		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
 		{
