@@ -202,6 +202,46 @@ public class DatabaseFunctions
 	}
 
 
+	public async Task<ResponseObject<string>> Delete_Profile(LoginAttempt authInfo)
+	{
+		try
+		{
+			User foundUser = await FindUser(authInfo.UsernameOrEmail);
+
+			if (foundUser == null) { return new ResponseObject<string>(500, "Username/Email or Password is Incorrect"); }  // If no user found with matching Username or Password, return a Generic LoginFailed Message. 
+
+			UserPassword foundPasswordEntry = await FindPass(foundUser.ID);
+
+			if (foundPasswordEntry.VerifyPassword(authInfo.Password))  // If Password matches the database-stored UserPassword then login can move forward.
+			{
+				_usercontext.Remove(foundUser.ID);
+				_passwordcontext.Remove(foundPasswordEntry.ID);
+
+				_usercontext.SaveChangesAsync();
+				_passwordcontext.SaveChangesAsync();
+
+				return new ResponseObject<string>(200, "User Deletion Successful!");
+			}
+			else  // Return Generic Deletion Failed Message if password doesn't match.
+			{
+				return new ResponseObject<string>(500, "Username/Email or Password is Incorrect");
+			}
+		}
+		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
+		{
+			var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "No inner exception.";
+			Console.WriteLine($"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+            return new ResponseObject<string>(500, $"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+        }
+		catch (Exception ex)  // Handle General Exception
+		{
+			Console.WriteLine(ex);
+            return new ResponseObject<string>(500, $"An error occurred: {ex.Message}");
+        }
+	}
+
+
+	// Protected Methods
 	public async Task<ResponseObject<string>> MakeEmployeeUser(NewUser newUser)
 	{
 		try

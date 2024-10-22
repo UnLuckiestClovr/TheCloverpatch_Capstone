@@ -52,4 +52,12 @@ public class UserController : ControllerBase
 
         return StatusCode(response.code, response);
     }
+
+    [HttpDelete("/delete")]
+    public async Task<IActionResult> DeleteUser(LoginAttempt authInfo)
+    {
+        var response = await _databaseFunctions.Delete_Profile(authInfo);
+
+        return StatusCode(response.code, response);
+    }
 }
