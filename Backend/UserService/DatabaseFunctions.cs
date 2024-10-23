@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 public class DatabaseFunctions
 {
@@ -39,6 +40,14 @@ public class DatabaseFunctions
 	}
 
 
+	static bool IsValidEmail(string email)
+    {
+        // Regular expression for validating an email address
+        string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        return Regex.IsMatch(email, pattern);
+    }
+
+
 	public async Task<ResponseObject<string>> RegisterUser<T>(NewUser newuser) // Create User
 	{
 		if (newuser == null) { return new ResponseObject<string>(500, "Invalid User Object: Found to be Null"); }
@@ -47,16 +56,21 @@ public class DatabaseFunctions
 		{
 			string newID = Guid.NewGuid().ToString();
 
-            User userobject = new User(newID, newuser.Username, newuser.Email);
-            UserPassword passwordObject = new UserPassword(newID, newuser.Password);
+			if (IsValidEmail(newuser.Email)) // If Email is Valid, go through with registering the USER.
+			{
+				User userobject = new User(newID, newuser.Username, newuser.Email);
+				UserPassword passwordObject = new UserPassword(newID, newuser.Password);
 
-			// Create new User in Context
-			await _usercontext.Users.AddAsync(userobject);
-			await _passwordcontext.Passwords.AddAsync(passwordObject);
-			await _usercontext.SaveChangesAsync();
-			await _passwordcontext.SaveChangesAsync();
+				// Create new User in Context
+				await _usercontext.Users.AddAsync(userobject);
+				await _passwordcontext.Passwords.AddAsync(passwordObject);
+				await _usercontext.SaveChangesAsync();
+				await _passwordcontext.SaveChangesAsync();
 
-            return new ResponseObject<string>(200, "User Registered Successfully");
+				return new ResponseObject<string>(200, "User Registered Successfully");
+			}
+            
+			return new ResponseObject<string>(500, "Email is Invalid");  // Return 500 Status and "Invalid Email" output message.
         } 
 		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
 		{
@@ -90,10 +104,10 @@ public class DatabaseFunctions
 	}
 
 
-	public async Task<ResponseObject<User>> Login<T>(LoginAttempt loginAttempt) // Attempt to Login
+	public async Task<ResponseObject<User>> Login<T>(Auth_Request loginAttempt) // Attempt to Login
 	{
 		try {
-			User foundUser = await FindUser(loginAttempt.UsernameOrEmail);
+			User foundUser = await FindUser(loginAttempt.AuthString);
 
 			if (foundUser == null) { return new ResponseObject<User>(500, "Username/Email or Password is Incorrect"); }  // If no user found with matching Username or Password, return a Generic LoginFailed Message. 
 
@@ -188,6 +202,46 @@ public class DatabaseFunctions
 	}
 
 
+	public async Task<ResponseObject<string>> Delete_Profile(Auth_Request authInfo)
+	{
+		try
+		{
+			User foundUser = await FindUser(authInfo.AuthString);  // AuthString in this case is the User's ID
+
+			if (foundUser == null) { return new ResponseObject<string>(500, "User Not Found"); }  // If no user found with matching Username or Password, return a Generic LoginFailed Message. 
+
+			UserPassword foundPasswordEntry = await FindPass(foundUser.ID);
+
+			if (foundPasswordEntry.VerifyPassword(authInfo.Password))  // If Password matches the database-stored UserPassword then login can move forward.
+			{
+				_usercontext.Remove(foundUser.ID);
+				_passwordcontext.Remove(foundPasswordEntry.ID);
+
+				await _usercontext.SaveChangesAsync();
+				await _passwordcontext.SaveChangesAsync();
+
+				return new ResponseObject<string>(200, "User Deletion Successful!");
+			}
+			else  // Return Generic Deletion Failed Message if password doesn't match.
+			{
+				return new ResponseObject<string>(500, "Password is Incorrect");
+			}
+		}
+		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
+		{
+			var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "No inner exception.";
+			Console.WriteLine($"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+            return new ResponseObject<string>(500, $"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+        }
+		catch (Exception ex)  // Handle General Exception
+		{
+			Console.WriteLine(ex);
+            return new ResponseObject<string>(500, $"An error occurred: {ex.Message}");
+        }
+	}
+
+
+	// Protected Methods
 	public async Task<ResponseObject<string>> MakeEmployeeUser(NewUser newUser)
 	{
 		try
