@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 
 [ApiController]
-[Route("[controller]")]
+[Route("protected-endpoints")]
 public class ProtectedUserController : ControllerBase
 {
 	private readonly DatabaseFunctions _databaseFunctions;
@@ -15,7 +15,7 @@ public class ProtectedUserController : ControllerBase
 
     // Protected Endpoints
     [Authorize(Policy= "AdminPolicy")]
-    [HttpPost("/make-employee")]
+    [HttpPost("make-employee")]
     public async Task<IActionResult> MakeEmployee(NewUser newUser)
     {
         var result = await _databaseFunctions.MakeEmployeeUser(newUser);
@@ -24,7 +24,7 @@ public class ProtectedUserController : ControllerBase
     }
 
     [Authorize(Policy = "AdminPolicy")]
-    [HttpPut("/update-to-employee/{id}")]
+    [HttpPut("update-to-employee/{id}")]
     public async Task<IActionResult> UpdateUserPerms_ToEmployee(string id)
     {
         var result = await _databaseFunctions.TurnUserIntoEmployee(id);

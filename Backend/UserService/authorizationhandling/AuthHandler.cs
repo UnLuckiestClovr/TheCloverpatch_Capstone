@@ -19,6 +19,8 @@ public class UserRoleHandler_Employee : AuthorizationHandler<UserIDRequirement>
         var httpContext = _contextAccessor.HttpContext;
         var userIDClaim = httpContext?.Request.Headers["AuthenticationToken"].FirstOrDefault();
 
+        Console.WriteLine($"Emp Auth Called Under ID of {userIDClaim}");
+
         if (!string.IsNullOrEmpty(userIDClaim))
         {
             if (await _dbContext.CheckAuthorizedIDs_Async(userIDClaim))
@@ -46,6 +48,8 @@ public class UserRoleHandler_Admin : AuthorizationHandler<UserIDRequirement>
     {
         var httpContext = _contextAccessor.HttpContext;
         var userIDClaim = httpContext?.Request.Headers["AuthenticationToken"].FirstOrDefault();
+
+        Console.WriteLine($"Adm Auth Called Under ID of {userIDClaim}");
 
         // Use Token ; Check for Null or Absent Token
         if (!string.IsNullOrEmpty(userIDClaim))
