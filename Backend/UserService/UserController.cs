@@ -53,7 +53,7 @@ public class UserController : ControllerBase
         return StatusCode(response.code, response);
     }
 
-    [HttpDelete("/delete")]
+    [HttpDelete("delete")]
     public async Task<IActionResult> DeleteUser(Auth_Request authInfo)
     {
         var response = await _databaseFunctions.Delete_Profile(authInfo);

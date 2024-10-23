@@ -206,20 +206,14 @@ public class DatabaseFunctions
 	{
 		try
 		{
-			User foundUser = await FindUser(authInfo.AuthString);  // AuthString in this case is the User's ID
+			User foundUser = await _usercontext.Users.FindAsync(authInfo.AuthString);  // AuthString in this case is the User's ID
 
 			if (foundUser == null) { return new ResponseObject<string>(500, "User Not Found"); }  // If no user found with matching Username or Password, return a Generic LoginFailed Message. 
 
-			UserPassword foundPasswordEntry = await FindPass(foundUser.ID);
+			UserPassword foundPasswordEntry = await _passwordcontext.Passwords.FindAsync(foundUser.ID);
 
 			if (foundPasswordEntry.VerifyPassword(authInfo.Password))  // If Password matches the database-stored UserPassword then login can move forward.
 			{
-				_usercontext.Users.Remove(foundUser);
-				_passwordcontext.Passwords.Remove(foundPasswordEntry);
-
-				await _usercontext.SaveChangesAsync();
-				await _passwordcontext.SaveChangesAsync();
-				
 				var enhancedUser = await _enhancedUserContext.EnhancedUsers.FindAsync(authInfo.AuthString);
 
 				if (enhancedUser != null) 
@@ -227,6 +221,12 @@ public class DatabaseFunctions
 					_enhancedUserContext.EnhancedUsers.Remove(enhancedUser);
 					await _enhancedUserContext.SaveChangesAsync();
 				}
+
+				_usercontext.Users.Remove(foundUser);
+				_passwordcontext.Passwords.Remove(foundPasswordEntry);
+
+				await _usercontext.SaveChangesAsync();
+				await _passwordcontext.SaveChangesAsync();
 
 				return new ResponseObject<string>(200, "User Deletion Successful!", $"User Deleted: {foundUser.ID}");
 			}
