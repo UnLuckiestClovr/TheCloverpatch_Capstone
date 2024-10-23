@@ -214,13 +214,21 @@ public class DatabaseFunctions
 
 			if (foundPasswordEntry.VerifyPassword(authInfo.Password))  // If Password matches the database-stored UserPassword then login can move forward.
 			{
-				_usercontext.Remove(foundUser.ID);
-				_passwordcontext.Remove(foundPasswordEntry.ID);
+				_usercontext.Users.Remove(foundUser);
+				_passwordcontext.Passwords.Remove(foundPasswordEntry);
 
 				await _usercontext.SaveChangesAsync();
 				await _passwordcontext.SaveChangesAsync();
+				
+				var enhancedUser = await _enhancedUserContext.EnhancedUsers.FindAsync(authInfo.AuthString);
 
-				return new ResponseObject<string>(200, "User Deletion Successful!");
+				if (enhancedUser != null) 
+				{
+					_enhancedUserContext.EnhancedUsers.Remove(enhancedUser);
+					await _enhancedUserContext.SaveChangesAsync();
+				}
+
+				return new ResponseObject<string>(200, "User Deletion Successful!", $"User Deleted: {foundUser.ID}");
 			}
 			else  // Return Generic Deletion Failed Message if password doesn't match.
 			{
@@ -286,6 +294,32 @@ public class DatabaseFunctions
 			await _enhancedUserContext.SaveChangesAsync();
 
             return new ResponseObject<string>(200, "User Transferred to Employee Status Successfully", $"New Employee: {id}");
+		}
+		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
+		{
+			var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "No inner exception.";
+			Console.WriteLine($"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+            return new ResponseObject<string>(500, $"Database error occurred: {ex.Message}. Inner exception: {innerExceptionMessage}");
+        }
+		catch (Exception ex)  // Handle General Exception
+		{
+			Console.WriteLine(ex);
+            return new ResponseObject<string>(500, $"An error occurred: {ex.Message}");
+        }
+	}
+
+	public async Task<ResponseObject<string>> DemoteEmployee(string id)
+	{
+		try
+		{
+			var user = await _enhancedUserContext.EnhancedUsers.FindAsync(id);
+
+			if (user == null) { return new ResponseObject<string>(500, "User Does Not Exist"); }
+			
+			_enhancedUserContext.EnhancedUsers.Remove(user);
+			await _enhancedUserContext.SaveChangesAsync();
+
+			return new ResponseObject<string>(200, "Deletion Successful!", $"User Deleted: {id}");
 		}
 		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
 		{

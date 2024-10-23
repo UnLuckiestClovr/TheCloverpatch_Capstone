@@ -23,7 +23,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginAttempt(LoginAttempt loginAttempt)
+    public async Task<IActionResult> LoginAttempt(Auth_Request loginAttempt)
     {
         var response = await _databaseFunctions.Login<User>(loginAttempt);
 
@@ -54,7 +54,7 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("/delete")]
-    public async Task<IActionResult> DeleteUser(LoginAttempt authInfo)
+    public async Task<IActionResult> DeleteUser(Auth_Request authInfo)
     {
         var response = await _databaseFunctions.Delete_Profile(authInfo);
 

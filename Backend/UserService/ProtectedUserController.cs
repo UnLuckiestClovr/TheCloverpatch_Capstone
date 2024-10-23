@@ -24,10 +24,19 @@ public class ProtectedUserController : ControllerBase
     }
 
     [Authorize(Policy = "AdminPolicy")]
-    [HttpPut("update-to-employee/{id}")]
+    [HttpPut("promote-to-employee/{id}")]
     public async Task<IActionResult> UpdateUserPerms_ToEmployee(string id)
     {
         var result = await _databaseFunctions.TurnUserIntoEmployee(id);
+
+        return StatusCode(result.code, result);
+    }
+
+    [Authorize(Policy = "AdminPolicy")]
+    [HttpDelete("demote-employee/{id}")]
+    public async Task<IActionResult> DemoteEmployeeOrAdmin(string id)
+    {
+        var result = await _databaseFunctions.DemoteEmployee(id);
 
         return StatusCode(result.code, result);
     }
