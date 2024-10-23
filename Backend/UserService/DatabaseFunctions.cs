@@ -104,10 +104,10 @@ public class DatabaseFunctions
 	}
 
 
-	public async Task<ResponseObject<User>> Login<T>(LoginAttempt loginAttempt) // Attempt to Login
+	public async Task<ResponseObject<User>> Login<T>(Auth_Request loginAttempt) // Attempt to Login
 	{
 		try {
-			User foundUser = await FindUser(loginAttempt.UsernameOrEmail);
+			User foundUser = await FindUser(loginAttempt.AuthString);
 
 			if (foundUser == null) { return new ResponseObject<User>(500, "Username/Email or Password is Incorrect"); }  // If no user found with matching Username or Password, return a Generic LoginFailed Message. 
 
@@ -202,13 +202,13 @@ public class DatabaseFunctions
 	}
 
 
-	public async Task<ResponseObject<string>> Delete_Profile(LoginAttempt authInfo)
+	public async Task<ResponseObject<string>> Delete_Profile(Auth_Request authInfo)
 	{
 		try
 		{
-			User foundUser = await FindUser(authInfo.UsernameOrEmail);
+			User foundUser = await FindUser(authInfo.AuthString);  // AuthString in this case is the User's ID
 
-			if (foundUser == null) { return new ResponseObject<string>(500, "Username/Email or Password is Incorrect"); }  // If no user found with matching Username or Password, return a Generic LoginFailed Message. 
+			if (foundUser == null) { return new ResponseObject<string>(500, "User Not Found"); }  // If no user found with matching Username or Password, return a Generic LoginFailed Message. 
 
 			UserPassword foundPasswordEntry = await FindPass(foundUser.ID);
 
@@ -217,14 +217,14 @@ public class DatabaseFunctions
 				_usercontext.Remove(foundUser.ID);
 				_passwordcontext.Remove(foundPasswordEntry.ID);
 
-				_usercontext.SaveChangesAsync();
-				_passwordcontext.SaveChangesAsync();
+				await _usercontext.SaveChangesAsync();
+				await _passwordcontext.SaveChangesAsync();
 
 				return new ResponseObject<string>(200, "User Deletion Successful!");
 			}
 			else  // Return Generic Deletion Failed Message if password doesn't match.
 			{
-				return new ResponseObject<string>(500, "Username/Email or Password is Incorrect");
+				return new ResponseObject<string>(500, "Password is Incorrect");
 			}
 		}
 		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
