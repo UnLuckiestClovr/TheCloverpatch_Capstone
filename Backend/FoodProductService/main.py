@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Path, Depends
 from starlette.responses import Response
 
-from security.dependencies import get_query_token, get_token_header
+from security.dependencies import get_token_header
 from routes import apiendpoints, protected
 
 app = FastAPI(
@@ -44,4 +44,4 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app=app, host="0.0.0.0", port=8080)
+    uvicorn.run(app=app, host="0.0.0.0", port=12003)

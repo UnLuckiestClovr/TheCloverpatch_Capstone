@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 
 
 class FlowerProduct(BaseModel):
-    _id: Optional[str] = Field()
+    id: Optional[str] = Field()
     PName: str = Field()
     PMonth: int = Field()
     PCostPerFlower: float = Field()
