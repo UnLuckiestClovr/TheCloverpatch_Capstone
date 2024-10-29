@@ -1,6 +1,8 @@
 import redis, json, uuid, re
 
+from datetime import datetime
 from models.apimodels import Order, AddressInfo, FlowerOrder
+from miscscripts.SendEmail import sendEmail
 
 rConnPool = redis.ConnectionPool(host='CloverpatchBasketAndOrderDatabase', port=6379)
 
@@ -24,7 +26,7 @@ def check_OrderExists(OID: str):
         }
 
 
-def CreateFlowerOrder(BID: str, addressInfo: AddressInfo):
+def CreateFlowerOrder(BID: str, addressInfo: AddressInfo, Email):
     try:
         redisOID = f"Order_{(uuid.uuid4()).__str__().replace('-', '_')}"
         redisBID = f"Basket_{BID.__str__().replace('-', '_')}"  # Concatenate for Redis
@@ -40,15 +42,24 @@ def CreateFlowerOrder(BID: str, addressInfo: AddressInfo):
         regexPatternBID = r'^(Order_|Basket_)(\w+)$'
         userid = re.sub(regexPatternBID, r'\2', userID)
 
+        current_time = datetime.now().strftime("%m/%d/%Y - %H:%M")
+
         orderObject = FlowerOrder(
             userID=userid,
             Items=items,
             FinalPrice=total_price,
-            AddressInfo=addressInfo
+            AddressInfo=addressInfo,
+            TimeMade=current_time
         )
 
         rConn.hmset(redisOID, orderObject.model_dump_json())
         rConn.rpush(f"UID:{orderObject.UID}:orders", redisOID)
+
+        sendEmail(
+            "Flowershop Order Made at The Cloverpatch!", 
+            f"Your order was accepted at {current_time} and will be processed soon, you will recieve a tracking number via this email when the order is on its way!", 
+            Email
+        )
 
         return {
             'success': True,
@@ -89,7 +100,7 @@ def CreateCafeOrder(rConn: redis.Redis, orderObject: Order, OID: str):
         }
 
 
-def ProcessBasketToOrder(BID: str):
+def ProcessBasketToOrder(BID: str, Email: str):
     try:
         redisOID = f"Order_{(uuid.uuid4()).__str__().replace('-', '_')}"
         redisBID = f"Basket_{BID.__str__().replace('-', '_')}"  # Concatenate for Redis
@@ -105,13 +116,31 @@ def ProcessBasketToOrder(BID: str):
         regexPatternBID = r'^(Order_|Basket_)(\w+)$'
         userid = re.sub(regexPatternBID, r'\2', userID)
 
+        current_time = datetime.now().strftime("%m/%d/%Y - %H:%M")
+
+        orderID = uuid.uuid4()
+
         order = Order(
-            UID=f'{userid}',
+            UID=f'{orderID}',
             Items=items,
-            FinalPrice=total_price
+            FinalPrice=total_price,
+            TimeMade=current_time
         )
 
-        return CreateCafeOrder(rConn, order, redisOID)  # Calls to the Creation Script
+        rConn.hmset(userid, order.model_dump_json())
+        rConn.rpush(f"UID:{order.UID}:orders", orderID)
+
+        sendEmail(
+            "Cafe Order Made at The Cloverpatch!", 
+            f"Your order was accepted at {current_time} and will be processed soon, you will recieve an email or text!", 
+            Email
+        )
+
+        return {
+            'success': True,
+            'message': f'Order {orderID} created Successfully',
+            'orderID': f'{orderID}'
+        }
             
     except redis.ConnectionError as e:
         return {

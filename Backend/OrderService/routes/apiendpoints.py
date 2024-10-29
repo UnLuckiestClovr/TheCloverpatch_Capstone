@@ -11,14 +11,14 @@ router = APIRouter(
 )
 
 
-@router.post("/create-order/food/{BID}")
-async def CreateOrder(BID: str = Path(alias='BID')):
-    return databaseinteraction.ProcessBasketToOrder(BID)
+@router.post("/create-order/food/{BID}/{Email}")
+async def CreateOrder(BID: str = Path(alias='BID'), Email: str = Path(alias='Email')):
+    return databaseinteraction.ProcessBasketToOrder(BID, Email)
 
 
-@router.post("/create-order/flower/{BID}")
-async def CreateOrder( AddressInfo: AddressInfo, BID: str = Path(alias='BID')):
-    return databaseinteraction.CreateFlowerOrder(BID, AddressInfo)
+@router.post("/create-order/flower/{BID}/{Email}")
+async def CreateOrder( AddressInfo: AddressInfo, BID: str = Path(alias='BID'), Email: str = Path(alias='Email')):
+    return databaseinteraction.CreateFlowerOrder(BID, AddressInfo, Email)
 
 
 @router.get("/fetch/{OID}")

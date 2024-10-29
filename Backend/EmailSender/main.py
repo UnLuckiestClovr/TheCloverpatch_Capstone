@@ -3,32 +3,12 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 
-
-# SEND EMAIL TO QUEUE EXAMPLE
-# conn = pika.BlockingConnection(pika.ConnectionParameters(host='localhost', port=9000))
-# channel = conn.channel()
-
-# channel.queue_declare(queue='email_queue')
-
-# # ExampleEmailObject
-
-# emailObject = {
-#     'ESubject': '',
-#     'EMessage': '',
-#     'toEmail': ''
-# }
-
-# channel.basic_publish(exchange='', routing_key='email_queue', body=json.dumps(emailObject))
-# print('Sent Email to Queue!')
-
-# conn.close()
-
-
 # Email configuration
 SMTP_SERVER = 'smtp.example.com'  # Replace with your SMTP server
 SMTP_PORT = 587                     # Common SMTP ports: 587 or 465
 SMTP_USERNAME = 'your_username'     # Your email username
 SMTP_PASSWORD = 'your_password'     # Your email password
+
 
 def sendEmail(subject, message, toEmail):
     msg = MIMEMultipart()

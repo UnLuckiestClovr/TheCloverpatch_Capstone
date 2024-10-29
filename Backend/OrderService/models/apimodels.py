@@ -24,9 +24,11 @@ class Order(BaseModel):
     UID: str = Field()
     Items: List[OrderItem] = Field()
     FinalPrice: float = Field()
+    TimeMade: str = Field()
 
 class FlowerOrder(BaseModel):
     UID: str = Field()
     Items: List[OrderItem] = Field()
     FinalPrice: float = Field()
     AddressInfo: AddressInfo = Field()
+    TimeMade: str = Field()
