@@ -4,7 +4,7 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css', defer)
     script(src="/javascripts/edm.js", defer)
-    script(src="/javascripts/LoginRegisterScripts.js", defer)
+    script(src=scriptName, defer)
   body
     h1(id="outerHeader")
       img(
@@ -38,8 +38,6 @@ html
           td
             a(href="/FlowerShop") Flower Parlor and Herbal Shop
           td
-            //- a(id="userLoginOrReg", href="/LoginorRegister") Login / Register
-            //- a(id="userProfile", href="/Profile") Profile
             if loggedInBool == false
               a(id="userLoginOrReg", href="/LoginorRegister") Login / Register
             else 

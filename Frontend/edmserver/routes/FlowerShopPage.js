@@ -15,7 +15,8 @@ router.get('/', function(req, res) {
     res.render('FlowerShopPage', {
         title: "The Cloverpatch", 
         loggedInBool: boolLog,
-        month: currentMonth
+        month: currentMonth,
+        scriptName: "/javascripts/flowershop.js"
     })
 })
 

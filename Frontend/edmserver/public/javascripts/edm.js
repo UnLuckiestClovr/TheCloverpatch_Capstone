@@ -13,6 +13,4 @@ try {
             console.log("Issue within Logout")
         }
     })
-
-
 } catch (error) {}

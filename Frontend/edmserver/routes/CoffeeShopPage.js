@@ -9,7 +9,11 @@ router.get('/', function(req, res) {
         boolLog = (req.session.user !== null && req.session.user !== undefined)
         //- console.log("Session User: ", req.session.user)
     }
-    res.render('CoffeeShopPage', {title: "The Cloverpatch", loggedInBool: boolLog})
+    res.render('CoffeeShopPage', {
+            title: "The Cloverpatch",
+            loggedInBool: boolLog,
+            scriptName: "/javascripts/edm.js"
+        })
 })
 
 module.exports = router;

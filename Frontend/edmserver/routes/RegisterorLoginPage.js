@@ -10,7 +10,11 @@ router.get('/', function(req, res) {
         //- console.log("Session User: ", req.session.user)
     }
     
-    res.render('RegisterorLoginPage', {title: "The Cloverpatch", loggedInBool: boolLog})
+    res.render('RegisterorLoginPage', {
+        title: "The Cloverpatch", 
+        loggedInBool: boolLog,
+        scriptName: "/javascripts/LoginRegisterScripts.js"
+    })
 })
 
 module.exports = router;

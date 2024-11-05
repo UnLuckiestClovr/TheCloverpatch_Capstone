@@ -5,10 +5,7 @@ let pageData = {
     username: "",
     email: "",
     fullname: "",
-    age: "",
-    q1Ans: "",
-    q2Ans: "",
-    q3Ans: ""
+    age: ""
 }
 
 router.get('/', function(req, res) {
@@ -18,14 +15,15 @@ router.get('/', function(req, res) {
         pageData.email = req.session.user.email
         pageData.fullname = req.session.user.fullname
         pageData.age = req.session.user.age
-        pageData.q1Ans = req.session.user.q1Ans
-        pageData.q2Ans = req.session.user.q2Ans
-        pageData.q3Ans = req.session.user.q3Ans
         console.log(profUser)
     } catch (error) {
         console.log(error)
     }
-    res.render('Profile', {title: "The Cloverpatch", pageData})
+    res.render('Profile', {
+        title: "The Cloverpatch", 
+        pageData,
+        scriptName: "/javascripts/edm.js"
+    })
 })
 
 module.exports = router; 

@@ -11,13 +11,13 @@ const profileTab = document.getElementById('userProfile')
 // })
 
 const outputTextBox = document.getElementById('OutputBox')
+const regErrors = document.getElementById('regErrors')
 
 async function LoginInvalid() {
     outputTextBox.innerHTML = "Login Unsuccessful: Username or Password Incorrect"
 }
 
 // - - - - - - - - - - - - - - - - - - - - RegLogin Page Scripts - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-var relativeUsername = ""
 
 try {
     document.getElementById('loginBTN').addEventListener('click', async () => {
@@ -32,9 +32,9 @@ try {
         }
         console.log("Inputs were Filled")
 
-        const newUser = {
-            username: uName,
-            password: uPswrd
+        const loginAuth = {
+            AuthString: uName,
+            Password: uPswrd
         }
 
         try {
@@ -43,12 +43,11 @@ try {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(newUser)
+                body: JSON.stringify(loginAuth)
             })
 
             if(response.ok) {
                 console.log("Login Successful")
-                relativeUsername = uName
                 window.location.href = "/Profile"
             } else {
                 LoginInvalid()
@@ -59,37 +58,63 @@ try {
         }
     })
 
+
+    function validateUsername(username) {
+        const usernameRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+        return usernameRegex.test(username);
+    }
+    
+    function validatePassword(password) {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-]).+$/;
+        return passwordRegex.test(password);
+    }
+
+    function validateEmail(email) {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailRegex.test(email);
+    }
+
+
+    function validateForm(uName, uPswrd, uEmail) {
+        const regErrors = document.getElementById('regErrors');
+        regErrors.innerHTML = ''; // Clear previous errors
+        let errors = [];
+
+        if (!validateUsername(uName)) {
+            errors.push("Username must have all required parameters.");
+        }
+        if (!validatePassword(uPswrd)) {
+            errors.push("Password must have all required parameters.");
+        }
+        if (!validateEmail(uEmail)) {
+            errors.push("Invalid email.");
+        }
+
+        if (errors.length > 0) {
+            regErrors.innerHTML = errors.map(error => `<p>${error}</p>`).join('');
+            return false; // Return false if there are errors
+        }
+
+        return true; // Return true if all validations passed
+    }
+
+
     document.getElementById('registerBTN').addEventListener('click', async() => {
         const uName = await document.getElementById('uReg').value
         const uPswrd = await document.getElementById('pReg').value
         const uEmail = await document.getElementById('eReg').value
-        const uFullName = await document.getElementById('nReg').value
-        const uAge = await document.getElementById('aReg').value
-        const q1Ans = await document.getElementById('question1').value
-        const q2Ans = await document.getElementById('question2').value
-        const q3Ans = await document.getElementById('question3').value
 
-        if(uName === "" || uPswrd === "" || uEmail === "" || uFullName === "" || uAge === "") {
-            questionsInvalid.innerHTML = "<p> Profile Inputs cannot be Empty. </p>"
+        if(uName === "" || uPswrd === "" || uEmail === "") {
+            regErrors.innerHTML = "<p> Profile Inputs cannot be Empty. </p>"
             return
         }
-        if(q1Ans === "" || q2Ans === "" || q3Ans === "") {
-            invalidQuestionaire(q1Ans, q2Ans, q3Ans)
-            return
-        }
-        questionInvalidOutput.innerHTML = ""
 
-        let intAge = parseInt(uAge)
+        if (!validateForm()) { return; }
 
         const newUser = {
-            username: uName,
-            password: uPswrd,
-            email: uEmail,
-            u_name: uFullName,
-            u_age: intAge,
-            q1Ans: q1Ans,
-            q2Ans: q2Ans,
-            q3Ans: q3Ans
+            Username: uName,
+            Password: uPswrd,
+            Email: uEmail
         }
 
         try {
@@ -101,7 +126,6 @@ try {
                 body: JSON.stringify(newUser)
             })
             if(response.ok) {
-                relativeUsername = uName
                 window.location.href = "/LoginorRegister"
             } else {
                 console.log("Registry Failure")
