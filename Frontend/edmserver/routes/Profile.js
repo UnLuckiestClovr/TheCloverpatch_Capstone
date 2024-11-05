@@ -13,8 +13,6 @@ router.get('/', function(req, res) {
         let profUser = req.session.user
         pageData.username = req.session.user.username
         pageData.email = req.session.user.email
-        pageData.fullname = req.session.user.fullname
-        pageData.age = req.session.user.age
         console.log(profUser)
     } catch (error) {
         console.log(error)
