@@ -3,9 +3,7 @@ var router = express.Router()
 
 let pageData = {
     username: "",
-    email: "",
-    fullname: "",
-    age: ""
+    email: ""
 }
 
 router.get('/', function(req, res) {
