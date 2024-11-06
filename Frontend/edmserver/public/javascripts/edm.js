@@ -1,6 +1,6 @@
 try {
     document.getElementById('LogoutBTN').addEventListener('click', async function() {
-        const response = await fetch('/logout', {
+        const response = await fetch('/user/logout', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

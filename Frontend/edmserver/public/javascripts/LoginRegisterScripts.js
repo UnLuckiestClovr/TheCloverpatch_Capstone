@@ -38,7 +38,7 @@ try {
         }
 
         try {
-            const response = await fetch('/users/login', {
+            const response = await fetch('/user/login', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -109,8 +109,6 @@ try {
             return
         }
 
-        if (!validateForm()) { return; }
-
         const newUser = {
             Username: uName,
             Password: uPswrd,
@@ -118,7 +116,7 @@ try {
         }
 
         try {
-            const response = await fetch('/users/register', {
+            const response = await fetch('/user/register', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
