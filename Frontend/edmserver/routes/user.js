@@ -61,7 +61,19 @@ router.get('/login', async function(req, res, next) {
         })
 
         if (response.ok) {
-            res.sendStatus(200)
+            const jsonData = await response.json();
+            const { code, message, data: userData } = jsonData;
+
+            // Sets Cookies for 1 Week
+            res.cookie('uid', userData.id, { httpOnly: true, maxAge: 604800000 })
+            res.cookie('username', userData.username, { httpOnly: true, maxAge: 604800000 })
+            res.cookie('email', userData.email, { httpOnly: true, maxAge: 604800000 })
+
+            res.status(code).send(message);
+            res.send("Logged In Successfully")
+        }
+        else {
+            res.sendStatus(500)
         }
     } catch (error) {
         console.log(error)
@@ -89,6 +101,9 @@ router.get('/register', async function(req, res, next) {
         if (response.ok) {
             res.sendStatus(200)
         }
+        else {
+            res.sendStatus(500)
+        }
     } catch (error) {
         console.log(error)
         res.sendStatus(500)
@@ -112,6 +127,9 @@ router.get('/update', async function(req, res, next) {
 
         if (response.ok) {
             res.sendStatus(200)
+        }
+        else {
+            res.sendStatus(500)
         }
     } catch (error) {
         console.log(error)
@@ -137,6 +155,9 @@ router.get('/delete', async function(req, res, next) {
         if (response.ok) {
             res.sendStatus(200)
         }
+        else {
+            res.sendStatus(500)
+        }
     } catch (error) {
         console.log(error)
         res.sendStatus(500)
@@ -147,6 +168,10 @@ router.get('/delete', async function(req, res, next) {
 // Log Out
 router.post('/', (req, res) => {
     console.log('Started Logout Process. . .')
+
+    res.clearCookie('username');
+    res.clearCookie('email');
+
     req.session.destroy((err) => {
         if (err) {
             console.error('Error Logging Out:', err)
