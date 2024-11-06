@@ -8,6 +8,43 @@ const registerEndpoint = 'http://localhost:5122/user/register'
 const updateEndpoint = 'http://localhost:5122/user/update-user-info'
 const deleteEndpoint = 'http://localhost:5122/user/delete'
 
+function validateUsername(username) {
+    const usernameRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+    return usernameRegex.test(username);
+}
+
+function validatePassword(password) {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-]).+$/;
+    return passwordRegex.test(password);
+}
+
+function validateEmail(email) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+}
+
+function validateForm(uName, uPswrd, uEmail) {
+    const regErrors = document.getElementById('regErrors');
+    regErrors.innerHTML = ''; // Clear previous errors
+    let errors = [];
+
+    if (!validateUsername(uName)) {
+        errors.push("Username must have all required parameters.");
+    }
+    if (!validatePassword(uPswrd)) {
+        errors.push("Password must have all required parameters.");
+    }
+    if (!validateEmail(uEmail)) {
+        errors.push("Invalid email.");
+    }
+
+    if (errors.length > 0) {
+        regErrors.innerHTML = errors.map(error => `<p>${error}</p>`).join('');
+        return false; // Return false if there are errors
+    }
+
+    return true; // Return true if all validations passed
+}
 
 // Login
 router.get('/login', async function(req, res, next) {
@@ -38,6 +75,8 @@ router.get('/register', async function(req, res, next) {
     try 
     {
         const regData = req.body
+
+        validateForm(regData.Usermame, regData.Password, regData.Email)
 
         const response = await fetch(registerEndpoint, {
             method: "POST",
