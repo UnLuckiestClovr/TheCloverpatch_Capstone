@@ -70,10 +70,10 @@ router.get('/login', async function(req, res, next) {
             res.cookie('email', userData.email, { httpOnly: true, maxAge: 604800000 })
 
             res.status(code).send(message);
-            res.send("Logged In Successfully")
+            res.send("Logged In Successfully");
         }
         else {
-            res.sendStatus(500)
+            res.status(500).send(message)
         }
     } catch (error) {
         console.log(error)
@@ -152,6 +152,10 @@ router.get('/delete', async function(req, res, next) {
             body: JSON.stringify(deleteInfo)
         })
 
+        res.clearCookie('uid');
+        res.clearCookie('username');
+        res.clearCookie('email');
+
         if (response.ok) {
             res.sendStatus(200)
         }
@@ -166,20 +170,18 @@ router.get('/delete', async function(req, res, next) {
 
 
 // Log Out
-router.post('/', (req, res) => {
+router.post('/logout', (req, res) => {
     console.log('Started Logout Process. . .')
 
-    res.clearCookie('username');
-    res.clearCookie('email');
+    try {
+        res.clearCookie('uid');
+        res.clearCookie('username');
+        res.clearCookie('email');
 
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Error Logging Out:', err)
-            res.sendStatus(500)
-        } else {
-            res.redirect('/LoginorRegister')
-        }
-    })
+        res.sendStatus(200);
+    } catch (error) {
+        res.sendStatus(500);
+    }
 })
 
 
