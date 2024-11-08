@@ -77,8 +77,7 @@ router.get("/fetch/:oid", async function(req, res, next) {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(addInfo)
+            }
         })
 
         if (response.ok) {
@@ -104,8 +103,7 @@ router.get("/fetch-all:uid", async function(req, res, next) {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
+            }
         })
 
         if (response.ok) {
@@ -123,16 +121,15 @@ router.get("/fetch-all:uid", async function(req, res, next) {
 })
 
 // Cancel Order
-router.get("/cancel/:oid", async function(req, res, next) {
+router.delete("/cancel/:oid", async function(req, res, next) {
     try {
         const oid = req.params.oid;
 
         const response = await fetch((cancelOrderEndpoint+"/"+oid), {
-            method: "GET",
+            method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
+            }
         })
 
         if (response.ok) {
