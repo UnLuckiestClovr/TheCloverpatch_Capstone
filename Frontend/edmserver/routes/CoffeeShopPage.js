@@ -30,7 +30,7 @@ async function getFood() {
         body: JSON.stringify(updateInfo)
     })
 
-    return JSON.parse(response).data
+    return JSON.parse(response).food
 }
 
 async function getDrinks() {
@@ -42,7 +42,7 @@ async function getDrinks() {
         body: JSON.stringify(updateInfo)
     })
 
-    return JSON.parse(response).data
+    return JSON.parse(response).drinks
 }
 
 module.exports = router;
