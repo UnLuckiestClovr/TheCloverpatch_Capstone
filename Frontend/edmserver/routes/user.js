@@ -6,6 +6,7 @@ var router = express.Router()
 const loginEndpoint = 'http://localhost:5122/user/login'
 const registerEndpoint = 'http://localhost:5122/user/register'
 const updateEndpoint = 'http://localhost:5122/user/update-user-info'
+const changePasswordEndpoint = 'http://localhost:5122/user/update-user-password/'
 const deleteEndpoint = 'http://localhost:5122/user/delete'
 
 function validateUsername(username) {
@@ -118,6 +119,34 @@ router.get('/update', async function(req, res, next) {
         const updateInfo = req.body
 
         const response = await fetch(updateEndpoint, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateInfo)
+        })
+
+        if (response.ok) {
+            res.sendStatus(200)
+        }
+        else {
+            res.sendStatus(500)
+        }
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
+})
+
+
+// Change Password
+router.get('/update-user-password', async function(req, res, next) {
+    try 
+    {
+        const email = req.cookie.email
+        const updateInfo = req.body
+
+        const response = await fetch(changePasswordEndpoint+email, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'

@@ -47,7 +47,6 @@ def FetchAll_Food_NonAdult():
             'message': f'We Ran Into an Issue while grabbing a list of Food : {e}'
         }
 
-
 def Fetch_Food_Adult():
     try:
         documents = foodColl.find({'IDRequired': True})
@@ -64,7 +63,6 @@ def Fetch_Food_Adult():
             'success': False,
             'message': f'We Ran Into an Issue while grabbing a list of Adult Food : {e}'
         }
-
 
 def FetchAll_Drinks_NonAdult():
     try:
@@ -83,7 +81,6 @@ def FetchAll_Drinks_NonAdult():
             'message': f'We Ran Into an Issue while grabbing a list of Drinks : {e}'
         }
 
-
 def Fetch_Drinks_Adult():
     try:
         documents = drinkColl.find({'IDRequired': True})
@@ -100,7 +97,6 @@ def Fetch_Drinks_Adult():
             'success': False,
             'message': f'We Ran Into an Issue while grabbing a list of Adult Drinks : {e}'
         }
-
 
 def Fetch_Food_ByID(id: str):
     try:
@@ -122,7 +118,6 @@ def Fetch_Food_ByID(id: str):
             'success': False,
             'message': f'We Ran Into an Issue while grabbing a Food Item : {e}'
         }
-
 
 def Fetch_Drink_ByID(id: str):
     try:
@@ -151,10 +146,10 @@ def Fetch_Drink_ByID(id: str):
 
 def CreateProduct(collection: Collection, edibleProduct: EdibleItem):
     try:
-        newID = uuid.uuid4()
+        newID = str(uuid.uuid4())
 
         newProduct = EdibleItem(
-            _id=newID,
+            id=newID,
             PName=edibleProduct.PName,
             IDRequired=edibleProduct.IDRequired,
             PCost=edibleProduct.PCost,

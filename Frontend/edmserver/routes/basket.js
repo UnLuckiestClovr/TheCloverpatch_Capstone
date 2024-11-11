@@ -93,7 +93,7 @@ router.delete('/delete-item/:itemid', async function(req, res, next) {
         const itemid = req.params.itemid;
         const bid = req.cookies.uid;
 
-        const response = await fetch((addItemEndpoint+bid+"/"+itemid), {
+        const response = await fetch((removeItemFromBasketEndpoint+bid+"/"+itemid), {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
