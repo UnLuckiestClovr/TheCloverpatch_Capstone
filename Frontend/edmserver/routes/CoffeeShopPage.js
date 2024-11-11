@@ -12,7 +12,9 @@ router.get('/', function(req, res) {
     res.render('CoffeeShopPage', {
             title: "The Cloverpatch",
             loggedInBool: boolLog,
-            scriptName: "/javascripts/edm.js"
+            scriptName: "/javascripts/edm.js",
+            FoodList: [],
+            DrinkList: []
         })
 })
 
