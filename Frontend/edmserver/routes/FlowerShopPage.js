@@ -1,9 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var DateTimeHandler = require('../dal/DatetimeFunctions')
 
 router.get('/', function(req, res) {
-    var currentMonth = DateTimeHandler.GETMONTH()
 
     let boolLog = false
     if(req.session === undefined) {
