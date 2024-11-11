@@ -115,6 +115,11 @@ public class DatabaseFunctions
 
 			if (foundPasswordEntry.VerifyPassword(loginAttempt.Password))  // If Password matches the database-stored UserPassword then login can move forward.
 			{
+				// Send Email to User
+				EmailSender eSender = new EmailSender();
+				string now = DateTime.Now.ToString();
+				eSender.SendEmail("Login Made at The Cloverpatch", $"A Login was enacted at our website on {now}. If this isn't you, please contact support and change your login information.", foundUser.Email);
+
 				return new ResponseObject<User>(200, "User Login Successful!", foundUser);
 			}
 			else  // Return Generic Login Failed Message if password doesn't match.
@@ -154,6 +159,11 @@ public class DatabaseFunctions
 			// Save Changes to Database
 			await _usercontext.SaveChangesAsync();
 
+			// Send Email to User
+			EmailSender eSender = new EmailSender();
+			string now = DateTime.Now.ToString();
+			eSender.SendEmail("Information Change Request Made at The Cloverpatch", $"User Info updated at {now}. If this isn't you, please contact support and change your login information.", existingUser.Email);
+
 			return new ResponseObject<User>(200, "User Updated Successfully", updatedUser);
 		}
 		catch (DbUpdateException ex)  // Handle Exceptions Pertaining to Database Updates
@@ -170,7 +180,7 @@ public class DatabaseFunctions
 	}
 
 
-	public async Task<ResponseObject<User>> Update_UserPassword(UserPasswordChangeInfo changeInfo)
+	public async Task<ResponseObject<User>> Update_UserPassword(string userEmail, UserPasswordChangeInfo changeInfo)
 	{
 		try
 		{
@@ -181,6 +191,11 @@ public class DatabaseFunctions
 				existingPassword.Password = changeInfo.HashPassword(changeInfo.NewPassword);
 
 				await _passwordcontext.SaveChangesAsync();
+
+				// Send Email to User
+				EmailSender eSender = new EmailSender();
+				string now = DateTime.Now.ToString();
+				eSender.SendEmail("Password Change Request Made at The Cloverpatch", $"User Info updated at {now}. If this isn't you, please contact support and change your login information.", existingUser.Email);
 
 				return new ResponseObject<User>(200, "Password Updated Successfully!");
 			}

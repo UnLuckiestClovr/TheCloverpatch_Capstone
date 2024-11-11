@@ -45,10 +45,10 @@ public class UserController : ControllerBase
         return StatusCode(response.code, response);
     }
 
-    [HttpPatch("update-user-password")]
-    public async Task<IActionResult> UpdateUser_Password(UserPasswordChangeInfo newInfo)
+    [HttpPatch("update-user-password/{email}")]
+    public async Task<IActionResult> UpdateUser_Password(string email, UserPasswordChangeInfo newInfo)
     {
-        var response = await _databaseFunctions.Update_UserPassword(newInfo);
+        var response = await _databaseFunctions.Update_UserPassword(email, newInfo);
 
         return StatusCode(response.code, response);
     }
