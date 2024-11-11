@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function(req, res) {
-    const fList = getFood();
-    const dList = getDrinks();
+router.get('/', async function(req, res) {
+    const fList = await getFood();
+    const dList = await getDrinks();
 
     let boolLog = false
     if(req.session === undefined) {
@@ -22,27 +22,57 @@ router.get('/', function(req, res) {
 })
 
 async function getFood() {
-    const response = await fetch('http://localhost:12003/products/fetch/food', {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updateInfo)
-    })
+    try {
+        const response = await fetch('http://0.0.0.0:12003/products/fetch/food', {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
 
-    return JSON.parse(response).food
+        // Check if the response is okay (status in the range 200-299)
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const food = await JSON.parse(data.food);
+
+        console.log
+        console.log(food)
+
+        return food;
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+    
 }
 
 async function getDrinks() {
-    const response = await fetch('http://localhost:12003/products/fetch/drinks', {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updateInfo)
-    })
+    try {
+        const response = await fetch('http://0.0.0.0:12003/products/fetch/drinks', {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
 
-    return JSON.parse(response).drinks
+        // Check if the response is okay (status in the range 200-299)
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const drinks = await JSON.parse(data.drinks);
+
+        console.log(drinks)
+
+        return drinks;
+    } catch (error) {
+        console.log(error)
+        return []
+    }
 }
 
 module.exports = router;

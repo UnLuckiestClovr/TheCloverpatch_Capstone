@@ -91,30 +91,24 @@ block mainContent
     
     h2(class="headrow") Or if you'd Rather, try our Specialized Drinks!
     table(class="ProductTables")
-        - const formatPrice = (price) => `$${parseFloat(price).toFixed(2)}`
-        - for (let i = 0; i < DrinkList.length; i+=2)
-            tr
-                td(class='Product')
-                    img(class='ProductImage', src=FoodList[i].PImageURL, alt="Image of Product")
-                    h3= DrinkList[i].PName
-                    p= formatPrice(DrinkList[i].PCost)
-                td(class='Product')
-                    img(class='ProductImage', src=DrinkList[i+1].PImageURL, alt="Image of Product")
-                    h3= DrinkList[i+1].PName
-                    p= formatPrice(DrinkList[i+1].PCost)
+        tbody 
+            +productRow(DrinkList)
 
-    br
-    
     h2(class="headrow") And if You Are Feeling a Bit Peckish, Try our Food!
     table(class="ProductTables")
-        - const formatPrice = (price) => `$${parseFloat(price).toFixed(2)}`
-        - for (let i = 0; i < FoodList.length; i+=2)
-            tr
+        tbody
+            +productRow(FoodList)
+
+mixin productRow(products)
+    - const formatPrice = (price) => `$${parseFloat(price).toFixed(2)}`
+    - for (let i = 0; i < products.length; i += 2)
+        tr
+            td(class='Product')
+                img(class='ProductImage', src=products[i].PImageURL, alt="Image of Product")
+                h3= products[i].PName
+                p= formatPrice(products[i].PCost)
+            if (i + 1 < products.length)
                 td(class='Product')
-                    img(class='ProductImage', src=FoodList[i].PImageURL, alt="Image of Product")
-                    h3= FoodList[i].PName
-                    p= formatPrice(DrinkList[i].PCost)
-                td(class='Product')
-                    img(class='ProductImage', src=FoodList[i+1].PImageURL, alt="Image of Product")
-                    h3= FoodList[i+1].PName
-                    p= formatPrice(DrinkList[i+1].PCost)
+                    img(class='ProductImage', src=products[i + 1].PImageURL, alt="Image of Product")
+                    h3= products[i + 1].PName
+                    p= formatPrice(products[i + 1].PCost)
