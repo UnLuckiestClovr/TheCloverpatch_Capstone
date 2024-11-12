@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+starlette
+pydantic==1.10.14
+py_eureka_client
+redis
+pika

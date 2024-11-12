@@ -35,9 +35,11 @@ def callback(ch, method, properties, body):
     print('Recieved Message')
     email_data = json.loads(body)
 
-    subject = email_data.get['ESubject']
-    message = email_data.get['EMessage']
-    toEmail = email_data.get['toEmail']
+    print(email_data, type(email_data))
+
+    subject = email_data["ESubject"]
+    message = email_data["EMessage"]
+    toEmail = email_data["toEmail"]
 
     sendEmail(subject, message, toEmail)
 
@@ -46,7 +48,7 @@ def callback(ch, method, properties, body):
 
 # Connect to RabbitMQ and Consume Messages
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost', port=9000))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='CloverpatchRabbitMQ', credentials=pika.PlainCredentials("CloverlyTheAdmin","1_L0v3_G04ts"), port=5672))
     channel = connection.channel()
 
     channel.queue_declare(queue='email_queue') # Declare the Queue

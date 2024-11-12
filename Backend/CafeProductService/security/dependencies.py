@@ -15,7 +15,6 @@ SQL_CONN_STRING = f"mssql+pyodbc://{DB_USERNAME}:{DB_PASSWORD}@{DB_SERVER}/{DB_D
 engine = create_engine(SQL_CONN_STRING)
 
 
-
 async def get_token_header(AuthenticationToken: Annotated[str, Header()]):
     try:
         print(AuthenticationToken)

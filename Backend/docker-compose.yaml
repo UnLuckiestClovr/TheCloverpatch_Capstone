@@ -1,29 +1,33 @@
 networks:
   cloverpatch-network:
 
-services:
-  eurekaregistry:
-    restart: always
-    networks:
-      - cloverpatch-network
+services:  
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: CloverpatchRabbitMQ
     ports:
-      - 10000:8761
-    container_name: CloverpatchEureka
-    image: steeltoeoss/eureka-server
+        - 10000:5672
+        - 10001:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: CloverlyTheAdmin
+      RABBITMQ_DEFAULT_PASS: 1_L0v3_G04ts
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - cloverpatch-network
 
-  ocelot:
-    restart: always
+  emailsender:
     depends_on:
-      - eureka-registry
+      - rabbitmq
+    restart: always
     networks:
       - cloverpatch-network
-    ports:
-      - 10001:5000
-    container_name: CloverpatchOcelotGateway
-    build: 
-      context: ./apigateway-ocelot-dotnet8
+    container_name: CloverpatchEmailSender
+    build:
+      context: ./EmailSender
       dockerfile: Dockerfile
-  
+
   # Basket and Order Service Setup
   basketandorderdatabase:
     restart: always
@@ -37,8 +41,6 @@ services:
 
   basketservice:
     depends_on:
-      - eurekaregistry
-      - ocelot
       - basketandorderdatabase
     restart: always
     networks:
@@ -46,15 +48,13 @@ services:
     ports:
       - 12000:8080
     build: 
-      context: ./Backend/BasketService
+      context: ./BasketService
       dockerfile: Dockerfile
     environment:
       - EUREKA_HOST=CloverpatchEureka
   
   orderservice:
     depends_on:
-      - eurekaregistry
-      - ocelot
       - basketandorderdatabase
     restart: always
     networks:
@@ -62,7 +62,7 @@ services:
     ports:
       - 12001:8080
     build: 
-      context: ./Backend/OrderService
+      context: ./OrderService
       dockerfile: Dockerfile
     environment:
       - EUREKA_HOST=CloverpatchEureka
@@ -79,8 +79,6 @@ services:
   
   flowerservice:
     depends_on:
-      - eurekaregistry
-      - ocelot
       - productdatabase
     restart: always
     container_name: CloverpatchFlowerService
@@ -89,10 +87,19 @@ services:
     ports:
       - 12002:8080
     build: 
-      context: ./Backend/FlowerService
+      context: ./FlowerService
       dockerfile: Dockerfile
-    environment:
-      - EUREKA_HOST=CloverpatchEureka
+
+  cafeservice: 
+    depends_on:
+      - productdatabase
+    restart: always
+    container_name: CafeService
+    ports:
+      - 12003:5122
+    build:
+      context: ./CafeProductService
+      dockerfile: ./Dockerfile
 
   # User Service Setup
   userdatabase:
@@ -105,13 +112,11 @@ services:
     ports:
       - "11003:1433"
     networks:
-      - ecommerce_webwork
+      - cloverpatch-network
   
   userservice:
     depends_on:
-      - eurekaregistry
-      - ocelot
-      - basketdatabase
+      - userdatabase
     restart: always
     container_name: CloverpatchUserService
     networks:
@@ -119,7 +124,5 @@ services:
     ports:
       - 12004:8080
     build: 
-      context: ./Backend/UserService
+      context: ./UserService
       dockerfile: Dockerfile
-    environment:
-      - EUREKA_HOST=CloverpatchEureka

@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Path, Depends
 from starlette.responses import Response
 
-from security.dependencies import get_query_token, get_token_header
+from security.dependencies import get_token_header
 from routes import apiendpoints, protected
 
 app = FastAPI(

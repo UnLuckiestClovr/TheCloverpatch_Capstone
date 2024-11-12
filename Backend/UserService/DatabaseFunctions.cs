@@ -195,7 +195,7 @@ public class DatabaseFunctions
 				// Send Email to User
 				EmailSender eSender = new EmailSender();
 				string now = DateTime.Now.ToString();
-				eSender.SendEmail("Password Change Request Made at The Cloverpatch", $"User Info updated at {now}. If this isn't you, please contact support and change your login information.", existingUser.Email);
+				eSender.SendEmail("Password Change Request Made at The Cloverpatch", $"User Info updated at {now}. If this isn't you, please contact support and change your login information.", userEmail);
 
 				return new ResponseObject<User>(200, "Password Updated Successfully!");
 			}

@@ -15,7 +15,7 @@ COPY . .
 
 EXPOSE 8080
 
-ENV NAME CloverpatchFlowerAPI
+ENV NAME CloverpatchCafeAPI
 ENV EUREKA_HOST CloverpatchEureka
 
 CMD ["python", "main.py"]

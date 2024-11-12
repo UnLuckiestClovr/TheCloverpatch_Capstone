@@ -5,7 +5,7 @@ public class UserDBContext : DbContext
 {
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		optionsBuilder.UseSqlServer("Server=localhost,10004;database=UserDB;User Id=sa;password=Nc220370979;TrustServerCertificate=True;");
+		optionsBuilder.UseSqlServer("Server=CloverpatchUserDatabase;database=UserDB;User Id=sa;password=Nc220370979;TrustServerCertificate=True;");
 	}
 
   public UserDBContext() {
@@ -25,7 +25,7 @@ public class PasswordDBContext : DbContext
 {
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-	optionsBuilder.UseSqlServer("Server=localhost,10004;database=UserPassDB;User Id=sa;password=Nc220370979;TrustServerCertificate=True;");
+	optionsBuilder.UseSqlServer("Server=CloverpatchUserDatabase;database=UserPassDB;User Id=sa;password=Nc220370979;TrustServerCertificate=True;");
   }
 
   public PasswordDBContext() {
@@ -44,7 +44,7 @@ public class HigherPermUserContext : DbContext
 {
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-	optionsBuilder.UseSqlServer("Server=localhost,10004;database=EnhancedUsersDB;User Id=sa;password=Nc220370979;TrustServerCertificate=True;");
+	optionsBuilder.UseSqlServer("Server=CloverpatchUserDatabase;database=EnhancedUsersDB;User Id=sa;password=Nc220370979;TrustServerCertificate=True;");
   }
 
   public HigherPermUserContext() {

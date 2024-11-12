@@ -36,11 +36,11 @@ app.get("/")
 async def root():
     return { "message" : "Order Root Called"}
 
-#Eureka Service Config
-EurekaHost = "localhost"
-EurekaPort = 10000
+# #Eureka Service Config
+# EurekaHost = "localhost"
+# EurekaPort = 10000
 
-EurekaConnection.Eureka_Register(EurekaHost, EurekaPort)
+# EurekaConnection.Eureka_Register(EurekaHost, EurekaPort)
 
 if __name__ == "__main__":
     import uvicorn

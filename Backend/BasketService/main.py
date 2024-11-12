@@ -35,11 +35,11 @@ app.include_router(apiendpoints.router)
 async def root():
     return {"message" : "Basket Root Called"}
 
-#Eureka Service Config
-EurekaHost = "localhost"
-EurekaPort = 10000
+# #Eureka Service Config
+# EurekaHost = "localhost"
+# EurekaPort = 10000
 
-EurekaConnection.Eureka_Register(EurekaHost, EurekaPort)
+# EurekaConnection.Eureka_Register(EurekaHost, EurekaPort)
 
 if __name__ == "__main__":
     import uvicorn
