@@ -127,7 +127,7 @@ def ProcessBasketToOrder(BID: str, Email: str):
             TimeMade=current_time
         )
 
-        rConn.hmset(userid, order.model_dump_json())
+        rConn.hmset(redisOID, order.model_dump_json())
         rConn.rpush(f"UID:{order.UID}:orders", orderID)
 
         sendEmail(
