@@ -5,7 +5,7 @@ from pymongo import ReturnDocument
 from models.apimodels import *
 
 
-MongoClient = pymongo.MongoClient("mongodb://localhost:11002/") # Test Connection, Change to Containerized Connection string upon Deployment
+MongoClient = pymongo.MongoClient("mongodb://CloverpatchProductDatabase:11002/") # Test Connection, Change to Containerized Connection string upon Deployment
 
 objDatabase = MongoClient["CloverpatchProducts"]
 flowerColl = objDatabase["Flowers"]
