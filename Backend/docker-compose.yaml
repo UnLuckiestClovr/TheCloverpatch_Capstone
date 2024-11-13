@@ -29,14 +29,14 @@ services:
       dockerfile: Dockerfile
 
   # Basket and Order Service Setup
-  basketandorderdatabase:
+  basketdatabase:
     restart: always
     networks:
       - cloverpatch-network
     ports:
       - 11000:6379
       - 11001:8001
-    container_name: CloverpatchBasketAndOrderDatabase
+    container_name: CloverpatchBasketDatabase
     image: redis/redis-stack:latest
 
   basketservice:
@@ -49,20 +49,6 @@ services:
       - 12000:8080
     build: 
       context: ./BasketService
-      dockerfile: Dockerfile
-    environment:
-      - EUREKA_HOST=CloverpatchEureka
-  
-  orderservice:
-    depends_on:
-      - basketandorderdatabase
-    restart: always
-    networks:
-      - cloverpatch-network
-    ports:
-      - 12001:8080
-    build: 
-      context: ./OrderService
       dockerfile: Dockerfile
     environment:
       - EUREKA_HOST=CloverpatchEureka
@@ -81,7 +67,6 @@ services:
     depends_on:
       - productdatabase
     restart: always
-    container_name: CloverpatchFlowerService
     networks:
       - cloverpatch-network
     ports:
@@ -94,7 +79,6 @@ services:
     depends_on:
       - productdatabase
     restart: always
-    container_name: CafeService
     networks:
       - cloverpatch-network
     ports:
@@ -102,6 +86,20 @@ services:
     build:
       context: ./CafeProductService
       dockerfile: ./Dockerfile
+  
+  orderservice:
+    depends_on:
+      - basketandorderdatabase
+    restart: always
+    networks:
+      - cloverpatch-network
+    ports:
+      - 12001:8080
+    build: 
+      context: ./OrderService
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_HOST=CloverpatchEureka
 
   # User Service Setup
   userdatabase:
@@ -120,7 +118,6 @@ services:
     depends_on:
       - userdatabase
     restart: always
-    container_name: CloverpatchUserService
     networks:
       - cloverpatch-network
     ports:

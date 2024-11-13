@@ -21,14 +21,16 @@ class OrderItem(BaseModel):
     Price: float = Field()
 
 class Order(BaseModel):
-    UID: str = Field()
-    Items: List[OrderItem] = Field()
-    FinalPrice: float = Field()
-    TimeMade: str = Field()
-
-class FlowerOrder(BaseModel):
+    OID: str = Field()
     UID: str = Field()
     Items: List[OrderItem] = Field()
     FinalPrice: float = Field()
     AddressInfo: AddressInfo = Field()
     TimeMade: str = Field()
+
+class Item(BaseModel):
+    IID: str = Field()
+    Name: str = Field()
+    Quantity: int = Field()
+    Variant: str = Field()
+    Price: float = Field()

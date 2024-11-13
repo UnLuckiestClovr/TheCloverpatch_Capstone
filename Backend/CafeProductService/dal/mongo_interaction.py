@@ -100,7 +100,7 @@ def Fetch_Drinks_Adult():
 
 def Fetch_Food_ByID(id: str):
     try:
-        document = foodColl.find_one({'_id': id})
+        document = foodColl.find_one({'id': id})
 
         if (document != None):
             return {
@@ -121,7 +121,7 @@ def Fetch_Food_ByID(id: str):
 
 def Fetch_Drink_ByID(id: str):
     try:
-        document = drinkColl.find_one({'_id': id})
+        document = drinkColl.find_one({'id': id})
 
         if (document != None):
             return {
@@ -182,7 +182,7 @@ def ProductCreationEnact(edibleProduct: EdibleItem, PType: int):
 
 def UpdateProduct(collection: Collection, updatedProduct: EdibleItem):
     try:
-        result = collection.find_one_and_replace({"_id": updatedProduct._id})
+        result = collection.find_one_and_replace({"id": updatedProduct.id})
 
         return {
             'success': True,
@@ -208,7 +208,7 @@ def EnactProductUpdate(updatedProduct: EdibleItem, PType: int):
 
 def DeleteProduct(collection: Collection, id: str):
     try:
-        collection.delete_one({'_id': id})
+        collection.delete_one({'id': id})
 
         return {
             'success': True,

@@ -11,14 +11,9 @@ router = APIRouter(
 )
 
 
-@router.post("/create-order/food/{BID}/{Email}")
-async def CreateOrder(BID: str = Path(alias='BID'), Email: str = Path(alias='Email')):
-    return databaseinteraction.ProcessBasketToOrder(BID, Email)
-
-
-@router.post("/create-order/flower/{BID}/{Email}")
-async def CreateOrder( AddressInfo: AddressInfo, BID: str = Path(alias='BID'), Email: str = Path(alias='Email')):
-    return databaseinteraction.CreateFlowerOrder(BID, AddressInfo, Email)
+@router.post("/create-order/{BID}/{Email}")
+async def CreateOrder( body: AddressInfo, BID: str = Path(alias='BID'), Email: str = Path(alias='Email')):
+    return databaseinteraction.ProcessBasketToOrder(body, BID, Email)
 
 
 @router.get("/fetch/{OID}")
@@ -29,6 +24,6 @@ async def FetchOrder(OID: str = Path(alias='OID')):
 async def FetchUserOrders(UID: str = Path(alias='UID')):
     return databaseinteraction.FetchOrdersOfUser(UID)
 
-@router.delete("/cancel/{UID}/{OID}")
-async def CancelOrder(UID: str = Path(alias='UID'), OID: str = Path(alias='OID')):
+@router.delete("/cancel/{OID}")
+async def CancelOrder(OID: str = Path(alias='OID')):
     return databaseinteraction.CancelOrder(OID, UID)
