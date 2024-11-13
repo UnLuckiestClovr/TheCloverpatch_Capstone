@@ -1,13 +1,13 @@
-import pika, json, smtplib
+import pika, json, smtplib, time, traceback
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 
 # Email configuration
-SMTP_SERVER = 'smtp.example.com'  # Replace with your SMTP server
+SMTP_SERVER = 'smtp.ethereal.email'  # Replace with your SMTP server
 SMTP_PORT = 587                     # Common SMTP ports: 587 or 465
-SMTP_USERNAME = 'your_username'     # Your email username
-SMTP_PASSWORD = 'your_password'     # Your email password
+SMTP_USERNAME = 'euna.greenfelder82@ethereal.email'     # Your email username
+SMTP_PASSWORD = 'VbybS132B36DGBnMkY'     # Your email password
 
 
 def sendEmail(subject, message, toEmail):
@@ -48,14 +48,33 @@ def callback(ch, method, properties, body):
 
 # Connect to RabbitMQ and Consume Messages
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='CloverpatchRabbitMQ', credentials=pika.PlainCredentials("CloverlyTheAdmin","1_L0v3_G04ts"), port=5672))
-    channel = connection.channel()
+    while(True):
+        try:
+            # Attempt to connect to RabbitMQ
+            connection = pika.BlockingConnection(pika.ConnectionParameters(
+                host='CloverpatchRabbitMQ',
+                credentials=pika.PlainCredentials("CloverlyTheAdmin", "1_L0v3_G04ts")
+            ))
+            channel = connection.channel()
 
-    channel.queue_declare(queue='email_queue') # Declare the Queue
-    channel.basic_consume(queue='email_queue', on_message_callback=callback)
+            channel.queue_declare(queue='email_queue') # Declare the Queue
+            channel.basic_consume(queue='email_queue', on_message_callback=callback)
 
-    print('Waiting for Messages. To Exit press CTRL+C')
-    channel.start_consuming()
+            print('Waiting for Messages. To Exit press CTRL+C')
+            channel.start_consuming()
+            break
+        except pika.exceptions.AMQPConnectionError as e:
+            # Handle connection error and print the stack trace
+            print(f"Connection failed: {e}")
+            traceback.print_exc()  # Print the full stack trace
+            print("Retrying in 2 seconds...")
+            time.sleep(5)  # Wait for 5 seconds before retrying
+        except Exception as e:
+            # Handle any other exceptions and print the stack trace
+            print(f"An error occurred: {e}")
+            traceback.print_exc()  # Print the full stack trace
+            print("Retrying in 2 seconds...")
+            time.sleep(5)  # Wait for 5 seconds before retrying
 
 
 if __name__ == '__main__':

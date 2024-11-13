@@ -5,7 +5,7 @@ from pymongo import ReturnDocument
 from models.apimodels import *
 
 
-MongoClient = pymongo.MongoClient("mongodb://CloverpatchProductDatabase:11002/") # Test Connection, Change to Containerized Connection string upon Deployment
+MongoClient = pymongo.MongoClient("mongodb://CloverpatchProductDatabase:27017/") # Test Connection, Change to Containerized Connection string upon Deployment
 
 objDatabase = MongoClient["CloverpatchProducts"]
 flowerColl = objDatabase["Flowers"]
@@ -20,10 +20,10 @@ def FetchAllFlowers():
         return {
             'success': True,
             'message': 'Fetch Successful',
-            'flowers': json.dumps(flowers)
+            'flowers': json.dumps(flowers, default=str)
         }
     except Exception as e:
-        print(f"Error Fetching List of Flowers")
+        print(f"Error Fetching List of Flowers: {e}")
         return None
 
 
@@ -38,7 +38,7 @@ def FetchFlowers_byCurrentMonth():
         return {
             'success': True,
             'message': 'Fetch by Month Successful',
-            'flowers': json.dumps(flowers)
+            'flowers': json.dumps(flowers, default=str)
         }
     except Exception as e:
         print(f"Error Fetching List of Flowers by Month")
@@ -57,7 +57,7 @@ def CreateFlowerProduct(inputFlower: FlowerProduct):
             PImageURL=inputFlower.PImageURL
         )
 
-        flowerColl.insert_one(json.loads(newFlower.model_dump_json()))
+        flowerColl.insert_one(json.loads(newFlower.json()))
 
         return {
             'success': True,

@@ -1,7 +1,10 @@
 import pika, json
 
 def sendEmail(subject, message, email):
-    conn = pika.BlockingConnection(pika.ConnectionParameters(host='localhost', port=9000))
+    conn = pika.BlockingConnection(pika.ConnectionParameters(
+                host='CloverpatchRabbitMQ',
+                credentials=pika.PlainCredentials("CloverlyTheAdmin", "1_L0v3_G04ts")
+            ))
     channel = conn.channel()
 
     channel.queue_declare(queue='email_queue')

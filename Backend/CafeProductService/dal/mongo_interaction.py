@@ -6,7 +6,7 @@ from pymongo.collection import Collection
 from models.apimodels import *
 
 
-MongoClient = pymongo.MongoClient("mongodb://CloverpatchProductDatabase:11002/") # Test Connection, Change to Containerized Connection string upon Deployment
+MongoClient = pymongo.MongoClient("mongodb://CloverpatchProductDatabase:27017/") # Test Connection, Change to Containerized Connection string upon Deployment
 
 objDatabase = MongoClient["CloverpatchProducts"]
 foodColl = objDatabase["Food"]
@@ -156,7 +156,7 @@ def CreateProduct(collection: Collection, edibleProduct: EdibleItem):
             PImageURL=edibleProduct.PImageURL
         )
 
-        collection.insert_one(json.loads(newProduct.model_dump_json()))
+        collection.insert_one(json.loads(newProduct.json()))
 
         return {
             'success': True,

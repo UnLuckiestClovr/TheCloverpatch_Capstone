@@ -85,7 +85,7 @@ services:
     networks:
       - cloverpatch-network
     ports:
-      - 12002:8080
+      - 12002:12002
     build: 
       context: ./FlowerService
       dockerfile: Dockerfile
@@ -95,8 +95,10 @@ services:
       - productdatabase
     restart: always
     container_name: CafeService
+    networks:
+      - cloverpatch-network
     ports:
-      - 12003:5122
+      - 12003:12003
     build:
       context: ./CafeProductService
       dockerfile: ./Dockerfile

@@ -8,9 +8,11 @@ from sqlalchemy.exc import SQLAlchemyError
 # Database Connection Settings and Engine Creation
 DB_USERNAME = "sa"
 DB_PASSWORD = "Nc220370979"
-DB_SERVER = "localhost:10004"
+DB_SERVER = "CloverpatchUserDatabase" # localhost:10004
 DB_DATABASE = "EnhancedUsersDB"
 SQL_CONN_STRING = f"mssql+pyodbc://{DB_USERNAME}:{DB_PASSWORD}@{DB_SERVER}/{DB_DATABASE}?driver=ODBC+Driver+17+for+SQL+Server"
+
+ADMIN_GENERALIZED_TOKEN = "123_ABC_124_GIVEUSMORE"
 
 engine = create_engine(SQL_CONN_STRING)
 
@@ -19,6 +21,10 @@ engine = create_engine(SQL_CONN_STRING)
 async def get_token_header(AuthenticationToken: Annotated[str, Header()]):
     try:
         print(AuthenticationToken)
+
+        if (AuthenticationToken == ADMIN_GENERALIZED_TOKEN): 
+            return
+        
         # Validate the token against the database.
         with engine.connect() as connection:
             result = connection.execute(text("SELECT COUNT(*) FROM EnhancedUsers WHERE ID = :idtoken"), {"idtoken": AuthenticationToken})

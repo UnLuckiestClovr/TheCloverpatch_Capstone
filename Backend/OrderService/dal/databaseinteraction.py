@@ -80,7 +80,7 @@ def CreateFlowerOrder(BID: str, addressInfo: AddressInfo, Email):
 
 def CreateCafeOrder(rConn: redis.Redis, orderObject: Order, OID: str):
     try:
-        rConn.hmset(OID, orderObject.model_dump_json())
+        rConn.hmset(OID, orderObject.json())
         rConn.rpush(f"UID:{orderObject.UID}:orders", OID)
 
         return {
@@ -127,7 +127,7 @@ def ProcessBasketToOrder(BID: str, Email: str):
             TimeMade=current_time
         )
 
-        rConn.hmset(redisOID, order.model_dump_json())
+        rConn.hmset(redisOID, order.json())
         rConn.rpush(f"UID:{order.UID}:orders", orderID)
 
         sendEmail(

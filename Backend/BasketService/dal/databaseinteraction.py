@@ -2,7 +2,7 @@ import redis, json, uuid
 
 from models.apimodels import Basket, Item
 
-rConnPool = redis.ConnectionPool(host='CloverpatchBasketDatabase', port=6379)
+rConnPool = redis.ConnectionPool(host='CloverpatchBasketAndOrderDatabase', port=6379)
 
 
 def check_BasketExists(BID: str):
@@ -31,7 +31,7 @@ def addItemToBasket(BID: str, item: Item):  # BID is Basket ID, this will be the
         rConn = redis.Redis(connection_pool=rConnPool) # Connect to Redis Database
         
         # Replace '-' with '_' in the BID; Redis doesn't like the '-' character
-        rConn.rpush(f'{redisBID}:Items', item.model_dump_json())
+        rConn.rpush(f'{redisBID}:Items', item.json())
         return {
             'success' : True,
             'message' : f'Item added to {redisBID} Successfully',
@@ -58,7 +58,9 @@ def getBasket(BID: str):
         rConn = redis.Redis(connection_pool=rConnPool)
 
         # Get all elements from the list
-        json_strings = rConn.lrange(f'{BID}:Items', 0, rConn.llen(f'{redisBID}:Items'))
+        json_strings = rConn.lrange(f'{redisBID}:Items', 0, rConn.llen(f'{redisBID}:Items'))
+
+        print(json_strings)
 
         items = []
         for json_str in json_strings:
