@@ -32,7 +32,7 @@ def ProcessBasketToOrder(orderAddress: AddressInfo, BID: str, Email: str):
         current_time = datetime.now().strftime("%m/%d/%Y - %H:%M")
 
         order = Order(
-            OID=(uuid.uuid4()).__str__(),
+            OID=OID,
             UID=f'{BID}',
             Items=items,
             FinalPrice=totalcost,
