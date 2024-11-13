@@ -1,7 +1,7 @@
 import redis, json, uuid, re, traceback, pymongo
 
 from datetime import datetime
-from models.apimodels import Order, AddressInfo, FlowerOrder, Item
+from models.apimodels import Order, AddressInfo, Item
 from miscscripts.SendEmail import sendEmail
 
 rConnPool = redis.ConnectionPool(host='CloverpatchBasketDatabase', port=6379)
@@ -60,6 +60,7 @@ def ProcessBasketToOrder(orderAddress: AddressInfo, BID: str, Email: str):
             "message": f"Error connecting to Redis: {e}"
         }
     except Exception as e:
+        traceback.print_exception(e)
         return {
             "success": False,
             "message": f"An error occurred: {e}"
@@ -82,6 +83,7 @@ def FetchOrderbyID(OID: str):
                 'message': f'Fetching of Order {OID} Unsuccessful!'
             }
     except Exception as e:
+        traceback.print_exception(e)
         return {
             "success": False,
             "message": f"An error occurred: {e}"
@@ -100,6 +102,7 @@ def FetchOrdersOfUser(UID: str):
             'orders': json.dumps(orders, default=str)
         }
     except Exception as e:
+        traceback.print_exception(e)
         return {
             "success": False,
             "message": f"An error occurred: {e}"
@@ -115,6 +118,7 @@ def CancelOrder(OID: str):
             "message" : f"Successful Deletion of Order {OID}"
         }
     except Exception as e:
+        traceback.print_exception(e)
         return {
             "success": False,
             "message": f"An error occurred: {e}"

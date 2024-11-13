@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
 
-from models.apimodels import Order, OrderItem, AddressInfo
+from models.apimodels import AddressInfo
 from dal import databaseinteraction
 
 # Router sets up the prefixes and allows the main application to see the included routes. 

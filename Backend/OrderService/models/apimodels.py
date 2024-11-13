@@ -6,6 +6,13 @@ from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
+class Item(BaseModel):
+    IID: str = Field()
+    Name: str = Field()
+    Quantity: int = Field()
+    Variant: str = Field()
+    Price: float = Field()
+
 class AddressInfo(BaseModel):
     AddressLine1: str = Field()
     AddressLine2: Optional[str] = Field()
@@ -13,24 +20,10 @@ class AddressInfo(BaseModel):
     State: Optional[str] = Field()
     Zipcode: str = Field()
 
-class OrderItem(BaseModel):
-    IID: str = Field()
-    ItemName: str = Field()
-    ItemVariant: str = Field()
-    ItemQuantity: int = Field()
-    Price: float = Field()
-
 class Order(BaseModel):
     OID: str = Field()
     UID: str = Field()
-    Items: List[OrderItem] = Field()
+    Items: List[Item] = Field()
     FinalPrice: float = Field()
     AddressInfo: AddressInfo = Field()
     TimeMade: str = Field()
-
-class Item(BaseModel):
-    IID: str = Field()
-    Name: str = Field()
-    Quantity: int = Field()
-    Variant: str = Field()
-    Price: float = Field()

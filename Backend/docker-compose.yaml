@@ -41,7 +41,7 @@ services:
 
   basketservice:
     depends_on:
-      - basketandorderdatabase
+      - basketdatabase
     restart: always
     networks:
       - cloverpatch-network
@@ -89,7 +89,7 @@ services:
   
   orderservice:
     depends_on:
-      - basketandorderdatabase
+      - productdatabase
     restart: always
     networks:
       - cloverpatch-network
