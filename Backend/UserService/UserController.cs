@@ -60,4 +60,12 @@ public class UserController : ControllerBase
 
         return StatusCode(response.code, response);
     }
+
+    [HttpGet("retrieve-data/{userid}")]
+    public async Task<IActionResult> RetrieveUserInfo(string userid) 
+    {
+        var response = await _databaseFunctions.RetrieveUserInfo(userid);
+
+        return StatusCode(response.code, response);
+    }
 }

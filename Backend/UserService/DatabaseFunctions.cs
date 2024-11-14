@@ -86,6 +86,17 @@ public class DatabaseFunctions
 	}
 
 
+	public async Task<ResponseObject<User>> RetrieveUserInfo(string userid) // Read User by Username or Email [ Same Value counts for Both ]
+	{
+		using (_usercontext)
+		{
+			var userInfo = await _usercontext.Users.FirstOrDefaultAsync(u => u.ID == userid);
+
+			return new ResponseObject<User>(200, "Data Retrieval Successful!", userInfo);
+		}
+	}
+
+
 	public async Task<User> FindUser(string usernameOrEmail) // Read User by Username or Email [ Same Value counts for Both ]
 	{
 		using (_usercontext)

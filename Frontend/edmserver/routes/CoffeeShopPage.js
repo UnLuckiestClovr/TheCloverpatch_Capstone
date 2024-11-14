@@ -6,12 +6,10 @@ router.get('/', async function(req, res) {
     const dList = await getDrinks();
 
     let boolLog = false
-    if(req.session === undefined) {
-        boolLog = false
-    } else {
-        boolLog = (req.session.user !== null && req.session.user !== undefined)
-        //- console.log("Session User: ", req.session.user)
+    if(req.cookies && req.cookies.uid) {
+        boolLog = true;
     }
+    
     res.render('CoffeeShopPage', {
             title: "The Cloverpatch",
             loggedInBool: boolLog,

@@ -1,6 +1,21 @@
 var express = require('express')
 var router = express.Router()
 
+
+router.get('/', function(req, res, next) {
+    let boolLog = false
+    if(req.cookies && req.cookies.uid) {
+        boolLog = true;
+    }
+
+    res.render('basketpage', { 
+        title: 'The Cloverpatch', 
+        loggedInBool: boolLog,
+        scriptName: "/javascripts/edm.js"
+    });
+});
+
+
 // API Endpoints
 const addItemEndpoint = "http//localhost:8080/basket/add-item/"
 const getBasketEndpoint = "http//localhost:8080/basket/get/"

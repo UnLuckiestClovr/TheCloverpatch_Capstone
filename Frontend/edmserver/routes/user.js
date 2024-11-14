@@ -8,6 +8,7 @@ const registerEndpoint = 'http://localhost:5122/user/register'
 const updateEndpoint = 'http://localhost:5122/user/update-user-info'
 const changePasswordEndpoint = 'http://localhost:5122/user/update-user-password/'
 const deleteEndpoint = 'http://localhost:5122/user/delete'
+const accountDataEndpoint = 'http://loclahost:5122/user/retrieve-info/'
 
 function validateUsername(username) {
     const usernameRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
@@ -47,6 +48,27 @@ function validateForm(uName, uPswrd, uEmail) {
     return true; // Return true if all validations passed
 }
 
+
+router.get('/get/', async function(req, res, next) {
+    try {
+        const userid = req.cookies.uid
+
+        if (userid !== null) {
+            const response = await fetch((accountDataEndpoint+userid), {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const jsonData = await response.json();
+            res.status(200).send(jsonData)
+        }
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
+})
+
 // Login
 router.get('/login', async function(req, res, next) {
     try 
@@ -66,9 +88,7 @@ router.get('/login', async function(req, res, next) {
             const { code, message, data: userData } = jsonData;
 
             // Sets Cookies for 1 Week
-            res.cookie('uid', userData.id, { httpOnly: true, maxAge: 604800000 })
-            res.cookie('username', userData.username, { httpOnly: true, maxAge: 604800000 })
-            res.cookie('email', userData.email, { httpOnly: true, maxAge: 604800000 })
+            res.cookie('uid', userData.ID, { httpOnly: true, maxAge: 604800000 })
 
             res.status(code).send(message);
             res.send("Logged In Successfully");
@@ -182,8 +202,6 @@ router.get('/delete', async function(req, res, next) {
         })
 
         res.clearCookie('uid');
-        res.clearCookie('username');
-        res.clearCookie('email');
 
         if (response.ok) {
             res.sendStatus(200)
@@ -204,8 +222,6 @@ router.post('/logout', (req, res) => {
 
     try {
         res.clearCookie('uid');
-        res.clearCookie('username');
-        res.clearCookie('email');
 
         res.sendStatus(200);
     } catch (error) {

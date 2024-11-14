@@ -1,0 +1,130 @@
+version: '3'
+
+# networks:
+#   cloverpatch-network:
+
+services:  
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: CloverpatchRabbitMQ
+    ports:
+        - 10000:5672
+        - 10001:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: CloverlyTheAdmin
+      RABBITMQ_DEFAULT_PASS: 1_L0v3_G04ts
+    volumes:
+        - 
+        # - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        # - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    # networks:
+    #     - cloverpatch-network
+
+  emailsender:
+    depends_on:
+      - rabbitmq
+    restart: always
+    # networks:
+    #   - cloverpatch-network
+    container_name: CloverpatchEmailSender
+    build:
+      context: ./EmailSender
+      dockerfile: Dockerfile
+
+  # Basket and Order Service Setup
+  basketdatabase:
+    restart: always
+    # networks:
+    #   - cloverpatch-network
+    ports:
+      - 11000:6379
+      - 11001:8001
+    container_name: CloverpatchBasketDatabase
+    image: redis/redis-stack:latest
+
+  basketservice:
+    depends_on:
+      - basketdatabase
+    restart: always
+    # networks:
+    #   - cloverpatch-network
+    ports:
+      - 12000:8080
+    build: 
+      context: ./BasketService
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_HOST=CloverpatchEureka
+
+  # Flower and Cafe Product Service
+  productdatabase:
+    restart: always
+    container_name: CloverpatchProductDatabase
+    image: mongo
+    # networks:
+    #   - cloverpatch-network
+    ports:
+      - 11002:27017
+  
+  flowerservice:
+    depends_on:
+      - productdatabase
+    restart: always
+    # networks:
+    #   - cloverpatch-network
+    ports:
+      - 12002:12002
+    build: 
+      context: ./FlowerService
+      dockerfile: Dockerfile
+
+  cafeservice: 
+    depends_on:
+      - productdatabase
+    restart: always
+    # networks:
+    #   - cloverpatch-network
+    ports:
+      - 12003:12003
+    build:
+      context: ./CafeProductService
+      dockerfile: ./Dockerfile
+  
+  orderservice:
+    depends_on:
+      - productdatabase
+    restart: always
+    # networks:
+    #   - cloverpatch-network
+    ports:
+      - 12001:8080
+    build: 
+      context: ./OrderService
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_HOST=CloverpatchEureka
+
+  # User Service Setup
+  userdatabase:
+    restart: always
+    container_name: CloverpatchUserDatabase
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Nc220370979"
+    ports:
+      - "11003:1433"
+    # networks:
+    #   - cloverpatch-network
+  
+  userservice:
+    depends_on:
+      - userdatabase
+    restart: always
+    # networks:
+    #   - cloverpatch-network
+    ports:
+      - 12004:8080
+    build: 
+      context: ./UserService
+      dockerfile: Dockerfile

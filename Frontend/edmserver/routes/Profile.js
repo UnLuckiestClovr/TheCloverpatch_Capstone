@@ -12,6 +12,8 @@ router.get('/', function(req, res) {
         pageData.username = req.session.user.username
         pageData.email = req.session.user.email
         console.log(profUser)
+
+        
     } catch (error) {
         console.log(error)
     }
