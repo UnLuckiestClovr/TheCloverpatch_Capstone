@@ -3,12 +3,12 @@ var router = express.Router()
 
 
 // Endpoint Links
-const loginEndpoint = 'http://localhost:5122/user/login'
-const registerEndpoint = 'http://localhost:5122/user/register'
-const updateEndpoint = 'http://localhost:5122/user/update-user-info'
-const changePasswordEndpoint = 'http://localhost:5122/user/update-user-password/'
-const deleteEndpoint = 'http://localhost:5122/user/delete'
-const accountDataEndpoint = 'http://loclahost:5122/user/retrieve-info/'
+const loginEndpoint = 'http://localhost:12004/user/login'
+const registerEndpoint = 'http://0.0.0.0:12004/user/register'
+const updateEndpoint = 'http://localhost:12004/user/update-user-info'
+const changePasswordEndpoint = 'http://localhost:12004/user/update-user-password/'
+const deleteEndpoint = 'http://localhost:12004/user/delete'
+const accountDataEndpoint = 'http://localhost:12004/user/retrieve-data/'
 
 function validateUsername(username) {
     const usernameRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
@@ -26,8 +26,6 @@ function validateEmail(email) {
 }
 
 function validateForm(uName, uPswrd, uEmail) {
-    const regErrors = document.getElementById('regErrors');
-    regErrors.innerHTML = ''; // Clear previous errors
     let errors = [];
 
     if (!validateUsername(uName)) {
@@ -41,15 +39,14 @@ function validateForm(uName, uPswrd, uEmail) {
     }
 
     if (errors.length > 0) {
-        regErrors.innerHTML = errors.map(error => `<p>${error}</p>`).join('');
-        return false; // Return false if there are errors
+        return errors; // Return false if there are errors
     }
 
     return true; // Return true if all validations passed
 }
 
 
-router.get('/get/', async function(req, res, next) {
+router.get('/get', async function(req, res, next) {
     try {
         const userid = req.cookies.uid
 
@@ -70,10 +67,12 @@ router.get('/get/', async function(req, res, next) {
 })
 
 // Login
-router.get('/login', async function(req, res, next) {
+router.post('/login', async function(req, res, next) {
     try 
     {
         const loginData = req.body
+
+        console.log(loginData)
 
         const response = await fetch(loginEndpoint, {
             method: "POST",
@@ -87,11 +86,12 @@ router.get('/login', async function(req, res, next) {
             const jsonData = await response.json();
             const { code, message, data: userData } = jsonData;
 
+            console.log(userData)
+
             // Sets Cookies for 1 Week
-            res.cookie('uid', userData.ID, { httpOnly: true, maxAge: 604800000 })
+            await res.cookie('uid', userData.id, { httpOnly: true, maxAge: 604800000 })
 
             res.status(code).send(message);
-            res.send("Logged In Successfully");
         }
         else {
             res.status(500).send(message)
@@ -104,27 +104,41 @@ router.get('/login', async function(req, res, next) {
 
 
 // Register
-router.get('/register', async function(req, res, next) {
+router.post('/register', async function(req, res, next) {
     try 
     {
+        console.log("User Register Called")
         const regData = req.body
 
-        validateForm(regData.Usermame, regData.Password, regData.Email)
+        console.log(regData)
 
-        const response = await fetch(registerEndpoint, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(regData)
-        })
+        console.log(JSON.stringify(regData))
 
-        if (response.ok) {
-            res.sendStatus(200)
+        const errors = validateForm(regData.Usermame, regData.Password, regData.Email)
+
+        if (errors.length > 0) {
+            console.log("Registration Data Valid: Beginning Register Process")
+            const response = await fetch(registerEndpoint, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(regData)
+            })
+    
+            if (response.ok) {
+                res.sendStatus(200)
+            }
+            else {
+                res.sendStatus(500)
+            }
         }
         else {
-            res.sendStatus(500)
+            console.log("Registration Data Invalid")
+            res.status(400).send(JSON.stringify(errors))
         }
+
+        
     } catch (error) {
         console.log(error)
         res.sendStatus(500)

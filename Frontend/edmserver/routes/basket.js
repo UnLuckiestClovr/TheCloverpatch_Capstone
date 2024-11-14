@@ -50,10 +50,9 @@ router.post('/add-item', async function(req, res, next) {
     }
 })
 
-// Get Basket
-router.get('/get', async function(req, res, next) {
+
+async function getUserBasket(bid) {
     try {
-        const bid = req.cookies.uid;
 
         const response = await fetch((getBasketEndpoint+bid), {
             method: "GET",
@@ -61,6 +60,29 @@ router.get('/get', async function(req, res, next) {
                 'Content-Type': 'application/json'
             }
         })
+
+        if (response.ok) {
+            const jsonData = await response.json();
+            const { value } = jsonData;
+
+            return { value }
+        } else {
+            return {}
+        }
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
+}
+
+// Get Basket
+router.get('/get', async function(req, res, next) {
+    try {
+        const bid = req.cookies.uid;
+
+        const basket = await getUserBasket(bid)
+
+        res.status(code).send(message)
 
         if (response.ok) {
             const jsonData = await response.json();

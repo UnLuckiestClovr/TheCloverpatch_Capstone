@@ -47,10 +47,10 @@ def FetchFlowers_byCurrentMonth():
 
 def CreateFlowerProduct(inputFlower: FlowerProduct):
     try:
-        newID = uuid.uuid4()
+        newID = uuid.uuid4().__str__()
 
         newFlower = FlowerProduct(
-            _id=newID,
+            id=newID,
             PName=inputFlower.PName,
             PMonth=inputFlower.PMonth,
             PCostPerFlower=inputFlower.PCostPerFlower,

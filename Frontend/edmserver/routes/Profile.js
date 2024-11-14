@@ -1,27 +1,39 @@
 var express = require('express')
 var router = express.Router()
 
-let pageData = {
-    username: "",
-    email: ""
-}
 
-router.get('/', function(req, res) {
+router.get('/', async function(req, res) {
     try {
-        let profUser = req.session.user
-        pageData.username = req.session.user.username
-        pageData.email = req.session.user.email
-        console.log(profUser)
+        let boolLog = false
+        if(req.cookies && req.cookies.uid) {
+            boolLog = true;
+        }
 
-        
+        let jsonData = {}
+        if (boolLog) {
+            const response = await fetch(("http://localhost:12004/user/retrieve-data/"+req.cookies.uid), {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            console.log(response)
+
+            jsonData = await response.json();
+
+            const userData = jsonData.data
+
+            console.log(jsonData)
+
+            res.render('Profile', {
+                title: "The Cloverpatch", 
+                pageData: userData,
+                scriptName: "/javascripts/edm.js"
+            })
+        }
     } catch (error) {
         console.log(error)
     }
-    res.render('Profile', {
-        title: "The Cloverpatch", 
-        pageData,
-        scriptName: "/javascripts/edm.js"
-    })
 })
 
 module.exports = router; 

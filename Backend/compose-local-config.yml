@@ -1,7 +1,5 @@
-version: '3'
-
-# networks:
-#   cloverpatch-network:
+networks:
+  cloverpatch-network:
 
 services:  
   rabbitmq:
@@ -14,18 +12,17 @@ services:
       RABBITMQ_DEFAULT_USER: CloverlyTheAdmin
       RABBITMQ_DEFAULT_PASS: 1_L0v3_G04ts
     volumes:
-        - 
-        # - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-        # - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-    # networks:
-    #     - cloverpatch-network
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - cloverpatch-network
 
   emailsender:
     depends_on:
       - rabbitmq
     restart: always
-    # networks:
-    #   - cloverpatch-network
+    networks:
+      - cloverpatch-network
     container_name: CloverpatchEmailSender
     build:
       context: ./EmailSender
@@ -34,8 +31,8 @@ services:
   # Basket and Order Service Setup
   basketdatabase:
     restart: always
-    # networks:
-    #   - cloverpatch-network
+    networks:
+      - cloverpatch-network
     ports:
       - 11000:6379
       - 11001:8001
@@ -46,8 +43,8 @@ services:
     depends_on:
       - basketdatabase
     restart: always
-    # networks:
-    #   - cloverpatch-network
+    networks:
+      - cloverpatch-network
     ports:
       - 12000:8080
     build: 
@@ -61,8 +58,8 @@ services:
     restart: always
     container_name: CloverpatchProductDatabase
     image: mongo
-    # networks:
-    #   - cloverpatch-network
+    networks:
+      - cloverpatch-network
     ports:
       - 11002:27017
   
@@ -70,8 +67,8 @@ services:
     depends_on:
       - productdatabase
     restart: always
-    # networks:
-    #   - cloverpatch-network
+    networks:
+      - cloverpatch-network
     ports:
       - 12002:12002
     build: 
@@ -82,8 +79,8 @@ services:
     depends_on:
       - productdatabase
     restart: always
-    # networks:
-    #   - cloverpatch-network
+    networks:
+      - cloverpatch-network
     ports:
       - 12003:12003
     build:
@@ -94,8 +91,8 @@ services:
     depends_on:
       - productdatabase
     restart: always
-    # networks:
-    #   - cloverpatch-network
+    networks:
+      - cloverpatch-network
     ports:
       - 12001:8080
     build: 
@@ -114,15 +111,15 @@ services:
       SA_PASSWORD: "Nc220370979"
     ports:
       - "11003:1433"
-    # networks:
-    #   - cloverpatch-network
+    networks:
+      - cloverpatch-network
   
   userservice:
     depends_on:
       - userdatabase
     restart: always
-    # networks:
-    #   - cloverpatch-network
+    networks:
+      - cloverpatch-network
     ports:
       - 12004:8080
     build: 

@@ -60,22 +60,24 @@ try {
 
 
     document.getElementById('registerBTN').addEventListener('click', async() => {
-        const uName = await document.getElementById('uReg').value
-        const uPswrd = await document.getElementById('pReg').value
-        const uEmail = await document.getElementById('eReg').value
-
-        if(uName === "" || uPswrd === "" || uEmail === "") {
-            regErrors.innerHTML = "<p> Profile Inputs cannot be Empty. </p>"
-            return
-        }
-
-        const newUser = {
-            Username: uName,
-            Password: uPswrd,
-            Email: uEmail
-        }
-
         try {
+            const uName = await document.getElementById('uReg').value
+            const uPswrd = await document.getElementById('pReg').value
+            const uEmail = await document.getElementById('eReg').value
+            
+            regErrors.innerHTML = ''; // Clear previous errors
+
+            if(uName === "" || uPswrd === "" || uEmail === "") {
+                regErrors.innerHTML = "<p> Profile Inputs cannot be Empty. </p>"
+                return
+            }
+
+            const newUser = {
+                Username: uName,
+                Password: uPswrd,
+                Email: uEmail
+            }
+
             const response = await fetch('/user/register', {
                 method: "POST",
                 headers: {
@@ -83,10 +85,17 @@ try {
                 },
                 body: JSON.stringify(newUser)
             })
+
+            console.log(response)
             if(response.ok) {
                 window.location.href = "/LoginorRegister"
             } else {
+                console.log(response)
                 console.log("Registry Failure")
+                const data = await response.json();
+                console.log(data)
+                const errors = await JSON.parse(data.body);
+                console.log(error)
             }
         } catch (error) {
             console.log(error)
