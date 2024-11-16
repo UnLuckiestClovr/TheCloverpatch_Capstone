@@ -5,6 +5,10 @@ var router = express.Router()
 router.get('/', async function(req, res, next) {
     const basket = await getUserBasket(req.cookies.uid)
 
+    const basketData = basket.value
+
+    console.log(basketData)
+
     let boolLog = false
     if(req.cookies && req.cookies.uid) {
         boolLog = true;
@@ -12,6 +16,7 @@ router.get('/', async function(req, res, next) {
 
     res.render('basketpage', { 
         title: 'The Cloverpatch', 
+        basketData: basketData,
         loggedInBool: boolLog,
         scriptName: "/javascripts/basketscript.js"
     });
@@ -19,10 +24,10 @@ router.get('/', async function(req, res, next) {
 
 
 // API Endpoints
-const addItemEndpoint = "http//localhost:8080/basket/add-item/"
-const getBasketEndpoint = "http//localhost:8080/basket/get/"
-const deleteBasketEndpoint = "http//localhost:8080/basket/delete/"
-const removeItemFromBasketEndpoint = "http//localhost:8080/basket/delete-item/"
+const addItemEndpoint = "http://localhost:12000/basket/add-item/"
+const getBasketEndpoint = "http://localhost:12000/basket/get/"
+const deleteBasketEndpoint = "http://localhost:12000/basket/delete/"
+const removeItemFromBasketEndpoint = "http://localhost:12000/basket/delete-item/"
 
 // Add Item
 router.post('/add-item', async function(req, res, next) {
@@ -73,7 +78,6 @@ async function getUserBasket(bid) {
         }
     } catch (error) {
         console.log(error)
-        res.sendStatus(500)
     }
 }
 

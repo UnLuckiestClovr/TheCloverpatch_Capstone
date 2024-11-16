@@ -1,4 +1,21 @@
 extends layout.pug
 
 block mainContent
-    
+    h2(class="headrow") Basket:
+    table(class="ProductTables")
+        tbody
+            +basketRow(basketData)
+    br
+    button(class="PrettyButton") Order Basket
+
+
+mixin basketRow(basket)
+    - const formatPrice = (price) => `$${parseFloat(price).toFixed(2)}`
+    - const multiply = (price, quantity) => (price*quantity)
+    - for (let i = 0; i < basket.length; i++)
+        tr
+            td(class='BasketItem')
+                p= `Name: ${basket[i].Name}`
+                p= `Quantity: ${basket[i].Quantity}`
+                p= `Variant: ${basket[i].Variant}`
+                p= `Price: ${formatPrice(multiply(basket[i].Price, basket[i].Quantity))}`

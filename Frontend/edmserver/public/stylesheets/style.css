@@ -6,6 +6,7 @@ body {
   font-family:'Josefin Sans', sans-serif;
   color: aliceblue;
   background-image: url(../images/BackTattoo.jpg);
+  font-size: 20px;
 }
 
 a {
@@ -214,24 +215,19 @@ h3.FlowerSeasonHeaders {
   text-align: center;
 }
 
-.QuestionaireSelection {
-  background-color: #212121;
-  color: #FFFFFF;
-  font-size: 30px;
+#basket-icon {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 50px;
+  height: 50px;
+  background-image: url(../images/Ecommerce-Shopping-Cart-icon.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  z-index: 999;
 }
 
-.QuestionHeader {
-  font-size: 35px;
-}
-
-#SubmitQuestionaire, #StatisticCharts {
-  text-align: center;
-  align-items: center;
-  width: 100%;
-  background-color:#212121;
-  margin-top: 1%;
-}
-
-#StatisticCharts canvas {
-  background-color: #fff;
+#basket-icon:hover {
+  transform: scale(1.1);
 }

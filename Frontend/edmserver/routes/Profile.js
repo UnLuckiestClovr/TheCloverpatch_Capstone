@@ -27,6 +27,7 @@ router.get('/', async function(req, res) {
 
             res.render('Profile', {
                 title: "The Cloverpatch", 
+                loggedInBool: boolLog,
                 pageData: userData,
                 scriptName: "/javascripts/edm.js"
             })

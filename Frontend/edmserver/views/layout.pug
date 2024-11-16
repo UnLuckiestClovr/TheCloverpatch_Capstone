@@ -6,6 +6,9 @@ html
     script(src="/javascripts/edm.js", defer)
     script(src=scriptName, defer)
   body
+    - if (loggedInBool) 
+        a(id='basket-icon', href='/basket')
+
     h1(id="outerHeader")
       img(
         id="CoffeeLogo"
