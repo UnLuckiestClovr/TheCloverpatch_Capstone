@@ -34,3 +34,9 @@ UserPass: {
     ID: str,
     PssHash: str
 }
+
+
+
+NGROK HOST COMMAND: [RAN IN CMD whilst service is running on your PC]
+
+ngrok http --url https://allowing-hideously-ostrich.ngrok-free.app 3000

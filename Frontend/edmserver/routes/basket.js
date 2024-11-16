@@ -2,7 +2,9 @@ var express = require('express')
 var router = express.Router()
 
 
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
+    const basket = await getUserBasket(req.cookies.uid)
+
     let boolLog = false
     if(req.cookies && req.cookies.uid) {
         boolLog = true;
@@ -11,7 +13,7 @@ router.get('/', function(req, res, next) {
     res.render('basketpage', { 
         title: 'The Cloverpatch', 
         loggedInBool: boolLog,
-        scriptName: "/javascripts/edm.js"
+        scriptName: "/javascripts/basketscript.js"
     });
 });
 
@@ -81,8 +83,6 @@ router.get('/get', async function(req, res, next) {
         const bid = req.cookies.uid;
 
         const basket = await getUserBasket(bid)
-
-        res.status(code).send(message)
 
         if (response.ok) {
             const jsonData = await response.json();
