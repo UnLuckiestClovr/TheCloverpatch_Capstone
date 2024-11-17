@@ -1,12 +1,32 @@
 extends layout.pug
 
 block mainContent
-    h2(class="headrow") Basket:
-    table(class="ProductTables")
-        tbody
-            +basketRow(basketData)
-    br
-    button(class="PrettyButton") Order Basket
+    article(id='orderOverlay')
+        article(id='orderDetails')
+            h2(class='OrderedFlowers') Order Details 
+
+            p Full Name:
+            input(id="NameInput", type="text", value="")
+            p Shipping Address:
+            input(id="AddressInput", type="text", value="")
+            p Phone Number:
+            input(id="PhoneInput", type="text", value="")
+
+        
+        p 
+            p(id="PriceOutput") Final Cost: $0.00
+            p 
+            button(id="ConfirmOrder") Confirm Order
+            p 
+            button(id="cancelOrder") Cancel Order
+
+    article(id='mainView')
+        h2(class="headrow") Basket:
+        table(class="ProductTables")
+            tbody
+                +basketRow(basketData)
+        br
+        button(id='EnactOrderFromBasketBTN', class="PrettyButton") Order Basket
 
 
 mixin basketRow(basket)

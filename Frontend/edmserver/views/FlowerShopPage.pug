@@ -3,20 +3,8 @@ extends layout.pug
 block mainContent
     article(id="orderOverlay")
         article(id="orderDetails")
-            h2(class="OrderedFlowers") Order Details 
 
-            div 
-                p Full Name:
-                input(id="NameInput", type="text", value="")
-                p Shipping Address:
-                input(id="AddressInput", type="text", value="")
-                p Phone Number:
-                input(id="PhoneInput", type="text", value="")
-                p Email Address: 
-                input(id="EmailInput", type="text", value="")
-
-
-            p(id="orderProductNameDisplay") You Are Ordering: 
+            p(id="orderProductNameDisplay") You Are Viewing: 
 
             select(id="ProductOptions")
                 option(value=1.26) Single Flowers - $1.26
@@ -33,13 +21,13 @@ block mainContent
             p 
             p(id="PriceOutput") Final Cost: $0.00
             p 
-            button(id="ConfirmOrder") Confirm Order
+            button(id="ConfirmAdd") Add to Basket
             p 
-            button(id="cancelOrder") Cancel Order
+            button(id="CancelAdd") Cancel
 
         article(id="ItemOrdered")
-            h2 Your Item has Been Ordered and is Preparing to Ship to You!!!
-            button(id="ReturnBtn") Return to Product Page
+            h2 Item has Been Added to your Basket!!!
+            button(id="ReturnBtn") Return to the Flowers
 
     article(id="Products_View")
         h2 If You Want to Get a Gift for Your Loved Ones,
@@ -78,8 +66,10 @@ mixin productRow(products)
                 img(class='ProductImage', src=products[i].PImageURL, alt="Image of Product")
                 h3= products[i].PName
                 p= formatPrice(products[i].PCostPerFlower)
+                button(class="orderButton", data-flower=products[i].PName, data-cost=products[i].PCostPerFlower) Click Me to Order Your Own!
             if (i + 1 < products.length)
                 td(class='Product')
                     img(class='ProductImage', src=products[i + 1].PImageURL, alt="Image of Product")
                     h3= products[i + 1].PName
                     p= formatPrice(products[i + 1].PCost)
+                    button(class="orderButton", data-flower=products[i + 1].PName) Click Me to Order Your Own!

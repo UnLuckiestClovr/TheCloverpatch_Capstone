@@ -36,9 +36,6 @@ async function GetFlowers()
         const data = await response.json();
         const flowers = await JSON.parse(data.flowers);
 
-        console.log(data)
-        console.log(flowers)
-
         return flowers;
     } catch (error) {
         console.log(error)
