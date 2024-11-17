@@ -1,9 +1,12 @@
 try {
+    let itemid = ''
+
     const buttons = document.querySelectorAll('.orderButton');
     buttons.forEach(function(button) {
         button.addEventListener('click', function () {
             const flowerSpecies = button.getAttribute('data-flower');
             const flowerCostPer = button.getAttribute('data-cost');
+            itemid = button.getAttribute('data-iid')
             OrderFlowers(flowerSpecies, flowerCostPer);
         });
     });
@@ -23,15 +26,25 @@ try {
     orderPageView.style.display = 'block'
     orderedView.style.display = 'none'
 
+    function switchView_OrderPage() {
+        orderPageView.style.display = 'block'
+        orderedView.style.display = 'none'
+    }
+
+    function switchView_OrderedPage() {
+        orderPageView.style.display = 'none'
+        orderedView.style.display = 'block'
+    }
+
     quantInput.value = "1"
     const quantity = parseInt(quantInput.value)
-        const pricePer = parseFloat(productSelector.value)
-        if(!isNaN(quantity)) {
-            const total = (pricePer * quantity)
-            const roundedTotal = (total.toFixed(2))
-            console.log("Current Price: $", roundedTotal)
-            outputBox.innerHTML = ("Final Cost: $" + roundedTotal)
-        }
+    const pricePer = parseFloat(productSelector.value)
+    if(!isNaN(quantity)) {
+        const total = (pricePer * quantity)
+        const roundedTotal = (total.toFixed(2))
+        console.log("Current Price: $", roundedTotal)
+        outputBox.innerHTML = ("Final Cost: $" + roundedTotal)
+    }
 
     function updateFinalPrice() {
         const quantity = parseInt(quantInput.value)
@@ -49,16 +62,51 @@ try {
         }
     }
 
-    addBTN.addEventListener('click', function() {        
-        switchView_OrderedPage()
+    addBTN.addEventListener('click', async function() {        
+        try {
+            const productName = document.getElementById("orderProductNameDisplay").innerText.replace("You Are Viewing: ", "").trim();
+            const quantity = parseInt(quantInput.value)
+            const pricePer = parseFloat(productSelector.value)
+            const variant = productSelector.options[productSelector.selectedIndex].text.split(" - ")[0].trim()
+            const finalPrice = parseFloat(pricePer*quantity).toFixed(2);
+
+            const item = {
+                "IID": itemid,
+                "Name": productName,
+                "Quantity": quantity,
+                "Variant": variant,
+                "Price": finalPrice
+            }
+
+            console.log(item)
+
+            const response = await fetch('/basket/add-item', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item)
+            })
+
+            if (response.ok) {
+                switchView_OrderedPage()
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
     })
 
     cancelButton.addEventListener('click', function() {
+        itemid = ''
         orderOverlayOff()
+        switchView_OrderPage()
     })
 
     returnBtn.addEventListener('click', function() {
+        itemid = ''
         orderOverlayOff()
+        switchView_OrderPage()        
     })
 
     productSelector.addEventListener('change', function () {
@@ -86,16 +134,6 @@ try {
     quantInput.addEventListener('input', function() {
         updateFinalPrice()
     })
-
-    function switchView_OrderPage() {
-        orderPageView.style.display = 'block'
-        orderedView.style.display = 'none'
-    }
-
-    function switchView_OrderedPage() {
-        orderPageView.style.display = 'none'
-        orderedView.style.display = 'block'
-    }
 
     async function OrderFlowers(FlowerSpecies, FlowerCost) {
         console.log("Clicked Order on: ", FlowerSpecies);

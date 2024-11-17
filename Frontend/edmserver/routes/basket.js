@@ -47,7 +47,7 @@ router.post('/add-item', async function(req, res, next) {
             const jsonData = await response.json();
             const { code, message } = jsonData;
 
-            res.status(code).send(message)
+            res.status(200).send(message)
         } else {
             res.sendStatus(500)
         }
