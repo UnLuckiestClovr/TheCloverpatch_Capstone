@@ -14,9 +14,10 @@ class Item(BaseModel):
     Price: float = Field()
 
 class AddressInfo(BaseModel):
+    RecipientName: str = Field()
+    PhoneNumber: str = Field()
     AddressLine1: str = Field()
     AddressLine2: Optional[str] = Field()
-    Country: str = Field()
     State: Optional[str] = Field()
     Zipcode: str = Field()
 

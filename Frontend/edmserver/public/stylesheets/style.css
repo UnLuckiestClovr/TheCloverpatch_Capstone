@@ -142,7 +142,6 @@ h3.FlowerSeasonHeaders {
   text-align: center;
 }
 
-/* CSS */
 .orderButton, #cancelOrder , #ConfirmOrder, #ReturnBtn, .PrettyButton{
   --b: 3px;   
   --s: .45em; 
@@ -230,4 +229,23 @@ h3.FlowerSeasonHeaders {
 
 #basket-icon:hover {
   transform: scale(1.1);
+}
+
+.orderDetailTable {
+  width: 50%; /* Set a width for the table */
+  border-collapse: collapse;
+  margin: auto; /* Center the table horizontally */
+}
+
+.orderDetailTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+#EnactOrderFromBasketBTN {
+  width: 40%;
+  display: block;
+  margin:auto;
+  font-size: x-large;
 }

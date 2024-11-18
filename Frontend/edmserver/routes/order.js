@@ -2,51 +2,20 @@ var express = require('express')
 var router = express.Router()
 
 // API Endpoints
-const createFoodOrderEndpoint = 'http://localhost:8080/order/create-order/food' // "/{BID}/{Email}"
-const createFlowerOrderEndpoint = 'http://localhost:8080/order/create-order/flower' // "/{BID}/{Email}"
-const getOrderByIDEndpoint = 'http://localhost:8080/order/fetch' // "/{OID}"
-const getAllOrdersByUserEndpoint = 'http://localhost:8080/order/fetch-all' // "/{UID}"
-const cancelOrderEndpoint = 'http://localhost:8080/order/cancel' // "/{UID}/{OID}"
-
-
-// Create Food Order
-router.post("/create-order/food", async function(req, res, next) {
-    try {
-
-        const email = req.cookies.email
-        const bid = req.cookies.uid
-
-        const response = await fetch((createFoodOrderEndpoint+"/"+bid+"/"+email), {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        })
-
-        if (response.ok) {
-            const jsonData = await response.json();
-            const { code, message } = jsonData;
-
-            res.status(code).send(message)
-        }
-
-
-    } catch (error) {
-        console.log(error)
-        res.sendStatus(500)
-    }
-})
+const createOrderEndpoint = 'http://localhost:12001/order/create-order/' // "/{BID}/{Email}"
+const getOrderByIDEndpoint = 'http://localhost:12001/order/fetch/' // "/{OID}"
+const getAllOrdersByUserEndpoint = 'http://localhost:12001/order/fetch-all' // "/{UID}"
+const cancelOrderEndpoint = 'http://localhost:12001/order/cancel' // "/{UID}/{OID}"
 
 // Create Flower Order
-router.post("/create-order/flower", async function(req, res, next) {
+router.post("/create-order", async function(req, res, next) {
     try {
 
         const email = req.cookies.email
         const bid = req.cookies.uid
         const addInfo = req.body
 
-        const response = await fetch((createFlowerOrderEndpoint+"/"+bid+"/"+email), {
+        const response = await fetch((createOrderEndpoint+bid+"/"+email), {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -56,9 +25,11 @@ router.post("/create-order/flower", async function(req, res, next) {
 
         if (response.ok) {
             const jsonData = await response.json();
-            const { code, message } = jsonData;
+            const { message } = jsonData;
 
-            res.status(code).send(message)
+            console.log(jsonData)
+
+            res.status(200).send(message)
         }
 
 
@@ -73,7 +44,7 @@ router.get("/fetch/:oid", async function(req, res, next) {
     try {
         const oid = req.params.oid;
 
-        const response = await fetch((getOrderByIDEndpoint+"/"+oid), {
+        const response = await fetch((getOrderByIDEndpoint+oid), {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'

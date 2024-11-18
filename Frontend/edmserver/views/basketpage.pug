@@ -3,30 +3,75 @@ extends layout.pug
 block mainContent
     article(id='orderOverlay')
         article(id='orderDetails')
+            p Take Note: We do not support shipping outside of the United States. 
+            p Please be knowledgeable of this as we are not responsible for missing packages or orders that are ordered in this manner.
+
             h2(class='OrderedFlowers') Order Details 
 
-            p Full Name:
-            input(id="NameInput", type="text", value="")
-            p Shipping Address:
-            input(id="AddressInput", type="text", value="")
-            p Phone Number:
-            input(id="PhoneInput", type="text", value="")
+            table(class='orderDetailTable')
+                tr 
+                    td
+                        p Full Name:
+                        input(id="NameInput", type="text", value="")
+                    td
+                        p Phone Number:
+                        input(id="PhoneInput", type="text", value="", placeholder="e.g., (123) 456-7890")
+                tr 
+                    td 
+                        p Address Line 1:
+                        input(id="AddressInput1", type="text", value="")
+                    td 
+                        p Address Line 2:
+                        input(id="AddressInput2", type="text", value="", placeholder="e.g., Apt. 123")
+                tr 
+                    td 
+                        p State:
+                        input(id="StateInput", type="text", value="")
+                    td 
+                        p Zipcode:
+                        input(id="ZipInput", type="text", value="")
+            
+            br
+            p
+            br
 
-        
-        p 
-            p(id="PriceOutput") Final Cost: $0.00
+            table(class='orderDetailTable')
+                tr 
+                    td 
+                        p Card Number:
+                        input(id="CardNumInput", type="text", value="")
+                    td
+                        p Expiry Date (MM/YY):
+                        input(id="ExpiryDateInput", type="text", value="")
+                    td 
+                        p CVV (3 Digit Number):
+                        input(id="CVVInput", type="text", value="")
+            br
+            p
+            br
             p 
             button(id="ConfirmOrder") Confirm Order
             p 
             button(id="cancelOrder") Cancel Order
 
+            p(id='ERRORBOX')
+
+
+        article(id="ItemOrdered")
+            h2 Item has Been Added to your Basket!!!
+            button(id="ReturnBtn") Return
+
     article(id='mainView')
-        h2(class="headrow") Basket:
-        table(class="ProductTables")
-            tbody
-                +basketRow(basketData)
-        br
-        button(id='EnactOrderFromBasketBTN', class="PrettyButton") Order Basket
+        - if (basketData.length > 0)
+            h2(class="headrow") Basket:
+            table(class="ProductTables")
+                tbody
+                    +basketRow(basketData)
+            br
+
+            button(id='EnactOrderFromBasketBTN', class="PrettyButton") Order Basket
+        - else 
+            h2(class="headrow") Your Basket is Empty, Go Add some Items to your Basket to Order Them!
 
 
 mixin basketRow(basket)

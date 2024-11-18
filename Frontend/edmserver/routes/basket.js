@@ -88,14 +88,7 @@ router.get('/get', async function(req, res, next) {
 
         const basket = await getUserBasket(bid)
 
-        if (response.ok) {
-            const jsonData = await response.json();
-            const { code, message } = jsonData;
-
-            res.status(code).send(message)
-        } else {
-            res.sendStatus(500)
-        }
+        res.status(200).send(basket)
     } catch (error) {
         console.log(error)
         res.sendStatus(500)
