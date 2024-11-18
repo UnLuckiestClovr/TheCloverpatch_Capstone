@@ -21,7 +21,7 @@ h2 {
   background-color: #212121;
 }
 
-table.ProductTables, table.NavTable {
+table.ProductTables, table.NavTable, table.OrdersTable {
   width:100%;
   background-color: #515151;
   border-collapse: collapse;
@@ -38,12 +38,19 @@ table.NavTable {
   margin-top: 10%;
 }
 
-table.NavTable td * {
+table.NavTable td * , table.OrdersTable td *{
   font-family: 'Cinzel', sans-serif;
   color: whitesmoke;
 }
 
-table.NavTable td {
+table.OrdersTable  tr {
+  border-width: 2px;
+  border-color: #3ddf20;
+  border-style: dotted;
+  padding: 3px;
+}
+
+table.NavTable td{
   border-width: 2px;
   border-color: #3ddf20;
   border-style: dotted;

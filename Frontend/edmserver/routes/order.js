@@ -1,11 +1,46 @@
 var express = require('express')
 var router = express.Router()
 
+
 // API Endpoints
 const createOrderEndpoint = 'http://localhost:12001/order/create-order/' // "/{BID}/{Email}"
 const getOrderByIDEndpoint = 'http://localhost:12001/order/fetch/' // "/{OID}"
 const getAllOrdersByUserEndpoint = 'http://localhost:12001/order/fetch-all' // "/{UID}"
 const cancelOrderEndpoint = 'http://localhost:12001/order/cancel' // "/{UID}/{OID}"
+
+
+router.get('/:orderid', async function(req, res, next) {
+    const orderid = req.params.orderid;
+
+    let boolLog = false
+    if(req.cookies && req.cookies.uid) {
+        boolLog = true;
+    }
+
+    const response = await fetch((getOrderByIDEndpoint+orderid), {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+
+    if (response.ok) {
+        const jsonData = await response.json();
+        const { order } = jsonData;
+
+        const orderData = JSON.parse(order)
+
+        console.log(orderData)
+
+        res.render('orderdetails', { 
+            title: 'The Cloverpatch', 
+            orderData: orderData,
+            loggedInBool: boolLog,
+            scriptName: "/javascripts/basketscript.js"
+        });
+    }
+});
+
 
 // Create Flower Order
 router.post("/create-order", async function(req, res, next) {

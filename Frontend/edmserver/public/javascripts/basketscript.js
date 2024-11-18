@@ -26,8 +26,8 @@ try {
         const phone = await document.getElementById('PhoneInput').value;
         const add1 = await document.getElementById('AddressInput1').value;
         const add2 = await document.getElementById('AddressInput2').value;
-        const state = await document.getElementById('NameInput').value;
-        const zip = await document.getElementById('NameInput').value;
+        const state = await document.getElementById('StateInput').value;
+        const zip = await document.getElementById('ZipInput').value;
 
         const cardNum = await document.getElementById('AddressInput2').value;
         const exDate = await document.getElementById('NameInput').value;

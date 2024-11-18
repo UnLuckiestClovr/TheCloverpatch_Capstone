@@ -17,18 +17,28 @@ router.get('/', async function(req, res) {
                     'Content-Type': 'application/json',
                 }
             })
-            console.log(response)
+
+            const ordersResponse = await fetch(('http://localhost:12001/order/fetch-all/'+req.cookies.uid), {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
 
             jsonData = await response.json();
+            orderList = await ordersResponse.json();
 
             const userData = jsonData.data
+            const userOrders = JSON.parse(orderList.orders)
 
-            console.log(jsonData)
+            console.log("Orders:")
+            console.log(userOrders)
 
             res.render('Profile', {
                 title: "The Cloverpatch", 
                 loggedInBool: boolLog,
                 pageData: userData,
+                userOrders: userOrders,
                 scriptName: "/javascripts/edm.js"
             })
         }

@@ -1,0 +1,22 @@
+extends layout
+
+block mainContent
+    h2= `Order ${orderData.OID}`
+    br
+
+    p= `Time Made: ${orderData.TimeMade}`
+    p= `Total Price: $${orderData.FinalPrice}`
+
+    br
+    h3 Items:
+    table(class='OrdersTable') 
+        tbody
+            - const formatPrice = (price) => `$${parseFloat(price).toFixed(2)}`
+            each item in orderData.Items
+                tr
+                    td
+                        p= `Name: ${item.Name}`
+                        p= `Quantity: ${item.Quantity}`
+                    td
+                        p= `Variant: ${item.Variant}`
+                        p= `Price: ${formatPrice(item.Price)}`

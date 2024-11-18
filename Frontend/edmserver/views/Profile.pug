@@ -1,4 +1,4 @@
-extends layout 
+extends layout
 
 block mainContent
     h2 Profile
@@ -6,5 +6,34 @@ block mainContent
         h3(class="profileHeader") Profile Info:
         h3(class="profileStatsText") Username: #{pageData.username}
         h3(class="profileStatsText") Email: #{pageData.email}
+    
     br
+
+    h3 Orders:
+    // Check if orders exist and iterate over them
+    if (userOrders && userOrders.length > 0)
+        article(id='UserOrders')
+            table(class='OrdersTable')
+                thead
+                    tr
+                        //- th Order ID
+                        th Address
+                        th State
+                        th Zipcode
+                        th Time Made
+                        th
+                tbody
+                    each order in userOrders
+                        tr
+                            //- td= order.OID
+                            td= `${order.AddressInfo.AddressLine1} ${order.AddressInfo.AddressLine2}`
+                            td= order.AddressInfo.State
+                            td= order.AddressInfo.Zipcode
+                            td= order.TimeMade
+                            td
+                                a(class='VODButton', data-oid=order.OID, href=`/order/${order.OID}`) View Order
+
+    else
+        p No orders found.
+
     button(id="LogoutBTN", class="PrettyButton") Log Out
