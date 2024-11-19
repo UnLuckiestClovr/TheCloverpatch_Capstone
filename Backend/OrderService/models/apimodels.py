@@ -28,3 +28,10 @@ class Order(BaseModel):
     FinalPrice: float = Field()
     AddressInfo: AddressInfo = Field()
     TimeMade: str = Field()
+
+class FoodOrder(BaseModel):
+    OID: str = Field()
+    UID: str = Field()
+    Items: List[Item] = Field()
+    FinalPrice: float = Field()
+    TimeMade: str = Field()

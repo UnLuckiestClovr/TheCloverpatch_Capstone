@@ -66,10 +66,12 @@ mixin productRow(products)
                 img(class='ProductImage', src=products[i].PImageURL, alt="Image of Product")
                 h3= products[i].PName
                 p= formatPrice(products[i].PCostPerFlower)
-                button(class="orderButton", data-flower=products[i].PName, data-cost=products[i].PCostPerFlower, data-iid=products[i].id) Click Me to Order Your Own!
+                - if (loggedInBool)
+                    button(class="orderButton", data-flower=products[i].PName, data-cost=products[i].PCostPerFlower, data-iid=products[i].id) Click Me to Order Your Own!
             if (i + 1 < products.length)
                 td(class='Product')
                     img(class='ProductImage', src=products[i + 1].PImageURL, alt="Image of Product")
                     h3= products[i + 1].PName
                     p= formatPrice(products[i + 1].PCost)
-                    button(class="orderButton", data-flower=products[i + 1].PName, data-iid=products[i + 1].id) Click Me to Order Your Own!
+                    - if (loggedInBool)
+                        button(class="orderButton", data-flower=products[i + 1].PName, data-iid=products[i + 1].id) Click Me to Order Your Own!

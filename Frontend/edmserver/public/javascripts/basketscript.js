@@ -33,7 +33,7 @@ try {
         const exDate = await document.getElementById('NameInput').value;
         const cvv = await document.getElementById('NameInput').value;
 
-        if(recName === "" || phone === "" || add1 === "" || add2 === "" || state === "" || zip === "") {
+        if(recName === "" || phone === "" || add1 === "" || state === "" || zip === "") {
             errorbox.innerHTML = "Inputs Cannot be left Empty"
             return
         }

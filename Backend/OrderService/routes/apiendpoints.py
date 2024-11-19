@@ -11,19 +11,37 @@ router = APIRouter(
 )
 
 
+# Create Orders : Both Flower and Food
 @router.post("/create-order/{BID}/{Email}")
 async def CreateOrder( body: AddressInfo, BID: str = Path(alias='BID'), Email: str = Path(alias='Email')):
     return databaseinteraction.ProcessBasketToOrder(body, BID, Email)
 
 
-@router.get("/fetch/{OID}")
+# Get Order by ID
+@router.get("/fetch/flower/{OID}")
 async def FetchOrder(OID: str = Path(alias='OID')):
-    return databaseinteraction.FetchOrderbyID(OID)
+    return databaseinteraction.FetchFlowerOrderbyID(OID)
 
-@router.get("/fetch-all/{UID}")
+@router.get("/fetch/food/{OID}")
+async def FetchOrder(OID: str = Path(alias='OID')):
+    return databaseinteraction.FetchFlowerOrderbyID(OID)
+
+
+# Get Orders by User
+@router.get("/fetch-all/flowers/{UID}")
 async def FetchUserOrders(UID: str = Path(alias='UID')):
-    return databaseinteraction.FetchOrdersOfUser(UID)
+    return databaseinteraction.FetchFlowerOrdersOfUser(UID)\
 
+@router.get("/fetch-all/food/{UID}")
+async def FetchUserOrders(UID: str = Path(alias='UID')):
+    return databaseinteraction.FetchFoodOrderbyID(UID)
+
+
+# Delete Orders by ID
 @router.delete("/cancel/{OID}")
 async def CancelOrder(OID: str = Path(alias='OID')):
-    return databaseinteraction.CancelOrder(OID)
+    return databaseinteraction.CancelFlowerOrder(OID)
+
+@router.delete("/complete/food/{OID}")
+async def CompleteFoodOrder(OID: str = Path(alias='OID')):
+    return databaseinteraction.CompleteFoodOrder(OID)

@@ -80,7 +80,7 @@ try {
 
             console.log(item)
 
-            const response = await fetch('/basket/add-item', {
+            const response = await fetch('/basket/add/Flowers', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
