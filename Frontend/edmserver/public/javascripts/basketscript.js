@@ -79,6 +79,21 @@ try {
 
     })
 
+    const buttons = document.querySelectorAll('.ItemRemovalBTN');
+    buttons.forEach(function(button) {
+        button.addEventListener('click', async function () {
+            itemid = button.getAttribute('data-iid')
+            itemtype = button.getAttribute('data-type')
+
+            await fetch(`/basket/delete/${itemtype}/${itemid}`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        });
+    });
+
     document.getElementById('ReturnBtn').addEventListener('click', async () => {
         window.location.href = "/profile"
     })
