@@ -1,7 +1,7 @@
 import redis, json, uuid, re, traceback, pymongo
 
 from datetime import datetime
-from models.apimodels import Order, FoodOrder,  AddressInfo, Item
+from models.apimodels import *
 from miscscripts.SendEmail import sendEmail
 
 rConnPool = redis.ConnectionPool(host='CloverpatchBasketDatabase', port=6379)
@@ -40,7 +40,7 @@ def processFoodList(OID: str, BID: str, json_list: list, current_time):
     totalcost = 0.00
     for json_str in json_list:
         item_dict = json.loads(json_str.decode('utf-8'))
-        item = Item(**item_dict)
+        item = FoodItem(**item_dict)
         items.append(item)
         totalcost = totalcost + item.Price
 
@@ -55,7 +55,48 @@ def processFoodList(OID: str, BID: str, json_list: list, current_time):
     return order
 
 
-def ProcessBasketToOrder(orderAddress: AddressInfo, BID: str, Email: str):
+def ProcessBasketToOrder_Food(BID: str, Email: str):
+    try:
+        redisBID = f"{BID.__str__().replace('-', '_')}"  # Concatenate for Redis
+
+        rConn = redis.Redis(connection_pool=rConnPool, decode_responses=True) # Connect to Redis Database
+
+        # Get all elements from the list
+        foodStrings = rConn.lrange(f'{redisBID}:Food', 0, rConn.llen(f'{redisBID}:Food'))
+
+        current_time = datetime.now().strftime("%m/%d/%Y - %H:%M")
+
+        # Process Lists into Order Objects
+        if (foodStrings.__len__() > 0):
+            OID = (uuid.uuid4()).__str__()
+            foodOrder = processFoodList(OID, BID, foodStrings, current_time)
+            foodOrderCollection.insert_one(json.loads(foodOrder.json()))
+
+        sendEmail(
+            "Cafe Order Made at The Cloverpatch!", 
+            f"Your orders were accepted at {current_time} and will be processed soon, you will recieve an email or text!", 
+            Email
+        )
+
+        return {
+            'success': True,
+            'message': f'Orders created Successfully'
+        }
+            
+    except redis.ConnectionError as e:
+        return {
+            "success": False,
+            "message": f"Error connecting to Redis: {e}"
+        }
+    except Exception as e:
+        traceback.print_exception(e)
+        return {
+            "success": False,
+            "message": f"An error occurred: {e}"
+        }
+
+
+def ProcessBasketToOrder_Flower(orderAddress: AddressInfo, BID: str, Email: str):
     try:
         redisBID = f"{BID.__str__().replace('-', '_')}"  # Concatenate for Redis
 
@@ -63,7 +104,6 @@ def ProcessBasketToOrder(orderAddress: AddressInfo, BID: str, Email: str):
 
         # Get all elements from the list
         flowerStrings = rConn.lrange(f'{redisBID}:Flowers', 0, rConn.llen(f'{redisBID}:Flowers'))
-        foodStrings = rConn.lrange(f'{redisBID}:Food', 0, rConn.llen(f'{redisBID}:Food'))
 
         current_time = datetime.now().strftime("%m/%d/%Y - %H:%M")
 
@@ -72,13 +112,9 @@ def ProcessBasketToOrder(orderAddress: AddressInfo, BID: str, Email: str):
             OID = (uuid.uuid4()).__str__()
             flowerOrder = processFlowerList(OID, BID, orderAddress, flowerStrings, current_time)
             flowerOrderCollection.insert_one(json.loads(flowerOrder.json()))
-        if (foodStrings.__len__() > 0):
-            OID = (uuid.uuid4()).__str__()
-            foodOrder = processFoodList(OID, BID, foodStrings, current_time)
-            foodOrderCollection.insert_one(json.loads(foodOrder.json()))
 
         sendEmail(
-            "Cafe Order Made at The Cloverpatch!", 
+            "Flowershop Order Made at The Cloverpatch!", 
             f"Your orders were accepted at {current_time} and will be processed soon, you will recieve an email or text!", 
             Email
         )

@@ -3,7 +3,8 @@ var router = express.Router()
 
 
 // API Endpoints
-const createOrderEndpoint = 'http://localhost:12001/order/create-order/' // "/{BID}/{Email}"
+const createFlowerOrderEndpoint = 'http://localhost:12001/order/create-order/flowers/' // "/{BID}/{Email}"
+const createFoodOrderEndpoint = 'http://localhost:12001/order/create-order/food/' // "/{BID}/{Email}"
 const getOrderByIDEndpoint = 'http://localhost:12001/order/fetch/' // "/{OID}"
 const getAllOrdersByUserEndpoint = 'http://localhost:12001/order/fetch-all' // "/{UID}"
 const cancelOrderEndpoint = 'http://localhost:12001/order/cancel' // "/{UID}/{OID}"
@@ -43,19 +44,50 @@ router.get('/:orderid', async function(req, res, next) {
 
 
 // Create Flower Order
-router.post("/create-order", async function(req, res, next) {
+router.post("/create-order/flowers", async function(req, res, next) {
     try {
 
         const email = req.cookies.email
         const bid = req.cookies.uid
         const addInfo = req.body
 
-        const response = await fetch((createOrderEndpoint+bid+"/"+email), {
+        const response = await fetch((createFlowerOrderEndpoint+bid+"/"+email), {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(addInfo)
+        })
+
+        if (response.ok) {
+            const jsonData = await response.json();
+            const { message } = jsonData;
+
+            console.log(jsonData)
+
+            res.status(200).send(message)
+        }
+
+
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
+})
+
+// Create Food Order
+router.post("/create-order/food", async function(req, res, next) {
+    try {
+
+        const email = req.cookies.email
+        const bid = req.cookies.uid
+
+        const response = await fetch((createFoodOrderEndpoint+bid+"/"+email), {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
         })
 
         if (response.ok) {

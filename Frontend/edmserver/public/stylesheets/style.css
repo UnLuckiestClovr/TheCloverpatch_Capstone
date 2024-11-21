@@ -256,3 +256,33 @@ h3.FlowerSeasonHeaders {
   margin:auto;
   font-size: x-large;
 }
+
+
+.tabs {
+  display: flex;
+  cursor: pointer;
+}
+.tab {
+  padding: 10px 20px;
+  background-color: #212121;
+  border: 3px solid #3ddf20;
+  border-bottom: none; /* Remove bottom border for touching effect */
+  margin-right: 5px;
+  border-radius: 5px 5px 0 0; /* Rounded top corners */
+  color: #ccc;
+}
+.tab.active {
+  background-color: #303030;
+  color: #ccc;
+}
+
+.baskArticle {
+  display: none;
+  border: 3px solid #3ddf20;
+  padding: 15px;
+  border-radius: 0 0 5px 5px; /* Rounded bottom corners */
+  background-color: #212121;
+}
+.baskArticle.active {
+  display: block;
+}

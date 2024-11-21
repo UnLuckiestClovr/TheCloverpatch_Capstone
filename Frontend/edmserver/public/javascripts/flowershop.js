@@ -1,4 +1,6 @@
 try {
+    const outputBox = document.getElementById('PriceOutput')
+    
     let itemid = ''
 
     const buttons = document.querySelectorAll('.orderButton');
@@ -11,17 +13,8 @@ try {
         });
     });
 
-    const addBTN = document.getElementById('ConfirmAdd')
-    const cancelButton = document.getElementById('CancelAdd')
-    const productSelector = document.getElementById('ProductOptions')
-    const quantInput = document.getElementById('ProductQuantity')
-    const incBtn = document.getElementById('increaseQuantityButton')
-    const decBtn = document.getElementById('decreaseQuantityButton')
-    const outputBox = document.getElementById('PriceOutput')
-
     const orderPageView = document.getElementById('orderDetails')
     const orderedView = document.getElementById('ItemOrdered')
-    const returnBtn = document.getElementById('ReturnBtn')
 
     orderPageView.style.display = 'block'
     orderedView.style.display = 'none'
@@ -36,6 +29,8 @@ try {
         orderedView.style.display = 'block'
     }
 
+
+    const quantInput = document.getElementById('ProductQuantity')
     quantInput.value = "1"
     const quantity = parseInt(quantInput.value)
     const pricePer = parseFloat(productSelector.value)
@@ -62,7 +57,7 @@ try {
         }
     }
 
-    addBTN.addEventListener('click', async function() {        
+    document.getElementById('ConfirmAdd').addEventListener('click', async function() {        
         try {
             const productName = document.getElementById("orderProductNameDisplay").innerText.replace("You Are Viewing: ", "").trim();
             const quantity = parseInt(quantInput.value)
@@ -97,32 +92,34 @@ try {
         }
     })
 
-    cancelButton.addEventListener('click', function() {
+    document.getElementById('CancelAdd').addEventListener('click', function() {
         itemid = ''
         orderOverlayOff()
         switchView_OrderPage()
     })
 
-    returnBtn.addEventListener('click', function() {
+    document.getElementById('ReturnBtn').addEventListener('click', function() {
         itemid = ''
         orderOverlayOff()
         switchView_OrderPage()        
     })
 
+
+    const productSelector = document.getElementById('ProductOptions')
     productSelector.addEventListener('change', function () {
         const selectedV = productSelector.value;
         console.log('Selected Product Value: ', selectedV)
         updateFinalPrice()
     })
 
-    incBtn.addEventListener('click', function () {
+    document.getElementById('increaseQuantityButton').addEventListener('click', function () {
         console.log("Increasing Quantity")
         const currentV = parseInt(quantInput.value)
         quantInput.value = (currentV + 1)
         updateFinalPrice()
     })
 
-    decBtn.addEventListener('click', function () {
+    document.getElementById('decreaseQuantityButton').addEventListener('click', function () {
         console.log("Decreasing Quantity")
         const currentV = parseInt(quantInput.value)
         if (currentV > 1) {

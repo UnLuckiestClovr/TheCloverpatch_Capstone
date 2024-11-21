@@ -1,45 +1,130 @@
 try {
-    const orderOverlay = document.getElementById('orderOverlay');
-    const orderDetails = document.getElementById('orderDetails');
-    const orderedView = document.getElementById('ItemOrdered');
-    const errorbox = document.getElementById('ERRORBOX');
+    // JOINT SCRIPTS
+    const buttons = document.querySelectorAll('.ItemRemovalBTN');
+    buttons.forEach(function(button) {
+        button.addEventListener('click', async function () {
+            itemid = button.getAttribute('data-iid')
+            itemtype = button.getAttribute('data-type')
 
-    orderOverlay.style.display = 'none'
-    orderDetails.style.display = 'block'
-    orderedView.style.display = 'none'
+            await fetch(`/basket/delete/${itemtype}/${itemid}`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
 
+            document.getElementById(itemid).remove()
+        });
+    });
 
-    document.getElementById('EnactOrderFromBasketBTN').addEventListener('click', async () => {
-        orderOverlay.style.display = 'block'
-        orderDetails.style.display = 'block'
-        orderedView.style.display = 'none'
+    document.getElementById('ReturnBtn').addEventListener('click', async () => {
+        window.location.href = "/basket"
     })
 
-    document.getElementById('cancelOrder').addEventListener('click', async () => { // Cancel Order [ Returns you to basic Basket View ]
-        orderOverlay.style.display = 'none'
-        orderDetails.style.display = 'block'
-        orderedView.style.display = 'none'
+
+    // ARTICLE TABS
+    function showArticle(articleId) {
+        // Hide all articles
+        const articles = document.querySelectorAll('.baskArticle');
+        articles.forEach(article => {
+            article.classList.remove('active');
+        });
+    
+        // Show the selected article
+        const selectedArticle = document.getElementById(articleId);
+        selectedArticle.classList.add('active');
+    
+        // Update active tab
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+        const activeTab = Array.from(tabs).find(tab => tab.id === articleId.replace('View', 'Tab'));
+        if (activeTab) {
+            activeTab.classList.add('active');
+        }
+    }
+    
+    document.getElementById('FlowerBasketTab').addEventListener('click', () => {
+        showArticle('FlowerBasketView')
+    })
+    
+    document.getElementById('FoodBasketTab').addEventListener('click', () => {
+        showArticle('FoodBasketView')
+    })
+} catch (error) {
+    console.log(error)
+}
+
+try {
+    // FLOWER STUFF ----------------------------------------------------------------------
+    const flowerOrderOverlay = document.getElementById('flowerOrderOverlay');
+    const flowerOrderDetails = document.getElementById('flowerOrderDetails');
+    const flowerOrderedView = document.getElementById('flowerItemOrdered');
+    const flowererrorbox = document.getElementById('flower_ERRORBOX');
+
+    flowerOrderOverlay.style.display = 'none'
+    flowerOrderDetails.style.display = 'block'
+    flowerOrderedView.style.display = 'none'
+
+
+    document.getElementById('flEnactOrderFromBasketBTN').addEventListener('click', async () => {
+        flowerOrderOverlay.style.display = 'block'
+        flowerOrderDetails.style.display = 'block'
+        flowerOrderedView.style.display = 'none'
     })
 
-    document.getElementById('ConfirmOrder').addEventListener('click', async () => { // Confirm Order [ Confirms Order, sends Order Request, if successful it gives you a small view of "Success" ]
-        const recName = await document.getElementById('NameInput').value;
-        const phone = await document.getElementById('PhoneInput').value;
-        const add1 = await document.getElementById('AddressInput1').value;
-        const add2 = await document.getElementById('AddressInput2').value;
-        const state = await document.getElementById('StateInput').value;
-        const zip = await document.getElementById('ZipInput').value;
+    document.getElementById('flCancelOrder').addEventListener('click', async () => { // Cancel Order [ Returns you to basic Basket View ]
+        flowerOrderOverlay.style.display = 'none'
+        flowerOrderDetails.style.display = 'block'
+        flowerOrderOverlay.style.display = 'none'
+    })
 
-        const cardNum = await document.getElementById('AddressInput2').value;
-        const exDate = await document.getElementById('NameInput').value;
-        const cvv = await document.getElementById('NameInput').value;
 
-        if(recName === "" || phone === "" || add1 === "" || state === "" || zip === "") {
-            errorbox.innerHTML = "Inputs Cannot be left Empty"
-            return
+    document.getElementById('flConfirmOrder').addEventListener('click', async () => { // Confirm Order [ Confirms Order, sends Order Request, if successful it gives you a small view of "Success" ]
+        const recName = await document.getElementById('flNameInput').value;
+        const phone = await document.getElementById('flPhoneInput').value;
+        const add1 = await document.getElementById('flAddressInput1').value;
+        const add2 = await document.getElementById('flAddressInput2').value;
+        const state = await document.getElementById('flStateInput').value;
+        const zip = await document.getElementById('flZipInput').value;
+
+        const cardNum = await document.getElementById('flCardNumInput').value;
+        const exDate = await document.getElementById('flExpiryDateInput').value;
+        const cvv = await document.getElementById('flCVVInput').value;
+
+        flowererrorbox.innerHTML = ""
+
+        let errors = []
+        if (recName === "") {
+            errors.push("Name Cannot be Left Empty.\n")
+        }
+        if (phone === "") {
+            errors.push("Phone Number Cannot be Left Empty.\n")
+        }
+        if (add1 === "") {
+            errors.push("Address Line 1 Cannot be Left Empty.\n")
+        }
+        if (state === "") {
+            errors.push("State Cannot be Left Empty.\n")
+        }
+        if (zip === "") {
+            errors.push("Zipcode Cannot be Left Empty.\n")
+        }
+        if (cardNum === "") {
+            errors.push("Card Number Cannot be Left Empty.\n")
+        }
+        if (exDate === "") {
+            errors.push("Expiration Date Cannot be Left Empty.\n")
+        }
+        if (cvv ==="") {
+            errors.push("CVV Cannot be Left Empty.\n")
         }
 
-        if (cardNum === "" || exDate === ""|| cvv ==="") {
-            errorbox.innerHTML = "Card Information Invalid"
+        if (errors.length > 0) {
+            errors.forEach(error => {
+                flowererrorbox.innerHTML += error
+            });
             return
         }
 
@@ -54,7 +139,7 @@ try {
 
         console.log(addInfo)
 
-        const response = await fetch('/order/create-order', {
+        const response = await fetch('/order/create-order/flowers', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -70,32 +155,101 @@ try {
                 }
             })
 
-            orderDetails.style.display = 'none'
-            orderedView.style.display = 'block'
+            flowerOrderDetails.style.display = 'none'
+            flowerOrderedView.style.display = 'block'
         } 
         else {
-            errorbox.innerHTML = response.message
+            flowererrorbox.innerHTML = response.message
         }
 
     })
+} catch (error) {
+    console.log(error)
+}
 
-    const buttons = document.querySelectorAll('.ItemRemovalBTN');
-    buttons.forEach(function(button) {
-        button.addEventListener('click', async function () {
-            itemid = button.getAttribute('data-iid')
-            itemtype = button.getAttribute('data-type')
+try {
+    // FOOD STUFF ------------------------------------------------------------
+    const foodOrderOverlay = document.getElementById('foodOrderOverlay');
+    const foodOrderDetails = document.getElementById('foodOrderDetails');
+    const foodOrderedView = document.getElementById('foodItemOrdered');
+    const fooderrorbox = document.getElementById('food_ERRORBOX');
 
-            await fetch(`/basket/delete/${itemtype}/${itemid}`, {
+    foodOrderOverlay.style.display = 'none'
+    foodOrderDetails.style.display = 'block'
+    foodOrderedView.style.display = 'none'
+
+
+    document.getElementById('foEnactOrderFromBasketBTN').addEventListener('click', async () => {
+        foodOrderOverlay.style.display = 'block'
+        foodOrderDetails.style.display = 'block'
+        foodOrderedView.style.display = 'none'
+    })
+
+    document.getElementById('foCancelOrder').addEventListener('click', async () => { // Cancel Order [ Returns you to basic Basket View ]
+        foodOrderOverlay.style.display = 'none'
+        foodOrderDetails.style.display = 'block'
+        foodOrderOverlay.style.display = 'none'
+    })
+
+    // FOOD ORDER BUTTON
+    document.getElementById('foConfirmOrder').addEventListener('click', async () => { // Confirm Order [ Confirms Order, sends Order Request, if successful it gives you a small view of "Success" ]
+        const recName = await document.getElementById('foNameInput').value;
+        const phone = await document.getElementById('foPhoneInput').value;
+
+        const cardNum = await document.getElementById('foCardNumInput').value;
+        const exDate = await document.getElementById('foExpiryDateInput').value;
+        const cvv = await document.getElementById('foCVVInput').value;
+
+
+        fooderrorbox.innerHTML = ""
+
+        let errors = []
+        if (recName === "") {
+            errors.push("Name Cannot be Left Empty.\n")
+        }
+        if (phone === "") {
+            errors.push("Phone Number Cannot be Left Empty.\n")
+        }
+        if (cardNum === "") {
+            errors.push("Card Number Cannot be Left Empty.\n")
+        }
+        if (exDate === "") {
+            errors.push("Expiration Date Cannot be Left Empty.\n")
+        }
+        if (cvv ==="") {
+            errors.push("CVV Cannot be Left Empty.\n")
+        }
+
+        if (errors.length > 0) {
+            errors.forEach(error => {
+                fooderrorbox.innerHTML += error
+            });
+            return
+        }
+
+        const response = await fetch('/order/create-order/food', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+
+        if (response.ok) {
+            await fetch('/basket/delete', {
                 method: "DELETE",
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-        });
-    });
 
-    document.getElementById('ReturnBtn').addEventListener('click', async () => {
-        window.location.href = "/profile"
+            foodOrderDetails.style.display = 'none'
+            foodOrderedView.style.display = 'block'
+        } 
+        else {
+            fooderrorbox.innerHTML = response.message
+        }
+
     })
 } catch (error) {
     console.log(error)

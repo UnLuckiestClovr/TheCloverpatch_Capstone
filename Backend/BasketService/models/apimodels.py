@@ -17,3 +17,16 @@ class Basket(BaseModel):
     BID: str = Field()
     Items: List[Item]
     TotalPrice: float = Field()
+
+
+class FoodItem(BaseModel):
+    IID: str = Field()
+    Name: str = Field()
+    Quantity: int = Field()
+    IDRequired: bool = Field()
+    Price: float = Field()
+
+class FoodBasket(BaseModel):
+    BID: str = Field()
+    Items: List[FoodItem]
+    TotalPrice: float = Field()

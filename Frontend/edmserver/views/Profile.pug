@@ -11,27 +11,42 @@ block mainContent
 
     h3 Orders:
     // Check if orders exist and iterate over them
-    if (userOrders && userOrders.length > 0)
-        article(id='UserOrders')
-            table(class='OrdersTable')
-                thead
-                    tr
-                        //- th Order ID
-                        th Address
-                        th State
-                        th Zipcode
-                        th Time Made
-                        th
-                tbody
-                    each order in userOrders
+    article(id="FlowerOrders")
+        if (flowerOrders && flowerOrders.length > 0)
+                table(class='OrdersTable')
+                    thead
                         tr
-                            //- td= order.OID
-                            td= `${order.AddressInfo.AddressLine1} ${order.AddressInfo.AddressLine2}`
-                            td= order.AddressInfo.State
-                            td= order.AddressInfo.Zipcode
-                            td= order.TimeMade
-                            td
-                                a(class='VODButton', data-oid=order.OID, href=`/order/${order.OID}`) View Order
+                            //- th Order ID
+                            th Address
+                            th State
+                            th Zipcode
+                            th Time Made
+                            th
+                    tbody
+                        each order in flowerOrders
+                            tr
+                                //- td= order.OID
+                                td= `${order.AddressInfo.AddressLine1} ${order.AddressInfo.AddressLine2}`
+                                td= order.AddressInfo.State
+                                td= order.AddressInfo.Zipcode
+                                td= order.TimeMade
+                                td
+                                    a(class='VODButton', data-oid=order.OID, href=`/order/${order.OID}`) View Order
+        else 
+            p No Flower Orders Found
+    
+    article(id="CafeOrders")
+        if (cafeOrders && cafeOrders.length > 0)
+            table(class='OrdersTable')
+                thead 
+                    tr
+                        th Final Price
+                        th Time Made 
+                tbody 
+                    each order in cafeOrders 
+                        tr 
+                            td= `${order.FinalPrice}`
+                            td= `${order.TimeMade}`
 
     else
         p No orders found.

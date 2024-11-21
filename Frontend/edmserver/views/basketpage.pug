@@ -1,8 +1,53 @@
 extends layout.pug
 
 block mainContent
-    article(id='orderOverlay')
-        article(id='orderDetails')
+    //FOOD ORDER OVERLAY ------------------------------------------------
+    article(id='foodOrderOverlay')
+        article(id='foodOrderDetails')
+            p Take Note: We do not Ship Food, it is a Pickup Order at our Cafe Location. 
+
+            h2(class='OrderedFood') Order Details 
+
+            table(class='orderDetailTable')
+                tr 
+                    td
+                        p Full Name:
+                        input(id="foNameInput", type="text", value="")
+                    td
+                        p Phone Number:
+                        input(id="foPhoneInput", type="text", value="", placeholder="e.g., (123) 456-7890")            
+            br
+            p
+            br
+
+            table(class='orderDetailTable')
+                tr 
+                    td 
+                        p Card Number:
+                        input(id="foCardNumInput", type="text", value="")
+                    td
+                        p Expiry Date (MM/YY):
+                        input(id="foExpiryDateInput", type="text", value="")
+                    td 
+                        p CVV (3 Digit Number):
+                        input(id="foCVVInput", type="text", value="")
+            br
+            p
+            br
+            p 
+            button(id="foConfirmOrder") Confirm Order
+            p 
+            button(id="foCancelOrder") Cancel Order
+
+            p(id='ERRORBOX')
+    
+        article(id="foodItemOrdered")
+            h2 Order has been Confirmed!!!
+            button(id="ReturnBtn") Return
+
+    //FLOWER ORDER OVERLAY ----------------------------------------------
+    article(id='flowerOrderOverlay')
+        article(id='flowerOrderDetails')
             p Take Note: We do not support shipping outside of the United States. 
 
             h2(class='OrderedFlowers') Order Details 
@@ -11,24 +56,24 @@ block mainContent
                 tr 
                     td
                         p Full Name:
-                        input(id="NameInput", type="text", value="")
+                        input(id="flNameInput", type="text", value="")
                     td
                         p Phone Number:
-                        input(id="PhoneInput", type="text", value="", placeholder="e.g., (123) 456-7890")
+                        input(id="flPhoneInput", type="text", value="", placeholder="e.g., (123) 456-7890")
                 tr 
                     td 
                         p Address Line 1:
-                        input(id="AddressInput1", type="text", value="")
+                        input(id="flAddressInput1", type="text", value="")
                     td 
                         p Address Line 2:
-                        input(id="AddressInput2", type="text", value="", placeholder="e.g., Apt. 123")
+                        input(id="flAddressInput2", type="text", value="", placeholder="e.g., Apt. 123")
                 tr 
                     td 
                         p State:
-                        input(id="StateInput", type="text", value="")
+                        input(id="flStateInput", type="text", value="")
                     td 
                         p Zipcode:
-                        input(id="ZipInput", type="text", value="")
+                        input(id="flZipInput", type="text", value="")
             
             br
             p
@@ -38,45 +83,63 @@ block mainContent
                 tr 
                     td 
                         p Card Number:
-                        input(id="CardNumInput", type="text", value="")
+                        input(id="flCardNumInput", type="text", value="")
                     td
                         p Expiry Date (MM/YY):
-                        input(id="ExpiryDateInput", type="text", value="")
+                        input(id="flExpiryDateInput", type="text", value="")
                     td 
                         p CVV (3 Digit Number):
-                        input(id="CVVInput", type="text", value="")
+                        input(id="flCVVInput", type="text", value="")
             br
             p
             br
             p 
-            button(id="ConfirmOrder") Confirm Order
+            button(id="flConfirmOrder") Confirm Order
             p 
-            button(id="cancelOrder") Cancel Order
+            button(id="flCancelOrder") Cancel Order
 
             p(id='ERRORBOX')
 
 
-        article(id="ItemOrdered")
-            h2 Item has Been Added to your Basket!!!
+        article(id="flowerItemOrdered")
+            h2 Order has been Confirmed!!!
             button(id="ReturnBtn") Return
 
     article(id='mainView')
-        - if (basketData.length > 0)
-            h2(class="headrow") Basket:
-            table(class="ProductTables")
-                tbody
-                    +basketRow(basketData, "Flowers")
-            br
+        div(class='tabs')
+            div(id="FlowerBasketTab", class="tab active") Flower Basket
+            div(id="FoodBasketTab", class="tab") Food Basket
 
-            button(id='EnactOrderFromBasketBTN', class="PrettyButton") Order Basket
-        - else 
-            h2(class="headrow") Your Basket is Empty, Go Add some Items to your Basket to Order Them!
+
+        div(id="FlowerBasketView", class="baskArticle active")
+            - if (flowerBasket.length > 0)
+                h2(class="headrow") Flower Basket:
+                table(class="ProductTables")
+                    tbody
+                        +basketRow(flowerBasket, "Flowers")
+                br
+
+                button(id='flEnactOrderFromBasketBTN', class="PrettyButton") Order Basket
+            - else 
+                h2(class="headrow") Your Basket is Empty, Go Add some Items to your Basket to Order Them!
+        
+        div(id="FoodBasketView", class="baskArticle")
+            - if (foodBasket.length > 0)
+                h2(class="headrow") Food Basket:
+                table(class="ProductTables")
+                    tbody
+                        +basketRow(foodBasket, "Food")
+                br
+
+                button(id='foEnactOrderFromBasketBTN', class="PrettyButton") Order Basket
+            - else 
+                h2(class="headrow") Your Basket is Empty, Go Add some Items to your Basket to Order Them!
 
 
 mixin basketRow(basket, type)
     - const formatPrice = (price) => `$${parseFloat(price).toFixed(2)}`
     - for (let i = 0; i < basket.length; i++)
-        tr
+        tr(id=`${basket[i].IID}`)
             td(class='BasketItem')
                 p= `Name: ${basket[i].Name}`
                 p= `Quantity: ${basket[i].Quantity}`

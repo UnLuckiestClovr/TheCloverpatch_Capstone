@@ -38,7 +38,7 @@ router.get('/', async function(req, res) {
                 title: "The Cloverpatch", 
                 loggedInBool: boolLog,
                 pageData: userData,
-                userOrders: userOrders,
+                flowerOrders: userOrders,
                 scriptName: "/javascripts/edm.js"
             })
         }

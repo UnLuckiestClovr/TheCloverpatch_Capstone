@@ -2,12 +2,38 @@ var express = require('express')
 var router = express.Router()
 
 
+async function getBothBaskets(bid) {
+    try {
+        const response = await fetch((`http://localhost:12000/basket/get-all/${bid}`), {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        console.log(response)
+
+        if (response.ok) {
+            const jsonData = await response.json();
+            const { flowers, food } = jsonData;
+
+            return { flowers, food }
+        } else {
+            return {}
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 router.get('/', async function(req, res, next) {
-    const basket = await getUserBasket(req.cookies.uid)
+    const baskets = await getBothBaskets(req.cookies.uid)
 
-    const basketData = basket.value
+    const flowers = baskets.flowers
+    const food = baskets.food
 
-    console.log(basketData)
+    console.log(baskets)
 
     let boolLog = false
     if(req.cookies && req.cookies.uid) {
@@ -16,7 +42,8 @@ router.get('/', async function(req, res, next) {
 
     res.render('basketpage', { 
         title: 'The Cloverpatch', 
-        basketData: basketData,
+        flowerBasket: flowers,
+        foodBasket: food,
         loggedInBool: boolLog,
         scriptName: "/javascripts/basketscript.js"
     });
@@ -123,6 +150,32 @@ router.get('/get/:type', async function(req, res, next) {
     }
 })
 
+// Get All Baskets
+router.get("/get-all", async function(req, res, next) {
+    try {
+        const bid = req.cookies.uid;
+
+        const response = await fetch((`http://localhost:12000/basket/get-all/${bid}`), {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (response.ok) {
+            const jsonData = await response.json();
+            const { flowers, food } = jsonData;
+
+            res.status(200).send({ flowers, food })
+        } else {
+            return {}
+        }
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
+})
+
 // Clear Basket
 router.delete('/delete/:type', async function(req, res, next) {
     try {
@@ -166,9 +219,9 @@ router.delete('/delete/:type/:itemid', async function(req, res, next) {
 
         if (response.ok) {
             const jsonData = await response.json();
-            const { code, message } = jsonData;
+            const { message } = jsonData;
 
-            res.status(code).send(message)
+            res.status(200).send(message)
         } else {
             res.sendStatus(500)
         }

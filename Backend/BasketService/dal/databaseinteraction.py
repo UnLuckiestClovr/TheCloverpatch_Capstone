@@ -1,6 +1,6 @@
-import redis, json, uuid
+import redis, json, uuid, traceback
 
-from models.apimodels import Basket, Item
+from models.apimodels import *
 
 rConnPool = redis.ConnectionPool(host='CloverpatchBasketDatabase', port=6379)
 
@@ -21,6 +21,7 @@ def check_BasketExists(BID: str):
             "message": f"Error connecting to Redis: {e}"
         }
     except Exception as e:
+        traceback.print_exception(e)
         return {
             "success": False,
             "message": f"An error occurred: {e}"
@@ -36,7 +37,11 @@ def addItemToBasket(BID: str, item: Item, type: str):  # BID is Basket ID, this 
 
         # Retrieve current items in the basket
         items_json = rConn.lrange(f'{redisBID}:{type}', 0, -1)
-        items = [Item.parse_raw(item) for item in items_json]
+
+        if (type == "Flowers"):
+            items = [Item.parse_raw(item) for item in items_json]
+        elif (type == "Food"):
+            items = [FoodItem.parse_raw(item) for item in items_json]
 
         print(f"Current Items: {items}")
 
@@ -73,6 +78,7 @@ def addItemToBasket(BID: str, item: Item, type: str):  # BID is Basket ID, this 
             "message": f"Error connecting to Redis: {e}"
         }
     except Exception as e:
+        traceback.print_exception(e)
         return {
             "success": False,
             "message": f"An error occurred: {e}"
@@ -80,27 +86,37 @@ def addItemToBasket(BID: str, item: Item, type: str):  # BID is Basket ID, this 
 
 
 # Retrieves the List of Items from the Basket
-def getBasket(BID: str, type: str):
+def getAllBaskets(BID: str):
     try:
         redisBID = BID.__str__().replace('-', '_')
 
         rConn = redis.Redis(connection_pool=rConnPool)
 
         # Get all elements from the list
-        json_strings = rConn.lrange(f'{redisBID}:{type}', 0, rConn.llen(f'{redisBID}:{type}'))
+        flower_strings = rConn.lrange(f'{redisBID}:Flowers', 0, rConn.llen(f'{redisBID}:Flowers'))
+        food_strings = rConn.lrange(f'{redisBID}:Food', 0, rConn.llen(f'{redisBID}:Food'))
 
-        print(json_strings)
-
-        items = []
-        for json_str in json_strings:
+        # Get Flower Basket
+        flowers = []
+        for json_str in flower_strings:
             print(json_str)
             item_dict = json.loads(json_str.decode('utf-8'))
             item = Item(**item_dict)
-            items.append(item)
+            flowers.append(item)
+
+        # Get Food Basket
+        food = []
+        for json_str in food_strings:
+            print(json_str)
+            item_dict = json.loads(json_str.decode('utf-8'))
+            item = FoodItem(**item_dict)
+            food.append(item)
+        
         return {
             "success": True,
             "message": f'Successful Grab from {redisBID}',
-            "value": items
+            "flowers": flowers,
+            "food": food
         }
     except redis.ConnectionError as e:
         return {
@@ -108,6 +124,7 @@ def getBasket(BID: str, type: str):
             "message": f"Error connecting to Redis: {e}"
         }
     except Exception as e:
+        traceback.print_exception(e)
         return {
             "success": False,
             "message": f"An error occurred: {e}"
@@ -120,37 +137,41 @@ def deleteItemFromBasket(BID: str, IID: str, type: str):
 
         rConn = redis.Redis(connection_pool=rConnPool)
 
+        basketSTR = f'{redisBID}:{type}'
+
         # Get all elements from the list
-        items = rConn.lrange(f'{BID}:{type}', 0, rConn.llen(f'{redisBID}:{type}'))
+        items = rConn.lrange(basketSTR, 0, rConn.llen(basketSTR))
+
+
 
         if items:
             # Decode to Python Dicts
             itemsDecoded = [item.decode('utf-8') for item in items]
+
             itemObjects = [json.loads(item) for item in itemsDecoded]
-            print(itemObjects)
 
             #iterate through list to find then remove the item by checking item IID
             updatedItemObjects = [item for item in itemObjects if item.get('IID') != IID]
 
-            print(updatedItemObjects)
-
-            if len(itemObjects) != len(updatedItemObjects):
+            if len(itemObjects) == len(updatedItemObjects):
+                return {
+                    "success": False,
+                    "message": f"Could not find Item of IID : {IID}"
+                }
+            elif len(itemObjects) != len(updatedItemObjects):
                 #encode back into strings for redis to use
                 updatedItems = [json.dumps(item) for item in updatedItemObjects]
 
                 #update redis data
                 rConn.delete(f'{redisBID}:{type}')
-                if updatedItems:
+
+                if (updatedItems.__len__() > 0):
                     rConn.rpush(f'{redisBID}:{type}', *updatedItems)
 
-                    return {
-                        "success": True,
-                        "message": f"\'{redisBID}\' updated successfully"
-                    }
-            return {
-                "success": False,
-                "message": f"Could not find Item of IID : {IID}"
-            }
+                return {
+                    "success": True,
+                    "message": f"\'{redisBID}\' updated successfully"
+                }
         else:
             return {
                 "success" : False,
@@ -162,6 +183,7 @@ def deleteItemFromBasket(BID: str, IID: str, type: str):
             "message": f"Error connecting to Redis: {e}"
         }
     except Exception as e:
+        traceback.print_exception(e)
         return {
             "success": False,
             "message": f"An error occurred: {e}"

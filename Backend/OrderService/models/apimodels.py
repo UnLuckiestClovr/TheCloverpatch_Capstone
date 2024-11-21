@@ -29,9 +29,17 @@ class Order(BaseModel):
     AddressInfo: AddressInfo = Field()
     TimeMade: str = Field()
 
+
+class FoodItem(BaseModel):
+    IID: str = Field()
+    Name: str = Field()
+    Quantity: int = Field()
+    IDRequired: bool = Field()
+    Price: float = Field()
+
 class FoodOrder(BaseModel):
     OID: str = Field()
     UID: str = Field()
-    Items: List[Item] = Field()
+    Items: List[FoodItem] = Field()
     FinalPrice: float = Field()
     TimeMade: str = Field()
