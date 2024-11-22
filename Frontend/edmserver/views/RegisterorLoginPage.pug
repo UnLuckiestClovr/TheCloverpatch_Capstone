@@ -18,16 +18,18 @@ block mainContent
 
     article(id="RegisterView") 
         h2 Register
-        p Username [Needs 1 Capital Letter, 1 Lowercase Letter, and 1 Number]:
-        input(type="text", class="usernameInput", id="uReg")
-        p Email :
-        input(type="text", class="emailInput", id="eReg")
-        p Password [Needs 1 Capital Letter, 1 Lowercase Letter, 1 Number, and 1 Special Character (!@#$%^&*()_-)]:
-        input(type="password", class="pswrdInput", id="pReg")
 
-        p(id="regErrors") 
-        br
-        button(class="PrettyButton", id='registerBTN', type='submit') Register
+        div(id="RegInputs")
+            p Username [Needs 1 Capital Letter, 1 Lowercase Letter, and 1 Number]:
+            input(type="text", class="usernameInput", id="uReg")
+            p Email :
+            input(type="text", class="emailInput", id="eReg")
+            p Password [Needs 1 Capital Letter, 1 Lowercase Letter, 1 Number, and 1 Special Character (!@#$%^&*()_-)]:
+            input(type="password", class="pswrdInput", id="pReg")
+
+            p(id="regErrors") 
+            br
+            button(class="PrettyButton", id='registerBTN', type='submit') Register
         br
         article(class="ViewChangeButton")
             h3(class="ViewSwitchLoginPage") Already Have an Account? 

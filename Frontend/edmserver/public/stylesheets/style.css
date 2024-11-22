@@ -5,7 +5,8 @@ body {
   padding: 50px;
   font-family:'Josefin Sans', sans-serif;
   color: aliceblue;
-  background-image: url(../images/BackTattoo.jpg);
+  /*background-image: url(../images/BackTattoo.jpg);*/
+  background-color: #2d2d2d;
   font-size: 20px;
 }
 
@@ -21,34 +22,59 @@ h2 {
   background-color: #212121;
 }
 
-table.ProductTables, table.NavTable, table.OrdersTable {
+table.ProductTables, table.OrdersTable {
+  width:100%;
+  background-color: #515151;
+  color: #FFFFFF;
+  text-align: center;
+  align-content: center;
+  font-size: larger;
+  border-radius: 5px;
+}
+
+table.NavTable {
   width:100%;
   background-color: #515151;
   border-collapse: collapse;
-  border-width: 2px;
-  border-color: #3ddf20;
-  border-style: dotted;
   color: #FFFFFF;
   text-align: center;
   align-content: center;
   font-size: larger;
 }
 
-table.NavTable {
-  margin-top: 10%;
-}
-
 table.NavTable td * , table.OrdersTable td *{
   font-family: 'Cinzel', sans-serif;
   color: whitesmoke;
+  padding: 5px;
 }
 
-table.OrdersTable  tr {
+table.ProductTables td * {
+  padding: 10px;
+}
+
+table.NavTable {
+  border-radius: 5px;
+}
+
+div.NAV, div.tables {
+  margin-top: 10%;
+  border-radius: 5px;
+  border-color: #3ddf20;
+  border-style: dotted;
+  background-color: #515151;
+}
+
+table.NavTable a:hover {
+  transform: scale(1.05);
+  color: rgb(0, 224, 56);
+}
+
+/* table.OrdersTable  tr {
   border-width: 2px;
   border-color: #3ddf20;
   border-style: dotted;
   padding: 3px;
-}
+} */
 
 table.NavTable td{
   border-width: 2px;
@@ -57,11 +83,13 @@ table.NavTable td{
   padding: 3px;
 }
 
+
+
 table.ProductTables td, table.ProductTables th {
   border-width: 2px;
   border-color: #3ddf20;
   border-style: dotted;
-  padding: 3px;
+  padding: 6px;
   width: 50%;
 }
 
@@ -172,6 +200,19 @@ h3.FlowerSeasonHeaders {
   touch-action: manipulation;
 }
 
+.Product {
+  position: relative;
+}
+
+.basketButton {
+  bottom: 0px;
+  position:absolute;
+  left: 0px;
+  right: 0px;
+  margin: 3%;
+  height: 50px;
+}
+
 .orderButton:hover,
 .orderButton:focus-visible,
 #cancelOrder:hover,
@@ -196,12 +237,16 @@ h3.FlowerSeasonHeaders {
   color: #fff;
 }
 
-#orderDetails, #RegisterView {
+#orderDetails, #RegInputs {
   background-color: #212121;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 #RegisterView {
   display: none;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 #LoginView {
@@ -227,10 +272,10 @@ h3.FlowerSeasonHeaders {
 
 #basket-icon {
   position: fixed;
-  top: 10px;
-  right: 10px;
-  width: 50px;
-  height: 50px;
+  top: 50px;
+  right: 50px;
+  width: 8%;
+  height: 8%;
   background-image: url(../images/Ecommerce-Shopping-Cart-icon.png);
   background-size: contain;
   background-repeat: no-repeat;
@@ -261,6 +306,11 @@ h3.FlowerSeasonHeaders {
   font-size: x-large;
 }
 
+.profileStats, #FlowerShopInfo, .headrow, .NavTable, h2 {
+  padding: 10px;
+  border-radius: 5px;
+}
+
 
 .tabs {
   display: flex;
@@ -289,4 +339,46 @@ h3.FlowerSeasonHeaders {
 }
 .baskArticle.active {
   display: block;
+}
+
+/* tr:first-child td {
+  border-top: none;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr td:first-child {
+  border-left: none;
+}
+
+tr td:last-child {
+  border-right: none;
+} */
+
+
+.border-none {
+  border-collapse: collapse;
+  border: none;
+}
+
+/* .border-none td {
+  border: 1px solid black !important;
+} */
+
+.border-none tr:first-child td, .border-none tr:first-child th {
+  border-top: none !important;
+}
+
+.border-none tr:last-child td {
+  border-bottom: none !important;
+}
+
+.border-none tr td:first-child, .border-none tr th:first-child {
+  border-left: none !important;
+}
+
+.border-none tr td:last-child, .border-none tr th:last-child {
+  border-right: none !important;
 }

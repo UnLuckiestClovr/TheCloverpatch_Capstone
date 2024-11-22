@@ -24,7 +24,7 @@ block mainContent
     h2 This is Our Menu, Come Try Some at our location!
     
     h2(class="headrow") For the Classic Coffee Experience. . .
-    table(class="ProductTables")
+    table(class="ProductTables border-none")
         tbody 
             tr 
                 td 
@@ -95,7 +95,7 @@ block mainContent
                     p  
                     p ~ Small - $4.59 ~ Medium - $7.99 ~ Large - $11.69 ~
                 td 
-                    h3 Submarine (Coffee Optional)
+                    h3 El Submarino: Argentina Hot Cocoa (Coffee Optional)
                     p  
                     p ~ Small - $4.39 ~ Medium - $5.89 ~ Large - $7.69 ~
             tr 
@@ -109,12 +109,12 @@ block mainContent
                     p ~ Small - $5.59 ~ Medium - $9.89 ~ Large - $13.69 ~
     
     h2(class="headrow") Or if you'd Rather, try our Specialized Drinks!
-    table(class="ProductTables")
+    table(class="ProductTables border-none")
         tbody 
             +productRow(DrinkList)
 
     h2(class="headrow") And if You Are Feeling a Bit Peckish, Try our Food!
-    table(class="ProductTables")
+    table(class="ProductTables border-none")
         tbody
             +productRow(FoodList)
 
@@ -126,13 +126,16 @@ mixin productRow(products)
                 img(class='ProductImage', src=products[i].PImageURL, alt="Image of Product")
                 h3= products[i].PName
                 p= formatPrice(products[i].PCost)
-
+                br
+                br
                 - if (loggedInBool)
-                    button(class="basketButton", data-product=products[i].PName, data-cost=products[i].PCost, data-iid=products[i].id, data-idrequired=`${products[i + 1].IDRequired}`) Click Me to Order Your Own!
+                    button(class="basketButton PrettyButton", data-product=products[i].PName, data-cost=products[i].PCost, data-iid=products[i].id, data-idrequired=`${products[i].IDRequired}`) Add to Basket
             if (i + 1 < products.length)
                 td(class='Product')
                     img(class='ProductImage', src=products[i + 1].PImageURL, alt="Image of Product")
                     h3= products[i + 1].PName
                     p= formatPrice(products[i + 1].PCost)
+                    br
+                    br
                     - if (loggedInBool)
-                    button(class="basketButton", data-product=products[i + 1].PName, data-cost=products[i + 1].PCost, data-iid=products[i + 1].id, data-idrequired=`${products[i + 1].IDRequired}`) Click Me to Order Your Own!
+                        button(class="basketButton PrettyButton", data-product=products[i + 1].PName, data-cost=products[i + 1].PCost, data-iid=products[i + 1].id, data-idrequired=`${products[i + 1].IDRequired}`) Add to Basket

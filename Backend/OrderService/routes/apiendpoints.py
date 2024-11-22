@@ -28,7 +28,7 @@ async def FetchOrder(OID: str = Path(alias='OID')):
 
 @router.get("/fetch/food/{OID}")
 async def FetchOrder(OID: str = Path(alias='OID')):
-    return databaseinteraction.FetchFlowerOrderbyID(OID)
+    return databaseinteraction.FetchFoodOrderbyID(OID)
 
 
 # Get Orders by User
@@ -38,7 +38,7 @@ async def FetchUserOrders(UID: str = Path(alias='UID')):
 
 @router.get("/fetch-all/food/{UID}")
 async def FetchUserOrders(UID: str = Path(alias='UID')):
-    return databaseinteraction.FetchFoodOrderbyID(UID)
+    return databaseinteraction.FetchFoodOrdersOfUser(UID)
 
 
 # Delete Orders by ID

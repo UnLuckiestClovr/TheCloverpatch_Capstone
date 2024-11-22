@@ -18,5 +18,6 @@ block mainContent
                         p= `Name: ${item.Name}`
                         p= `Quantity: ${item.Quantity}`
                     td
-                        p= `Variant: ${item.Variant}`
+                        -if (item.Variant)
+                            p= `Variant: ${item.Variant}`
                         p= `Price: ${formatPrice(item.Price)}`

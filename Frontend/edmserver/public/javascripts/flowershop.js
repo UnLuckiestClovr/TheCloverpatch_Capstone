@@ -31,15 +31,6 @@ try {
 
 
     const quantInput = document.getElementById('ProductQuantity')
-    // quantInput.value = "1"
-    // const quantity = parseInt(quantInput.value)
-    // const pricePer = parseFloat(productSelector.value)
-    // if(!isNaN(quantity)) {
-    //     const total = (pricePer * quantity)
-    //     const roundedTotal = (total.toFixed(2))
-    //     console.log("Current Price: $", roundedTotal)
-    //     outputBox.innerHTML = ("Final Cost: $" + roundedTotal)
-    // }
 
     function updateFinalPrice() {
         const quantity = parseInt(quantInput.value)

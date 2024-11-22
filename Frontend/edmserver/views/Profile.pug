@@ -38,7 +38,7 @@ block mainContent
                                     td= order.AddressInfo.Zipcode
                                     td= order.TimeMade
                                     td
-                                        a(class='VODButton', data-oid=order.OID, href=`/order/${order.OID}`) View Order
+                                        a(class='VODButton', data-oid=order.OID, href=`/order/flower/${order.OID}`) View Order
             else 
                 p No Flower Orders Found
 
@@ -58,10 +58,12 @@ block mainContent
                                 td= `${order.FinalPrice}`
                                 td= `${order.TimeMade}`
                                 td
-                                    a(class='VODButton', data-oid=order.OID, href=`/order/${order.OID}`) View Order
+                                    a(class='VODButton', data-oid=order.OID, href=`/order/food/${order.OID}`) View Order
 
             else
                 p No Cafe Orders Found.
 
+    br
+    br
 
     button(id="LogoutBTN", class="PrettyButton") Log Out

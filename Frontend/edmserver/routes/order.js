@@ -10,28 +10,34 @@ const getAllOrdersByUserEndpoint = 'http://localhost:12001/order/fetch-all' // "
 const cancelOrderEndpoint = 'http://localhost:12001/order/cancel' // "/{UID}/{OID}"
 
 
-router.get('/:orderid', async function(req, res, next) {
+router.get('/:type/:orderid', async function(req, res, next) {
     const orderid = req.params.orderid;
+    const type = req.params.type;
 
     let boolLog = false
     if(req.cookies && req.cookies.uid) {
         boolLog = true;
     }
 
-    const response = await fetch((getOrderByIDEndpoint+orderid), {
+    const response = await fetch((getOrderByIDEndpoint+type+"/"+orderid), {
         method: "GET",
         headers: {
             'Content-Type': 'application/json'
         }
     })
 
+    console.log(`RESPONSE: ${response}`)
+
     if (response.ok) {
         const jsonData = await response.json();
+        console.log(`JSON: ${JSON.stringify(jsonData)}`)
         const { order } = jsonData;
+        
+        console.log(`ORDER: ${order}`)
 
         const orderData = JSON.parse(order)
 
-        console.log(orderData)
+        console.log(`order: ${orderData}`)
 
         res.render('orderdetails', { 
             title: 'The Cloverpatch', 
@@ -123,11 +129,12 @@ router.post("/create-order/food", async function(req, res, next) {
 })
 
 // Fetch Order by ID
-router.get("/fetch/:oid", async function(req, res, next) {
+router.get("/fetch/:type/:oid", async function(req, res, next) {
     try {
         const oid = req.params.oid;
+        const type = req.params.type
 
-        const response = await fetch((getOrderByIDEndpoint+oid), {
+        const response = await fetch((getOrderByIDEndpoint+type+"/"+oid), {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
@@ -136,9 +143,9 @@ router.get("/fetch/:oid", async function(req, res, next) {
 
         if (response.ok) {
             const jsonData = await response.json();
-            const { code, message, data } = jsonData;
+            const { message, data } = jsonData;
 
-            res.status(code).send(message)
+            res.status(200).send(message)
         }
 
 
