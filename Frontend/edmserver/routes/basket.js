@@ -99,7 +99,7 @@ router.post('/add/Food', async function(req, res, next) {
 
         if (response.ok) {
             const jsonData = await response.json();
-            const { code, message } = jsonData;
+            const { message } = jsonData;
 
             res.status(200).send(message)
         } else {

@@ -18,7 +18,14 @@ router.get('/', async function(req, res) {
                 }
             })
 
-            const ordersResponse = await fetch(('http://localhost:12001/order/fetch-all/'+req.cookies.uid), {
+            const flowersResponse = await fetch(('http://localhost:12001/order/fetch-all/flowers/'+req.cookies.uid), {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+
+            const foodResponse = await fetch(('http://localhost:12001/order/fetch-all/food/'+req.cookies.uid), {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
@@ -26,19 +33,25 @@ router.get('/', async function(req, res) {
             })
 
             jsonData = await response.json();
-            orderList = await ordersResponse.json();
-
-            const userData = jsonData.data
-            const userOrders = JSON.parse(orderList.orders)
+            const flowerOrders = await flowersResponse.json();
+            const foodOrders = await foodResponse.json()
 
             console.log("Orders:")
-            console.log(userOrders)
+            console.log(flowerOrders)
+            console.log(foodOrders)
+
+            let flOrders = []
+            let foOrders = []
+
+            if (flowerOrders.success) { flOrders = JSON.parse(flowerOrders.orders) }
+            if (foodOrders.success) { foOrders = JSON.parse(foodOrders.orders) }
 
             res.render('Profile', {
                 title: "The Cloverpatch", 
                 loggedInBool: boolLog,
-                pageData: userData,
-                flowerOrders: userOrders,
+                pageData: jsonData.data,
+                flowerOrders: flOrders,
+                cafeOrders: foOrders,
                 scriptName: "/javascripts/edm.js"
             })
         }

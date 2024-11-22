@@ -39,7 +39,7 @@ block mainContent
             p 
             button(id="foCancelOrder") Cancel Order
 
-            p(id='ERRORBOX')
+            p(id='food_ERRORBOX')
     
         article(id="foodItemOrdered")
             h2 Order has been Confirmed!!!
@@ -98,7 +98,7 @@ block mainContent
             p 
             button(id="flCancelOrder") Cancel Order
 
-            p(id='ERRORBOX')
+            p(id='flower_ERRORBOX')
 
 
         article(id="flowerItemOrdered")
@@ -143,7 +143,8 @@ mixin basketRow(basket, type)
             td(class='BasketItem')
                 p= `Name: ${basket[i].Name}`
                 p= `Quantity: ${basket[i].Quantity}`
-                p= `Variant: ${basket[i].Variant}`
+                - if (basket[i].Variant)
+                    p= `Variant: ${basket[i].Variant}`
                 p= `Price: ${formatPrice(basket[i].Price)}`
 
                 button(class="ItemRemovalBTN", data-iid=basket[i].IID, data-type=type) Remove Item

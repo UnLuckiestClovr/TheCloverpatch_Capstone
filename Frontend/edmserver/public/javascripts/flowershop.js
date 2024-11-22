@@ -31,15 +31,15 @@ try {
 
 
     const quantInput = document.getElementById('ProductQuantity')
-    quantInput.value = "1"
-    const quantity = parseInt(quantInput.value)
-    const pricePer = parseFloat(productSelector.value)
-    if(!isNaN(quantity)) {
-        const total = (pricePer * quantity)
-        const roundedTotal = (total.toFixed(2))
-        console.log("Current Price: $", roundedTotal)
-        outputBox.innerHTML = ("Final Cost: $" + roundedTotal)
-    }
+    // quantInput.value = "1"
+    // const quantity = parseInt(quantInput.value)
+    // const pricePer = parseFloat(productSelector.value)
+    // if(!isNaN(quantity)) {
+    //     const total = (pricePer * quantity)
+    //     const roundedTotal = (total.toFixed(2))
+    //     console.log("Current Price: $", roundedTotal)
+    //     outputBox.innerHTML = ("Final Cost: $" + roundedTotal)
+    // }
 
     function updateFinalPrice() {
         const quantity = parseInt(quantInput.value)
@@ -57,6 +57,7 @@ try {
         }
     }
 
+    // ADD BASKET
     document.getElementById('ConfirmAdd').addEventListener('click', async function() {        
         try {
             const productName = document.getElementById("orderProductNameDisplay").innerText.replace("You Are Viewing: ", "").trim();
@@ -133,7 +134,6 @@ try {
     })
 
     async function OrderFlowers(FlowerSpecies, FlowerCost) {
-        console.log("Clicked Order on: ", FlowerSpecies);
 
         let displayName = document.getElementById('orderProductNameDisplay')
         displayName.innerHTML = ("You Are Viewing: " + FlowerSpecies)

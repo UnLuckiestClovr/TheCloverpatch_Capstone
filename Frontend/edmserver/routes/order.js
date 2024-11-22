@@ -43,12 +43,26 @@ router.get('/:orderid', async function(req, res, next) {
 });
 
 
+async function GetUserEmail(UID) {
+    const response = await fetch(("http://localhost:12004/user/retrieve-data/"+UID), {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+
+    userData = await response.json()
+
+    console.log(userData.data.email)
+
+    return userData.data.email
+}
+
 // Create Flower Order
 router.post("/create-order/flowers", async function(req, res, next) {
     try {
-
-        const email = req.cookies.email
         const bid = req.cookies.uid
+        const email = await GetUserEmail(bid)
         const addInfo = req.body
 
         const response = await fetch((createFlowerOrderEndpoint+bid+"/"+email), {
@@ -78,16 +92,18 @@ router.post("/create-order/flowers", async function(req, res, next) {
 // Create Food Order
 router.post("/create-order/food", async function(req, res, next) {
     try {
-
-        const email = req.cookies.email
         const bid = req.cookies.uid
+        const email = await GetUserEmail(bid)
+        const food = req.body
 
-        const response = await fetch((createFoodOrderEndpoint+bid+"/"+email), {
+        console.log(`Food: ${JSON.stringify(food)}`)
+
+        const response = await fetch(`http://localhost:12001/order/create-order/food/${bid}/${email}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({})
+            body: JSON.stringify(food)
         })
 
         if (response.ok) {

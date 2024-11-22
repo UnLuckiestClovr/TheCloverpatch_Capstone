@@ -13,7 +13,7 @@ router.get('/', async function(req, res) {
     res.render('CoffeeShopPage', {
             title: "The Cloverpatch",
             loggedInBool: boolLog,
-            scriptName: "/javascripts/edm.js",
+            scriptName: "/javascripts/coffeeshop.js",
             FoodList: fList,
             DrinkList: dList
         })

@@ -71,6 +71,7 @@ def ProcessBasketToOrder_Food(BID: str, Email: str):
             OID = (uuid.uuid4()).__str__()
             foodOrder = processFoodList(OID, BID, foodStrings, current_time)
             foodOrderCollection.insert_one(json.loads(foodOrder.json()))
+            rConn.delete(f'{redisBID}:Food')
 
         sendEmail(
             "Cafe Order Made at The Cloverpatch!", 
@@ -112,6 +113,7 @@ def ProcessBasketToOrder_Flower(orderAddress: AddressInfo, BID: str, Email: str)
             OID = (uuid.uuid4()).__str__()
             flowerOrder = processFlowerList(OID, BID, orderAddress, flowerStrings, current_time)
             flowerOrderCollection.insert_one(json.loads(flowerOrder.json()))
+            rConn.delete(f'{redisBID}:Flowers')
 
         sendEmail(
             "Flowershop Order Made at The Cloverpatch!", 
@@ -198,7 +200,8 @@ def FetchFlowerOrdersOfUser(UID: str):
         traceback.print_exception(e)
         return {
             "success": False,
-            "message": f"An error occurred: {e}"
+            "message": f"An error occurred: {e}",
+            "orders": []
         }
 
 
@@ -217,7 +220,8 @@ def FetchFoodOrdersOfUser(UID: str):
         traceback.print_exception(e)
         return {
             "success": False,
-            "message": f"An error occurred: {e}"
+            "message": f"An error occurred: {e}",
+            "orders": []
         }
 
 

@@ -134,7 +134,7 @@ h3.FlowerSeasonHeaders {
   text-align: center;
 }
 
-#orderOverlay {
+#orderOverlay, #BasketAddOverlay, #foodOrderOverlay, #flowerOrderOverlay {
   position: fixed; 
   display: none; 
   width: 100%; 
@@ -149,7 +149,7 @@ h3.FlowerSeasonHeaders {
   text-align: center;
 }
 
-.orderButton, #cancelOrder , #ConfirmOrder, #ReturnBtn, .PrettyButton{
+.orderButton, #cancelOrder , #ConfirmOrder, #ReturnBtn, .PrettyButton, .ItemRemovalBTN, .ItemRemovalBTN{
   --b: 3px;   
   --s: .45em; 
   --color: #FFFFFF;
@@ -181,13 +181,17 @@ h3.FlowerSeasonHeaders {
 #ReturnBtn:hover,
 #ReturnBtn:focus-visible,
 .PrettyButton:hover,
-.PrettyButton:focus-visible{
+.PrettyButton:focus-visible,
+.ItemRemovalBTN:hover,
+.ItemRemovalBTN:focus-visible
+.basketButton:hover,
+.basketButton:focus-visible{
   --_p: 0px;
   outline-color: var(--color);
   outline-offset: .05em;
 }
 
-.orderButton:active, #cancelOrder:active, #ConfirmOrder:active , #ReturnBtn:active, .PrettyButton:active{
+.orderButton:active, #cancelOrder:active, #ConfirmOrder:active , #ReturnBtn:active, .PrettyButton:active, .ItemRemovalBTN:active, .basketButton:active{
   background: var(--color);
   color: #fff;
 }

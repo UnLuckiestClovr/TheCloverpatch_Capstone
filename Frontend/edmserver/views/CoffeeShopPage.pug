@@ -1,6 +1,25 @@
 extends layout.pug
 
 block mainContent
+    article(id='BasketAddOverlay')
+        div(id='productDetails')
+            div
+                p Quantity:
+                input(id="ProductQuantity", type="text", value="1")
+                button(id="increaseQuantityButton") +
+                button(id="decreaseQuantityButton") -
+            
+            p 
+            p(id="PriceOutput") Final Cost: $0.00
+            p 
+            button(id="ConfirmAdd", data-iid='', data-name='', data-idrequired='', data-costper='') Add to Basket
+            p 
+            button(id="CancelAdd") Cancel
+
+        div(id='productAdded')
+            h2 Item has Been Added to your Basket!!!
+            button(id="ReturnBtn") Return to the Cafe
+
     h2(class="headrow") Try Our Delicious Drinks! Made from our Home Grown Herbs and Spices!
     h2 This is Our Menu, Come Try Some at our location!
     
@@ -107,8 +126,13 @@ mixin productRow(products)
                 img(class='ProductImage', src=products[i].PImageURL, alt="Image of Product")
                 h3= products[i].PName
                 p= formatPrice(products[i].PCost)
+
+                - if (loggedInBool)
+                    button(class="basketButton", data-product=products[i].PName, data-cost=products[i].PCost, data-iid=products[i].id, data-idrequired=`${products[i + 1].IDRequired}`) Click Me to Order Your Own!
             if (i + 1 < products.length)
                 td(class='Product')
                     img(class='ProductImage', src=products[i + 1].PImageURL, alt="Image of Product")
                     h3= products[i + 1].PName
                     p= formatPrice(products[i + 1].PCost)
+                    - if (loggedInBool)
+                    button(class="basketButton", data-product=products[i + 1].PName, data-cost=products[i + 1].PCost, data-iid=products[i + 1].id, data-idrequired=`${products[i + 1].IDRequired}`) Click Me to Order Your Own!

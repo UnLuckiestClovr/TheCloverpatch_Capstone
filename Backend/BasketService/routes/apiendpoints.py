@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
 
-from models.apimodels import Item, Basket
+from models.apimodels import *
 from dal import databaseinteraction
 
 # Router sets up the prefixes and allows the main application to see the included routes. 
@@ -10,9 +10,19 @@ router = APIRouter(
     responses={404 : {"description":"Not Found"}}
 )
 
-@router.post("/add/{type}/{BID}")
-async def addSingleItemToBasket(BID: str = Path(alias='BID'), type: str = Path(alias='type'), body: Item = None):
-    return databaseinteraction.addItemToBasket(BID, body, type)
+@router.post("/add/Flowers/{BID}")
+async def addSingleItemToBasket(BID: str = Path(alias='BID'), body: Item = None):
+    try:
+        return databaseinteraction.addItemToBasket(BID, body, "Flowers")
+    except Exception as e:
+        print(e)
+
+@router.post("/add/Food/{BID}")
+async def addSingleItemToBasket(BID: str = Path(alias='BID'), body: FoodItem = None):
+    try:
+        return databaseinteraction.addItemToBasket(BID, body, "Food")
+    except Exception as e:
+            print(e)
 
 @router.get("/get-all/{BID}")
 async def getAllBaskets(BID: str = Path(alias='BID')):

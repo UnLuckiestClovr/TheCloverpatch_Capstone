@@ -28,7 +28,7 @@ def check_BasketExists(BID: str):
         }
 
 
-def addItemToBasket(BID: str, item: Item, type: str):  # BID is Basket ID, this will be the User's ID as it reduces need for extra data storage and saves load time.
+def addItemToBasket(BID: str, item, type: str):  # BID is Basket ID, this will be the User's ID as it reduces need for extra data storage and saves load time.
     try:
         # Replace '-' with '_' in the BID; Redis doesn't like the '-' character
         redisBID = BID.__str__().replace('-', '_')
@@ -96,6 +96,9 @@ def getAllBaskets(BID: str):
         flower_strings = rConn.lrange(f'{redisBID}:Flowers', 0, rConn.llen(f'{redisBID}:Flowers'))
         food_strings = rConn.lrange(f'{redisBID}:Food', 0, rConn.llen(f'{redisBID}:Food'))
 
+        print(flower_strings)
+        print(food_strings)
+
         # Get Flower Basket
         flowers = []
         for json_str in flower_strings:
@@ -111,7 +114,7 @@ def getAllBaskets(BID: str):
             item_dict = json.loads(json_str.decode('utf-8'))
             item = FoodItem(**item_dict)
             food.append(item)
-        
+
         return {
             "success": True,
             "message": f'Successful Grab from {redisBID}',

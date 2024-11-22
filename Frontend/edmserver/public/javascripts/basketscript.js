@@ -227,6 +227,8 @@ try {
             return
         }
 
+        
+
         const response = await fetch('/order/create-order/food', {
             method: "POST",
             headers: {

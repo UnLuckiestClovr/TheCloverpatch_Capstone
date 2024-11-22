@@ -18,7 +18,7 @@ async def CreateOrder( body: AddressInfo, BID: str = Path(alias='BID'), Email: s
 
 @router.post("/create-order/food/{BID}/{Email}")
 async def CreateOrder(BID: str = Path(alias='BID'), Email: str = Path(alias='Email')):
-    return databaseinteraction.ProcessBasketToOrder_Flower(BID, Email)
+    return databaseinteraction.ProcessBasketToOrder_Food(BID, Email)
 
 
 # Get Order by ID
