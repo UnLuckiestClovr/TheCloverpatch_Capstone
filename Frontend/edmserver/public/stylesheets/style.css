@@ -382,3 +382,13 @@ tr td:last-child {
 .border-none tr td:last-child, .border-none tr th:last-child {
   border-right: none !important;
 }
+
+.quantity-controls {
+  display: flex;
+  align-items: center; /* Align items vertically centered */
+}
+
+.quantity-btn {
+  margin-right: 5px; /* Space between buttons and quantity */
+  cursor: pointer; /* Pointer cursor for buttons */
+}

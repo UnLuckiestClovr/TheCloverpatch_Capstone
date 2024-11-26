@@ -5,8 +5,33 @@ from models.apimodels import *
 rConnPool = redis.ConnectionPool(host='CloverpatchBasketDatabase', port=6379)
 
 
+def changeItemQuantity(BID: str, QUANT: int, type: str):
+    try:
 
-# Setup Baskets to take on both Food and Flowers; BEST IDEA: Take the "Items" keywords out of <BID>:Items and swap it for "Food" and "Flowers" to store basket data seperately, will void the need for manual basket seperation later.
+        # Replace '-' with '_' in the BID; Redis doesn't like the '-' character
+        redisBID = BID.__str__().replace('-', '_')
+        rConn = redis.Redis(connection_pool=rConnPool) # Connect to Redis Database
+
+        items_json = rConn.lrange(f'{redisBID}:{type}', 0, -1)
+
+        if (type == "Flowers"):
+            items = [Item.parse_raw(item) for item in items_json]
+        elif (type == "Food"):
+            items = [FoodItem.parse_raw(item) for item in items_json]
+        
+        if (items):
+            pass
+    except redis.ConnectionError as e:
+        return {
+            "success": False,
+            "message": f"Error connecting to Redis: {e}"
+        }
+    except Exception as e:
+        traceback.print_exception(e)
+        return {
+            "success": False,
+            "message": f"An error occurred: {e}"
+        }
 
 
 def check_BasketExists(BID: str):

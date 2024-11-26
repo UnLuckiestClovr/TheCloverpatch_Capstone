@@ -17,6 +17,7 @@ async def addSingleItemToBasket(BID: str = Path(alias='BID'), body: Item = None)
     except Exception as e:
         print(e)
 
+
 @router.post("/add/Food/{BID}")
 async def addSingleItemToBasket(BID: str = Path(alias='BID'), body: FoodItem = None):
     try:
@@ -24,13 +25,21 @@ async def addSingleItemToBasket(BID: str = Path(alias='BID'), body: FoodItem = N
     except Exception as e:
             print(e)
 
+
 @router.get("/get-all/{BID}")
 async def getAllBaskets(BID: str = Path(alias='BID')):
     return databaseinteraction.getAllBaskets(BID)
 
+
+@router.patch("/update-quantity/{type}/{BID}/{quant}")
+async def updateItemQuantity(type: str= Path(alias='type'), BID: str = Path(alias='BID'), quant: int = Path(alias='quant')):
+    return databaseinteraction.changeItemQuantity(BID, quant, type)
+
+
 @router.delete("/delete/{type}/{BID}")
 async def deleteBasket(BID : str = Path(alias='BID'), type : str = Path(alias='type')):
     return databaseinteraction.ClearBasket(BID, type)
+
 
 @router.delete("/delete-item/{type}/{BID}/{IID}")
 async def deleteItemFromBasket(type : str = Path(alias='type'), BID : str = Path(alias='BID'), IID : str = Path(alias='IID')):

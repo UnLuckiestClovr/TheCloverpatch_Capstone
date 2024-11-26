@@ -2,16 +2,17 @@ var express = require('express')
 var router = express.Router()
 
 
+const BASKET_HOST = process.env.BASKET_HOST || 'localhost:12000'
+
+
 async function getBothBaskets(bid) {
     try {
-        const response = await fetch((`http://localhost:12000/basket/get-all/${bid}`), {
+        const response = await fetch((`http://${BASKET_HOST}/basket/get-all/${bid}`), {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-
-        console.log(response)
 
         if (response.ok) {
             const jsonData = await response.json();
@@ -33,8 +34,6 @@ router.get('/', async function(req, res, next) {
     const flowers = baskets.flowers
     const food = baskets.food
 
-    console.log(baskets)
-
     let boolLog = false
     if(req.cookies && req.cookies.uid) {
         boolLog = true;
@@ -50,19 +49,13 @@ router.get('/', async function(req, res, next) {
 });
 
 
-// API Endpoints
-const addItemEndpoint = "http://localhost:12000/basket/add/"
-const getBasketEndpoint = "http://localhost:12000/basket/get/"
-const deleteBasketEndpoint = "http://localhost:12000/basket/delete/"
-const removeItemFromBasketEndpoint = "http://localhost:12000/basket/delete-item/"
-
 // Add Item
 router.post('/add/Flowers', async function(req, res, next) {
     try {
         const item = req.body;
         const bid = req.cookies.uid;
 
-        const response = await fetch((addItemEndpoint+"Flowers"+"/"+bid), {
+        const response = await fetch(`http://${BASKET_HOST}/add/Flowers/${bid}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -89,7 +82,7 @@ router.post('/add/Food', async function(req, res, next) {
         const item = req.body;
         const bid = req.cookies.uid;
 
-        const response = await fetch((addItemEndpoint+"Food"+"/"+bid), {
+        const response = await fetch(`http://${BASKET_HOST}/add/Food/${bid}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -115,7 +108,7 @@ router.post('/add/Food', async function(req, res, next) {
 async function getUserBasket(bid, type) {
     try {
 
-        const response = await fetch((getBasketEndpoint+type+"/"+bid), {
+        const response = await fetch(`http://${BASKET_HOST}/basket/get/${type}/${bid}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
@@ -155,7 +148,7 @@ router.get("/get-all", async function(req, res, next) {
     try {
         const bid = req.cookies.uid;
 
-        const response = await fetch((`http://localhost:12000/basket/get-all/${bid}`), {
+        const response = await fetch((`http://${BASKET_HOST}/basket/get-all/${bid}`), {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
@@ -176,13 +169,27 @@ router.get("/get-all", async function(req, res, next) {
     }
 })
 
+//Update Basket Item Quantity
+router.patch('/update/quantity/:type/:quant', async function(req, res, next) {
+    try {
+        const bid = req.cookies.uid;
+        const type = req.params.type;
+        const quant = req.params.quant;
+        
+        const response = await fetch(`http://${BASKET_HOST}/basket/update-quantity/${type}/${bid}/${quant}`)
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
+})
+
 // Clear Basket
 router.delete('/delete/:type', async function(req, res, next) {
     try {
         const bid = req.cookies.uid;
         const type = req.params.type
 
-        const response = await fetch((deleteBasketEndpoint+type+"/"+bid), {
+        const response = await fetch(`http://${BASKET_HOST}/basket/delete/${type}/${bid}`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
@@ -210,7 +217,7 @@ router.delete('/delete/:type/:itemid', async function(req, res, next) {
         const type = req.params.type
         const bid = req.cookies.uid;
 
-        const response = await fetch((removeItemFromBasketEndpoint+type+"/"+bid+"/"+itemid), {
+        const response = await fetch(`http://${BASKET_HOST}/basket/delete-item/${type}/${bid}/${itemid}`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'

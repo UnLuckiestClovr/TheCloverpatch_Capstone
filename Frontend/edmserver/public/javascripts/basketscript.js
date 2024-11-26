@@ -1,7 +1,6 @@
 try {
     // JOINT SCRIPTS
-    const buttons = document.querySelectorAll('.ItemRemovalBTN');
-    buttons.forEach(function(button) {
+    document.querySelectorAll('.ItemRemovalBTN').forEach(function(button) {
         button.addEventListener('click', async function () {
             itemid = button.getAttribute('data-iid')
             itemtype = button.getAttribute('data-type')
@@ -19,6 +18,47 @@ try {
 
     document.getElementById('ReturnBtn').addEventListener('click', async () => {
         window.location.href = "/basket"
+    })
+
+
+    async function INCREASE(iid, quant) {
+        try {
+            quant++;
+            const quantElement = document.getElementById(`Quant_${iid}`)
+            quantElement.innerHTML = `Quantity: ${quant}`
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function DECREASE(iid, quant) {
+        try {
+            quant--;
+            console.log(quant)
+            const quantElement = document.getElementById(`Quant_${iid}`)
+            quantElement.innerHTML = `Quantity: ${quant}`
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    document.querySelectorAll('.quantity-btn').forEach(function(button) {
+        button.addEventListener('click', async function () {
+            let iid = button.getAttribute('data-iid')
+            let action = button.getAttribute('data-action')
+            let quant = await parseInt(await document.getElementById(`Quant_${iid}`).innerText.replace('Quantity: ', ''));
+
+            console.log(`IID: ${iid} | Quantity: ${quant}`)
+
+            if (action === 'increase') {
+                await INCREASE(iid, quant);
+            }
+            else if (action === 'decrease') {
+                if (quant === 1) {return}
+                await DECREASE(iid, quant);
+            }
+        });
     })
 
 
@@ -253,6 +293,9 @@ try {
         }
 
     })
+
+
+
 } catch (error) {
     console.log(error)
 }

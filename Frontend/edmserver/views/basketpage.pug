@@ -11,10 +11,10 @@ block mainContent
             table(class='orderDetailTable')
                 tr 
                     td
-                        p Full Name:
+                        label(for="foNameInput") Full Name:
                         input(id="foNameInput", type="text", value="")
                     td
-                        p Phone Number:
+                        label(for="foPhoneInput") Phone Number:
                         input(id="foPhoneInput", type="text", value="", placeholder="e.g., (123) 456-7890")            
             br
             p
@@ -23,13 +23,13 @@ block mainContent
             table(class='orderDetailTable')
                 tr 
                     td 
-                        p Card Number:
+                        label(for="foCardNumInput") Card Number:
                         input(id="foCardNumInput", type="text", value="")
                     td
-                        p Expiry Date (MM/YY):
+                        label(for="foExpiryDateInput") Expiry Date (MM/YY):
                         input(id="foExpiryDateInput", type="text", value="")
                     td 
-                        p CVV (3 Digit Number):
+                        label(for="foCVVInput") CVV (3 Digit Number):
                         input(id="foCVVInput", type="text", value="")
             br
             p
@@ -55,24 +55,24 @@ block mainContent
             table(class='orderDetailTable')
                 tr 
                     td
-                        p Full Name:
+                        label(for="flNameInput") Full Name:
                         input(id="flNameInput", type="text", value="")
                     td
-                        p Phone Number:
+                        label(for="flPhoneInput") Phone Number:
                         input(id="flPhoneInput", type="text", value="", placeholder="e.g., (123) 456-7890")
                 tr 
                     td 
-                        p Address Line 1:
+                        label(for="flAddressInput1") Address Line 1:
                         input(id="flAddressInput1", type="text", value="")
                     td 
-                        p Address Line 2:
+                        label(for="flAddressInput2") Address Line 2:
                         input(id="flAddressInput2", type="text", value="", placeholder="e.g., Apt. 123")
                 tr 
                     td 
-                        p State:
+                        label(for="flStateInput") State:
                         input(id="flStateInput", type="text", value="")
                     td 
-                        p Zipcode:
+                        label(for="flZipInput") Zipcode:
                         input(id="flZipInput", type="text", value="")
             
             br
@@ -82,21 +82,21 @@ block mainContent
             table(class='orderDetailTable')
                 tr 
                     td 
-                        p Card Number:
+                        label(for="flCardNumInput") Card Number:
                         input(id="flCardNumInput", type="text", value="")
                     td
-                        p Expiry Date (MM/YY):
+                        label(for="flExpiryDateInput") Expiry Date (MM/YY):
                         input(id="flExpiryDateInput", type="text", value="")
                     td 
-                        p CVV (3 Digit Number):
+                        label(for="flCVVInput") CVV (3 Digit Number):
                         input(id="flCVVInput", type="text", value="")
             br
             p
             br
             p 
-            button(id="flConfirmOrder") Confirm Order
+            button(id="flConfirmOrder", class="PrettyButton") Confirm Order
             p 
-            button(id="flCancelOrder") Cancel Order
+            button(id="flCancelOrder", class="PrettyButton") Cancel Order
 
             p(id='flower_ERRORBOX')
 
@@ -142,9 +142,13 @@ mixin basketRow(basket, type)
         tr(id=`${basket[i].IID}`)
             td(class='BasketItem')
                 p= `Name: ${basket[i].Name}`
-                p= `Quantity: ${basket[i].Quantity}`
+                p(id=`Quant_${basket[i].IID}`, class='baskItemQuantity')= `Quantity: ${basket[i].Quantity}`
+                button(class="quantity-btn" data-action="decrease" data-iid=`${basket[i].IID}`) -
+                button(class="quantity-btn" data-action="increase" data-iid=`${basket[i].IID}`) +
+                br
                 - if (basket[i].Variant)
+                    br
                     p= `Variant: ${basket[i].Variant}`
                 p= `Price: ${formatPrice(basket[i].Price)}`
-
+                br
                 button(class="ItemRemovalBTN", data-iid=basket[i].IID, data-type=type) Remove Item
