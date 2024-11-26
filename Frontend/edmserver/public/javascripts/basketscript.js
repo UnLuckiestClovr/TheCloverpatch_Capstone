@@ -21,22 +21,51 @@ try {
     })
 
 
-    async function INCREASE(iid, quant) {
+    async function INCREASE(iid, quant, type) {
         try {
+            const priceEl = document.getElementById(`Price_${iid}`)
+            let pricePer = parseFloat(priceEl.innerText.replace('Price: $', ''));
+            pricePer = (pricePer/quant).toFixed(2)
             quant++;
-            const quantElement = document.getElementById(`Quant_${iid}`)
-            quantElement.innerHTML = `Quantity: ${quant}`
+
+            const response = await fetch(`/basket/update/quantity/${type}/${quant}/${iid}`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            if (response.ok) {
+                const quantElement = document.getElementById(`Quant_${iid}`)
+                quantElement.innerHTML = `Quantity: ${quant}`
+                console.log(pricePer)
+                priceEl.innerHTML = `Price: $${(pricePer*quant).toFixed(2)}`
+            }
         } catch (error) {
             console.log(error)
         }
     }
 
-    async function DECREASE(iid, quant) {
+    async function DECREASE(iid, quant, type) {
         try {
+            const priceEl = document.getElementById(`Price_${iid}`)
+            let pricePer = parseFloat(priceEl.innerText.replace('Price: $', ''));
+            pricePer = (pricePer/quant).toFixed(2)
             quant--;
-            console.log(quant)
-            const quantElement = document.getElementById(`Quant_${iid}`)
-            quantElement.innerHTML = `Quantity: ${quant}`
+
+            const response = await fetch(`/basket/update/quantity/${type}/${quant}/${iid}`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            if (response.ok) {
+                const quantElement = document.getElementById(`Quant_${iid}`)
+                quantElement.innerHTML = `Quantity: ${quant}`
+
+                priceEl.innerHTML = `Price: $${(pricePer*quant).toFixed(2)}`
+            }
         } catch (error) {
             console.log(error)
         }
@@ -48,15 +77,14 @@ try {
             let iid = button.getAttribute('data-iid')
             let action = button.getAttribute('data-action')
             let quant = await parseInt(await document.getElementById(`Quant_${iid}`).innerText.replace('Quantity: ', ''));
-
-            console.log(`IID: ${iid} | Quantity: ${quant}`)
+            let type = await button.getAttribute('data-type')
 
             if (action === 'increase') {
-                await INCREASE(iid, quant);
+                await INCREASE(iid, quant, type);
             }
             else if (action === 'decrease') {
                 if (quant === 1) {return}
-                await DECREASE(iid, quant);
+                await DECREASE(iid, quant, type);
             }
         });
     })

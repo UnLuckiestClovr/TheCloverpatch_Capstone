@@ -31,9 +31,9 @@ async def getAllBaskets(BID: str = Path(alias='BID')):
     return databaseinteraction.getAllBaskets(BID)
 
 
-@router.patch("/update-quantity/{type}/{BID}/{quant}")
-async def updateItemQuantity(type: str= Path(alias='type'), BID: str = Path(alias='BID'), quant: int = Path(alias='quant')):
-    return databaseinteraction.changeItemQuantity(BID, quant, type)
+@router.patch("/update-quantity/{type}/{BID}/{quant}/{iid}")
+async def updateItemQuantity(type: str= Path(alias='type'), BID: str = Path(alias='BID'), quant: int = Path(alias='quant'), iid: str = Path(alias='iid')):
+    return databaseinteraction.changeItemQuantity(BID, quant, type, iid)
 
 
 @router.delete("/delete/{type}/{BID}")

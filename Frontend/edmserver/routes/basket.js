@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router()
 
 
-const BASKET_HOST = process.env.BASKET_HOST || 'localhost:12000'
+const BASKET_HOST = process.env.BASKET_HOST || 'localhost:12000';
 
 
 async function getBothBaskets(bid) {
@@ -170,13 +170,30 @@ router.get("/get-all", async function(req, res, next) {
 })
 
 //Update Basket Item Quantity
-router.patch('/update/quantity/:type/:quant', async function(req, res, next) {
+router.patch('/update/quantity/:type/:quant/:iid', async function(req, res, next) {
     try {
         const bid = req.cookies.uid;
         const type = req.params.type;
         const quant = req.params.quant;
+        const iid = req.params.iid
+
+        console.log(`Endpoint Call: http://${BASKET_HOST}/basket/update-quantity/${type}/${bid}/${quant}/${iid}`)
         
-        const response = await fetch(`http://${BASKET_HOST}/basket/update-quantity/${type}/${bid}/${quant}`)
+        const response = await fetch(`http://${BASKET_HOST}/basket/update-quantity/${type}/${bid}/${quant}/${iid}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: {}
+        })
+
+        if (response.ok) {
+            res.status(200).send(response.json())
+        } else {
+            const errorData = await response.json();  // Await the JSON response for error
+            console.log(errorData);
+            res.status(500).send(errorData);
+        }
     } catch (error) {
         console.log(error)
         res.sendStatus(500)

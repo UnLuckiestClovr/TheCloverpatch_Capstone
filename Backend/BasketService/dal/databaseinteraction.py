@@ -5,22 +5,44 @@ from models.apimodels import *
 rConnPool = redis.ConnectionPool(host='CloverpatchBasketDatabase', port=6379)
 
 
-def changeItemQuantity(BID: str, QUANT: int, type: str):
+def changeItemQuantity(BID: str, QUANT: int, type: str, iid: str):
     try:
 
         # Replace '-' with '_' in the BID; Redis doesn't like the '-' character
         redisBID = BID.__str__().replace('-', '_')
         rConn = redis.Redis(connection_pool=rConnPool) # Connect to Redis Database
 
+        # Get Items from the Database
         items_json = rConn.lrange(f'{redisBID}:{type}', 0, -1)
 
-        if (type == "Flowers"):
-            items = [Item.parse_raw(item) for item in items_json]
-        elif (type == "Food"):
-            items = [FoodItem.parse_raw(item) for item in items_json]
-        
-        if (items):
-            pass
+        # Deserialize items from JSON
+        items = [json.loads(item) for item in items_json]
+        print(items)
+
+        # Step 2: Find and update the item quantity and price
+        for item in items:
+            print(item)
+            if item['IID'] == iid:
+                item['Price'] = (item['Price']/item['Quantity']) * QUANT  # Update the total price
+                item['Quantity'] = QUANT
+                break
+        else:
+            return {
+                "success": False,
+                "message": "Item not found in the basket."
+            }
+
+        # Step 3: Save the updated items back to Redis
+        rConn.delete(f'{redisBID}:{type}')  # Clear the old list
+        for item in items:
+            rConn.rpush(f'{redisBID}:{type}', json.dumps(item))  # Push updated items back
+
+        return {
+            "success": True,
+            "message": "Item quantity updated successfully."
+        }
+
+            
     except redis.ConnectionError as e:
         return {
             "success": False,
