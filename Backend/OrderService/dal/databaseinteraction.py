@@ -1,12 +1,14 @@
-import redis, json, uuid, re, traceback, pymongo
+import os, redis, json, uuid, re, traceback, pymongo
 
 from datetime import datetime
 from models.apimodels import *
 from miscscripts.SendEmail import sendEmail
 
-rConnPool = redis.ConnectionPool(host='CloverpatchBasketDatabase', port=6379)
+REDIS_HOST = os.getenv('BASKETDTB_HOST', 'localhost')
+rConnPool = redis.ConnectionPool(host=REDIS_HOST, port=6379)
 
-MongoClient = pymongo.MongoClient("mongodb://CloverpatchProductDatabase:27017/") # Test Connection, Change to Containerized Connection string upon Deployment
+MONGO_HOST = os.getenv('PRODUCTDTB_HOST', 'CloverpatchProductDatabase:27017')
+MongoClient = pymongo.MongoClient(f"mongodb://{MONGO_HOST}/") # Test Connection, Change to Containerized Connection string upon Deployment
 orderDatabase = MongoClient["CloverpatchOrders"]
 flowerOrderCollection = orderDatabase["FlowerOrders"]
 foodOrderCollection = orderDatabase["FoodOrders"]

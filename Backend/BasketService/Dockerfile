@@ -10,5 +10,6 @@ EXPOSE 8080
 
 ENV NAME CloverpatchBasketAPI
 ENV EUREKA_HOST CloverpatchEureka
+ENV BASKETDTB_HOST CloverpatchBasketDatabase
 
 CMD ["python", "main.py"]

@@ -1,8 +1,9 @@
-import redis, json, uuid, traceback
+import os, redis, json, traceback
 
 from models.apimodels import *
 
-rConnPool = redis.ConnectionPool(host='CloverpatchBasketDatabase', port=6379)
+HOST = os.getenv('BASKETDTB_HOST', 'localhost')
+rConnPool = redis.ConnectionPool(host=HOST, port=6379)
 
 
 def changeItemQuantity(BID: str, QUANT: int, type: str, iid: str):
