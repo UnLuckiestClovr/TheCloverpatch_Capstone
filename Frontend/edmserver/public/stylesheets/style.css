@@ -179,7 +179,7 @@ h3.FlowerSeasonHeaders {
 
 .orderButton, #cancelOrder , #ConfirmOrder, #ReturnBtn, .PrettyButton, .ItemRemovalBTN, .ItemRemovalBTN{
   --b: 3px;   
-  --s: .45em; 
+  --s: .3em; 
   --color: #FFFFFF;
   
   padding: calc(.5em + var(--s)) calc(.9em + var(--s));

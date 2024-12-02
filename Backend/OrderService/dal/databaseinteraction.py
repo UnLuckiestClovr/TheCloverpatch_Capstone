@@ -5,13 +5,25 @@ from models.apimodels import *
 from miscscripts.SendEmail import sendEmail
 
 REDIS_HOST = os.getenv('BASKETDTB_HOST', 'localhost')
-rConnPool = redis.ConnectionPool(host=REDIS_HOST, port=6379)
+REDIS_PASS = os.getenv('REDIS_PASSWORD', None)  # Default to None if not set
+rConnPool = redis.ConnectionPool(
+    host=REDIS_HOST, 
+    port=6379,
+    password=REDIS_PASS
+)
 
-MONGO_HOST = os.getenv('PRODUCTDTB_HOST', 'CloverpatchProductDatabase:27017')
-MongoClient = pymongo.MongoClient(f"mongodb://{MONGO_HOST}/") # Test Connection, Change to Containerized Connection string upon Deployment
-orderDatabase = MongoClient["CloverpatchOrders"]
-flowerOrderCollection = orderDatabase["FlowerOrders"]
-foodOrderCollection = orderDatabase["FoodOrders"]
+MONGO_HOST = os.getenv('PRODUCTDTB_HOST', 'localhost:27017')
+
+# Print the host for debugging
+print(f"MONGO_HOST: {MONGO_HOST}")
+
+try:
+    MongoClient = pymongo.MongoClient(f"mongodb://{MONGO_HOST}/") 
+    orderDatabase = MongoClient["CloverpatchOrders"]
+    flowerOrderCollection = orderDatabase["FlowerOrders"]
+    foodOrderCollection = orderDatabase["FoodOrders"]
+except Exception as e:
+    print(e)
 
 
 def processFlowerList(OID: str, BID: str, address: AddressInfo, json_list: list, current_time):

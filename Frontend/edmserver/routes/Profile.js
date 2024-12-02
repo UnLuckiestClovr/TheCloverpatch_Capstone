@@ -36,10 +36,6 @@ router.get('/', async function(req, res) {
             const flowerOrders = await flowersResponse.json();
             const foodOrders = await foodResponse.json()
 
-            console.log("Orders:")
-            console.log(flowerOrders)
-            console.log(foodOrders)
-
             let flOrders = []
             let foOrders = []
 

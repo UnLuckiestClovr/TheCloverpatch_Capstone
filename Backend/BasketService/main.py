@@ -2,7 +2,6 @@ from fastapi import FastAPI, Path, Depends
 from starlette.responses import Response
 from py_eureka_client import eureka_client
 
-from miscscripts import EurekaConnection
 from routes import apiendpoints
 
 app = FastAPI(
@@ -14,8 +13,10 @@ app = FastAPI(
 from fastapi.middleware.cors import CORSMiddleware
 
 origins = [
-    "http://localhost:8080",
-    "https://localhost:8080",
+    "https://localhost:3000/*",
+    "http://localhost:3000/*",
+    "https://allowing-hideously-ostrich.ngrok-free.app/",
+    "https://allowing-hideously-ostrich.ngrok-free.app:3000/",
     "*"
 ]
 
@@ -34,12 +35,6 @@ app.include_router(apiendpoints.router)
 @app.get("/")
 async def root():
     return {"message" : "Basket Root Called"}
-
-# #Eureka Service Config
-# EurekaHost = "localhost"
-# EurekaPort = 10000
-
-# EurekaConnection.Eureka_Register(EurekaHost, EurekaPort)
 
 if __name__ == "__main__":
     import uvicorn

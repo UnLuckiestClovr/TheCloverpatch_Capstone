@@ -72,8 +72,6 @@ router.post('/login', async function(req, res, next) {
     {
         const loginData = req.body
 
-        console.log(loginData)
-
         const response = await fetch(loginEndpoint, {
             method: "POST",
             headers: {
@@ -109,8 +107,6 @@ router.post('/register', async function(req, res, next) {
     {
         console.log("User Register Called")
         const regData = req.body
-
-        console.log(regData)
 
         console.log(JSON.stringify(regData))
 

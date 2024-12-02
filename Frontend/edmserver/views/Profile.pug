@@ -23,7 +23,6 @@ block mainContent
                     table(class='OrdersTable')
                         thead
                             tr
-                                //- th Order ID
                                 th Address
                                 th State
                                 th Zipcode
@@ -46,7 +45,7 @@ block mainContent
     div(id="FoodBasketView", class="baskArticle")
         article(id="CafeOrders")
             if (cafeOrders && cafeOrders.length > 0)
-                table(class='OrdersTable')
+                table(class='OrdersTable border-none')
                     thead 
                         tr
                             th Final Price

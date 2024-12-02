@@ -2,8 +2,13 @@ import os, redis, json, traceback
 
 from models.apimodels import *
 
-HOST = os.getenv('BASKETDTB_HOST', 'localhost')
-rConnPool = redis.ConnectionPool(host=HOST, port=6379)
+REDIS_HOST = os.getenv('BASKETDTB_HOST', 'localhost')
+REDIS_PASS = os.getenv('REDIS_PASSWORD', None)  # Default to None if not set
+rConnPool = redis.ConnectionPool(
+    host=REDIS_HOST, 
+    port=6379,
+    password=REDIS_PASS
+)
 
 
 def changeItemQuantity(BID: str, QUANT: int, type: str, iid: str):
@@ -13,16 +18,11 @@ def changeItemQuantity(BID: str, QUANT: int, type: str, iid: str):
         redisBID = BID.__str__().replace('-', '_')
         rConn = redis.Redis(connection_pool=rConnPool) # Connect to Redis Database
 
-        # Get Items from the Database
+        # Get Items from the Database Then Deserialize items from JSON
         items_json = rConn.lrange(f'{redisBID}:{type}', 0, -1)
-
-        # Deserialize items from JSON
         items = [json.loads(item) for item in items_json]
-        print(items)
 
-        # Step 2: Find and update the item quantity and price
         for item in items:
-            print(item)
             if item['IID'] == iid:
                 item['Price'] = (item['Price']/item['Quantity']) * QUANT  # Update the total price
                 item['Quantity'] = QUANT
@@ -80,36 +80,28 @@ def addItemToBasket(BID: str, item, type: str):  # BID is Basket ID, this will b
     try:
         # Replace '-' with '_' in the BID; Redis doesn't like the '-' character
         redisBID = BID.__str__().replace('-', '_')
-
         rConn = redis.Redis(connection_pool=rConnPool) # Connect to Redis Database
 
         # Retrieve current items in the basket
         items_json = rConn.lrange(f'{redisBID}:{type}', 0, -1)
-
         if (type == "Flowers"):
             items = [Item.parse_raw(item) for item in items_json]
         elif (type == "Food"):
             items = [FoodItem.parse_raw(item) for item in items_json]
 
-        print(f"Current Items: {items}")
-
         # Check if the item already exists
         existing_item = next((i for i in items if i.IID == item.IID), None)
 
         if existing_item:
-            print(f"Already Existing Item: {existing_item.json()}")
 
             # Update the quantity of the existing item
             existing_item.Quantity += item.Quantity
             existing_item.Price += item.Price
 
-            print(f"Updated Item: {existing_item.json()}")
-
             # Update the basket in Redis
             rConn.delete(f'{redisBID}:{type}')  # Clear existing items
             for it in items:
                 rConn.rpush(f'{redisBID}:{type}', it.json())
-            # rConn.rpush(f'{redisBID}:Items', existing_item.json())
         else:
             # Add the new item to the basket
             rConn.rpush(f'{redisBID}:{type}', item.json())
@@ -144,13 +136,9 @@ def getAllBaskets(BID: str):
         flower_strings = rConn.lrange(f'{redisBID}:Flowers', 0, rConn.llen(f'{redisBID}:Flowers'))
         food_strings = rConn.lrange(f'{redisBID}:Food', 0, rConn.llen(f'{redisBID}:Food'))
 
-        print(flower_strings)
-        print(food_strings)
-
         # Get Flower Basket
         flowers = []
         for json_str in flower_strings:
-            print(json_str)
             item_dict = json.loads(json_str.decode('utf-8'))
             item = Item(**item_dict)
             flowers.append(item)
@@ -158,7 +146,6 @@ def getAllBaskets(BID: str):
         # Get Food Basket
         food = []
         for json_str in food_strings:
-            print(json_str)
             item_dict = json.loads(json_str.decode('utf-8'))
             item = FoodItem(**item_dict)
             food.append(item)
@@ -185,20 +172,14 @@ def getAllBaskets(BID: str):
 def deleteItemFromBasket(BID: str, IID: str, type: str):
     try:
         redisBID = BID.__str__().replace('-', '_')
-
         rConn = redis.Redis(connection_pool=rConnPool)
 
-        basketSTR = f'{redisBID}:{type}'
-
         # Get all elements from the list
-        items = rConn.lrange(basketSTR, 0, rConn.llen(basketSTR))
-
-
+        items = rConn.lrange(f'{redisBID}:{type}', 0, rConn.llen(f'{redisBID}:{type}'))
 
         if items:
             # Decode to Python Dicts
             itemsDecoded = [item.decode('utf-8') for item in items]
-
             itemObjects = [json.loads(item) for item in itemsDecoded]
 
             #iterate through list to find then remove the item by checking item IID
