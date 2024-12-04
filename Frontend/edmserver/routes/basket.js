@@ -55,7 +55,7 @@ router.post('/add/Flowers', async function(req, res, next) {
         const item = req.body;
         const bid = req.cookies.uid;
 
-        const response = await fetch(`http://${BASKET_HOST}/add/Flowers/${bid}`, {
+        const response = await fetch(`http://${BASKET_HOST}/basket/add/Flowers/${bid}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ router.post('/add/Food', async function(req, res, next) {
         const item = req.body;
         const bid = req.cookies.uid;
 
-        const response = await fetch(`http://${BASKET_HOST}/add/Food/${bid}`, {
+        const response = await fetch(`http://${BASKET_HOST}/basket/add/Food/${bid}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

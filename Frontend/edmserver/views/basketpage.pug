@@ -114,7 +114,7 @@ block mainContent
         div(id="FlowerBasketView", class="baskArticle active")
             - if (flowerBasket.length > 0)
                 h2(class="headrow") Flower Basket:
-                table(class="ProductTables")
+                table(class="ProductTables border-none")
                     tbody
                         +basketRow(flowerBasket, "Flowers")
                 br
@@ -126,7 +126,7 @@ block mainContent
         div(id="FoodBasketView", class="baskArticle")
             - if (foodBasket.length > 0)
                 h2(class="headrow") Food Basket:
-                table(class="ProductTables")
+                table(class="ProductTables border-none")
                     tbody
                         +basketRow(foodBasket, "Food")
                 br
@@ -141,14 +141,18 @@ mixin basketRow(basket, type)
     - for (let i = 0; i < basket.length; i++)
         tr(id=`${basket[i].IID}`)
             td(class='BasketItem')
-                p= `Name: ${basket[i].Name}`
-                p(id=`Quant_${basket[i].IID}`, class='baskItemQuantity')= `Quantity: ${basket[i].Quantity}`
-                button(class="quantity-btn" data-action="decrease" data-iid=`${basket[i].IID}`, data-type=type) -
-                button(class="quantity-btn" data-action="increase" data-iid=`${basket[i].IID}`, data-type=type) +
+                div(class='info-container')
+                    p= `${basket[i].Name}`
+                    p |
+                    - if (basket[i].Variant)
+                        p= `${basket[i].Variant}`
+                        p |
+                    p(id=`Price_${basket[i].IID}`)= `Price: ${formatPrice(basket[i].Price)}`
+
+                div(class='quantity-container')
+                    p(id=`Quant_${basket[i].IID}`, class='baskItemQuantity')= `Quantity: ${basket[i].Quantity}`
+                    p
+                    button(class="quantity-btn" data-action="decrease" data-iid=`${basket[i].IID}`, data-type=type) -
+                    button(class="quantity-btn" data-action="increase" data-iid=`${basket[i].IID}`, data-type=type) +
                 br
-                - if (basket[i].Variant)
-                    br
-                    p= `Variant: ${basket[i].Variant}`
-                p(id=`Price_${basket[i].IID}`)= `Price: ${formatPrice(basket[i].Price)}`
-                br
-                button(class="ItemRemovalBTN", data-iid=basket[i].IID, data-type=type) Remove Item
+                button(class="ItemRemovalBTN PrettyButton", data-iid=basket[i].IID, data-type=type) Remove Item

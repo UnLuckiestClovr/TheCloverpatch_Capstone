@@ -38,7 +38,6 @@ try {
             if (response.ok) {
                 const quantElement = document.getElementById(`Quant_${iid}`)
                 quantElement.innerHTML = `Quantity: ${quant}`
-                console.log(pricePer)
                 priceEl.innerHTML = `Price: $${(pricePer*quant).toFixed(2)}`
             }
         } catch (error) {

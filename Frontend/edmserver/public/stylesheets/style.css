@@ -5,8 +5,12 @@ body {
   padding: 50px;
   font-family:'Josefin Sans', sans-serif;
   color: aliceblue;
-  /*background-image: url(../images/BackTattoo.jpg);*/
-  background-color: #2d2d2d;
+  background: linear-gradient(to top, rgba(52, 42, 40, 0.8), rgba(52, 42, 40, 0.8), #1e1412), url(../images/CafeBackgroundIMG.png); /* Gradient + Main background image */
+  /* background-image: url(../images/CafeBackgroundIMG.png); */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom; /* Keep the image at the bottom */
+  background-color: #342a28;
   font-size: 20px;
 }
 
@@ -363,10 +367,6 @@ tr td:last-child {
   border: none;
 }
 
-/* .border-none td {
-  border: 1px solid black !important;
-} */
-
 .border-none tr:first-child td, .border-none tr:first-child th {
   border-top: none !important;
 }
@@ -391,4 +391,15 @@ tr td:last-child {
 .quantity-btn {
   margin-right: 5px; /* Space between buttons and quantity */
   cursor: pointer; /* Pointer cursor for buttons */
+}
+
+.quantity-container, .info-container {
+  display: flex;
+  flex-direction:row; /* Stack Quantity and buttons horizontally */
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity-container *, .info-container * {
+  margin: 0px;
 }

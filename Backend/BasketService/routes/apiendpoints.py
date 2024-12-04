@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 @router.post("/add/Flowers/{BID}")
-async def addSingleItemToBasket(BID: str = Path(alias='BID'), body: Item = None):
+async def addSingleFlowerToBasket(BID: str = Path(alias='BID'), body: Item = None):
     try:
         return databaseinteraction.addItemToBasket(BID, body, "Flowers")
     except Exception as e:
@@ -19,7 +19,7 @@ async def addSingleItemToBasket(BID: str = Path(alias='BID'), body: Item = None)
 
 
 @router.post("/add/Food/{BID}")
-async def addSingleItemToBasket(BID: str = Path(alias='BID'), body: FoodItem = None):
+async def addSingleFoodToBasket(BID: str = Path(alias='BID'), body: FoodItem = None):
     try:
         return databaseinteraction.addItemToBasket(BID, body, "Food")
     except Exception as e:

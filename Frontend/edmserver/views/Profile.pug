@@ -13,8 +13,8 @@ block mainContent
 
     article(id='mainView')
         div(class='tabs')
-            div(id="FlowerBasketTab", class="tab active") Flower Basket
-            div(id="FoodBasketTab", class="tab") Food Basket
+            div(id="FlowerBasketTab", class="tab active") Flower Orders
+            div(id="FoodBasketTab", class="tab") Food Orders
 
     div(id="FlowerBasketView", class="baskArticle active")
         // Check if orders exist and iterate over them
@@ -31,7 +31,6 @@ block mainContent
                         tbody
                             each order in flowerOrders
                                 tr
-                                    //- td= order.OID
                                     td= `${order.AddressInfo.AddressLine1} ${order.AddressInfo.AddressLine2}`
                                     td= order.AddressInfo.State
                                     td= order.AddressInfo.Zipcode
@@ -45,7 +44,7 @@ block mainContent
     div(id="FoodBasketView", class="baskArticle")
         article(id="CafeOrders")
             if (cafeOrders && cafeOrders.length > 0)
-                table(class='OrdersTable border-none')
+                table(class='OrdersTable')
                     thead 
                         tr
                             th Final Price
@@ -54,7 +53,7 @@ block mainContent
                     tbody 
                         each order in cafeOrders 
                             tr 
-                                td= `${order.FinalPrice}`
+                                td= `$${order.FinalPrice}`
                                 td= `${order.TimeMade}`
                                 td
                                     a(class='VODButton', data-oid=order.OID, href=`/order/food/${order.OID}`) View Order

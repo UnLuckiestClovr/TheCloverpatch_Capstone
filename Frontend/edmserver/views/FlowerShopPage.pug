@@ -66,4 +66,4 @@ mixin productRow(products)
                     h3= products[i + 1].PName
                     p= formatPrice(products[i + 1].PCostPerFlower)
                     - if (loggedInBool)
-                        button(class="orderButton", data-flower=products[i + 1].PName, data-iid=products[i + 1].id) Click Me to Order Your Own!
+                        button(class="orderButton", data-flower=products[i + 1].PName, data-cost=products[i + 1].PCostPerFlower, data-iid=products[i + 1].id) Click Me to Order Your Own!
