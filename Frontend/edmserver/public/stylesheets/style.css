@@ -5,8 +5,7 @@ body {
   padding: 50px;
   font-family:'Josefin Sans', sans-serif;
   color: aliceblue;
-  background: linear-gradient(to top, rgba(52, 42, 40, 0.8), rgba(52, 42, 40, 0.8), #1e1412), url(../images/CafeBackgroundIMG.png); /* Gradient + Main background image */
-  /* background-image: url(../images/CafeBackgroundIMG.png); */
+  background: linear-gradient(to top, rgba(52, 42, 40, 0.2), rgba(52, 42, 40, 0.8), #1e1412), url(../images/CafeBackgroundIMG.png); /* Gradient + Main background image */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom; /* Keep the image at the bottom */
